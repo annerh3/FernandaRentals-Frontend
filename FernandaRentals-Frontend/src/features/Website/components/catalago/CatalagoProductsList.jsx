@@ -43,6 +43,22 @@ export const CatalagoProductsList = () => {
     setFetching(true); 
   };
 
+  // Agregar el listener de teclado
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "ArrowLeft") {
+        handlePreviousPage();
+      } else if (e.key === "ArrowRight") {
+        handleNextPage();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [products]);
+  
   // if (isLoading) {
   //   return <Loading />;
   // }

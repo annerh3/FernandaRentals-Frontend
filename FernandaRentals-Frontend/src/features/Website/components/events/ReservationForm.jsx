@@ -17,8 +17,8 @@ import { SelecOptions } from "./SelecOptions";
 export const ReservationForm = () => {
   const { products, loadProducts, isLoading } = useProducts(); //para cargar los productos
   const [currentPage, setCurrentPage] = useState(1); // para administracion de la pagina de productos
-  const [searchTerm, setSearchTerm] = useState(''); //para el uso de la busqueda
-  const [selectedCategory, setSelectedCategory] = useState(''); //para almacenar la categoria selecionada
+  const [searchTerm, setSearchTerm] = useState(""); //para el uso de la busqueda
+  const [selectedCategory, setSelectedCategory] = useState(""); //para almacenar la categoria selecionada
   const [fetching, setFetching] = useState(true); //feching
   const [selectedProducts, setSelectedProducts] = useState([]); // para almacenar los productos seleccionados
   const [alert, setAlert] = useState({ message: "", isVisible: false }); // la que salta por errores del backend
@@ -51,7 +51,7 @@ export const ReservationForm = () => {
   useEffect(() => {
     if (!fetching) return;
     console.log(selectedCategory);
-    
+
     loadProducts(searchTerm, currentPage, selectedCategory);
     setFetching(false);
   }, [fetching, searchTerm, currentPage, loadProducts]);
@@ -97,7 +97,7 @@ export const ReservationForm = () => {
 
     try {
       const response = await createEvent(formDataToSubmit);
-      if (response.status ==true) {
+      if (response.status == true) {
         resetForm();
 
         await setSuccessAlert({
@@ -105,8 +105,8 @@ export const ReservationForm = () => {
           isVisible: true, // Añadimos isVisible para controlar la visibilidad del pop-up
         });
       } else {
-        console.log(response)
-          
+        console.log(response);
+
         await setAlert({
           message: response.data.message,
           isVisible: true,
@@ -138,18 +138,18 @@ export const ReservationForm = () => {
     setFetching(true);
   };
 
-  const handleSearchChange =async (e) => {
+  const handleSearchChange = async (e) => {
     e.preventDefault();
     console.log(selectedProducts);
-    
-   await setSelectedProducts(selectedProducts)
+
+    await setSelectedProducts(selectedProducts);
     setFetching(true); // Vuelve a cargar productos cuando cambia el término de búsqueda
   };
   const handleEnter = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault(); 
+    if (e.key === "Enter") {
+      e.preventDefault();
     }
-  }
+  };
   // Maneja la selección de productos
   const handleProductSelect = (product) => {
     setSelectedProducts((prevSelected) =>
@@ -158,10 +158,10 @@ export const ReservationForm = () => {
         : [...prevSelected, product]
     );
   };
-  const handlesearchChangeValue =(e) => {
+  const handlesearchChangeValue = (e) => {
     setSearchTerm(e.target.value);
     console.log(selectedProducts);
-  }
+  };
   // Maneja la eliminación de productos seleccionados
   const handleRemoveProduct = (id) => {
     setSelectedProducts((prevProducts) =>
@@ -198,10 +198,10 @@ export const ReservationForm = () => {
   };
 
   return (
-    <div className="py-12 container ml-auto mr-auto flex items-center justify-center bg-gray-100 ">
+    <div className="min-h-screen container ml-auto mr-auto flex items-center justify-center bg-gray-100 ">
       <div className="w-full p-4 ">
         <form
-          className="bg-white shadow-md px-8 pb-4 pt-6 mb-4 rounded-md"
+          className="bg-white shadow-md px-8 pb-4 pt-6 mb-4 rounded-md grid grid-cols-1 sm:grid-cols-2 gap-6"
           onSubmit={handleSubmit}
         >
           {successAlert.isVisible && (
@@ -214,87 +214,94 @@ export const ReservationForm = () => {
           {alert.isVisible && (
             <AlertPopUp message={alert.message} onClose={handleCloseAlert} />
           )}
-          <div className="mb-4 mt-4">
-            <div className="grid grid-flow-row sm:grid-flow-col gap-3">
-              <div className="sm:col-span-4 justify-center">
-                <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="name"
-                >
-                  Nombre del Evento
-                </label>
-                <input
-                  type="text"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-md"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  placeholder="Presentación UNAH"
-                  onChange={handleInputChange}
-                />
-                {errors.name && <Alert errorMessage={errors.name} />}
-              </div>
-              <div className="sm:col-span-4 justify-center">
-                <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="ubication"
-                >
-                  Localización del Evento
-                </label>
-                <input
-                  type="text"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-md"
-                  id="ubication"
-                  name="location"
-                  value={formData.location}
-                  placeholder="Santa Rosa, Copán, Honduras"
-                  onChange={handleInputChange}
-                />
-                {errors.location && <Alert errorMessage={errors.location} />}
-              </div>
-            </div>
-            <div className="grid grid-flow-row lg:grid-flow-col gap-3 mt-4 py-2">
-              <div className="grid grid-flow-col gap-3">
+          <div className="my-4">
+            {/* Inicio Info Básica del Evento */}
+            <section>
+              <div className="grid grid-flow-row sm:grid-flow-col gap-3">
                 <div className="sm:col-span-4 justify-center">
                   <label
                     className="block text-gray-700 text-sm font-bold mb-2"
-                    htmlFor="startdate"
+                    htmlFor="name"
                   >
-                    Fecha de Inicio
+                    Nombre del Evento
                   </label>
                   <input
-                    type="date"
+                    type="text"
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-md"
-                    id="startdate"
-                    name="startDate"
-                    value={formData.startDate}
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    placeholder="Presentación UNAH"
                     onChange={handleInputChange}
                   />
-                  {errors.startDate && (
-                    <Alert errorMessage={errors.startDate} />
-                  )}
+                  {errors.name && <Alert errorMessage={errors.name} />}
                 </div>
                 <div className="sm:col-span-4 justify-center">
                   <label
                     className="block text-gray-700 text-sm font-bold mb-2"
-                    htmlFor="enddate"
+                    htmlFor="ubication"
                   >
-                    Fecha de Finalización
+                    Localización del Evento
                   </label>
                   <input
-                    type="date"
+                    type="text"
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-md"
-                    id="enddate"
-                    name="endDate"
-                    value={formData.endDate}
+                    id="ubication"
+                    name="location"
+                    value={formData.location}
+                    placeholder="Santa Rosa, Copán, Honduras"
                     onChange={handleInputChange}
                   />
-                  {errors.endDate && <Alert errorMessage={errors.endDate} />}
+                  {errors.location && <Alert errorMessage={errors.location} />}
                 </div>
               </div>
-            </div>
-            <div className="grid grid-flow-row lg:grid-flow-col gap-3 mt-8">
-              {/* PARA LOS PRODUCTOS QUE SELECCIONA EL USUARIO  */}
+
+              <div className="grid grid-flow-row lg:grid-flow-col gap-3 mt-4 py-2">
+                <div className="grid grid-flow-col gap-3">
+                  <div className="sm:col-span-4 justify-center">
+                    <label
+                      className="block text-gray-700 text-sm font-bold mb-2"
+                      htmlFor="startdate"
+                    >
+                      Fecha de Inicio
+                    </label>
+                    <input
+                      type="date"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-md"
+                      id="startdate"
+                      name="startDate"
+                      value={formData.startDate}
+                      onChange={handleInputChange}
+                    />
+                    {errors.startDate && (
+                      <Alert errorMessage={errors.startDate} />
+                    )}
+                  </div>
+                  <div className="sm:col-span-4 justify-center">
+                    <label
+                      className="block text-gray-700 text-sm font-bold mb-2"
+                      htmlFor="enddate"
+                    >
+                      Fecha de Finalización
+                    </label>
+                    <input
+                      type="date"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-md"
+                      id="enddate"
+                      name="endDate"
+                      value={formData.endDate}
+                      onChange={handleInputChange}
+                    />
+                    {errors.endDate && <Alert errorMessage={errors.endDate} />}
+                  </div>
+                </div>
+              </div>
+            </section>
+            {/* Fin Info Básica del Evento */}
+
+            {/* Inicio Sección Productos   */}
+            <section className="grid grid-flow-row lg:grid-flow-col gap-3 mt-8">
+              {/* Inicio de los Productos que seleeciona el Usuario  */}
               <div className="border rounded w-full shadow-md mb-4 mt-4 py-2">
                 {/* Encabezados */}
                 <div className="w-full justify-center items-center">
@@ -310,6 +317,8 @@ export const ReservationForm = () => {
                 />
               </div>
               {/* Fin de los Productos que seleeciona el Usuario  */}
+
+              {/* Inicio Lista de Productos Existentes */}
               <div className="border rounded w-full shadow-md mb-4 mt-4 px-6 py-2">
                 <div className="w-full justify-center items-center">
                   <h3 className="text-center font-bold text-gray-800">
@@ -318,59 +327,69 @@ export const ReservationForm = () => {
                 </div>
 
                 {/* Selector de Categoría y Buscador */}
-                <div className="flex items-center mb-4 mt-4">
-                  <SelecOptions setSelectedCategory={setSelectedCategory} setFeching={setFetching}/>
-
-                  <input
-                    type="text"
-                    placeholder="Buscar productos..."
-                    name="searchTerm"
-                    className="ml-4 shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    value={searchTerm}
-                    onChange={handlesearchChangeValue}
-                    onKeyDown={handleEnter}
-                  />
-
-                  <button
-                    type="button"
-                    className="ml-4 bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    onClick={handleSearchChange}
-                  >
-                    Buscar
-                  </button>
-                </div>
-
-                {/* Lista de Productos */}
-                <div className="border rounded w-full shadow-md mb-4 mt-4 py-2">
-                  <div className="w-full justify-center items-center">
-                    <h3 className="text-center font-bold text-gray-800 mb-4">
-                      Lista de Productos Existentes
-                    </h3>
-
-                    <ProductGrid
-                      products={products}
-                      isLoading={isLoading}
-                      onProductSelect={handleProductSelect}
+                <div className="">
+                  <div className="flex items-center mb-4 mt-4 ">
+                    <SelecOptions
+                      setSelectedCategory={setSelectedCategory}
+                      setFeching={setFetching}
                     />
-                    {/* Paginación */}
-                    <Pagination
-                      totalPages={products?.data?.totalPages}
-                      hasNextPage={products?.data?.hasNextPage}
-                      hasPreviousPage={products?.data?.hasPreviousPage}
-                      currentPage={currentPage}
-                      handleNextPage={handleNextPage}
-                      handlePreviousPage={handlePreviousPage}
-                      setCurrentPage={setCurrentPage}
-                      handleCurrentPage={handleCurrentPage}
+
+                    <input
+                      type="text"
+                      placeholder="Buscar productos..."
+                      name="searchTerm"
+                      className="ml-4 shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      value={searchTerm}
+                      onChange={handlesearchChangeValue}
+                      onKeyDown={handleEnter}
                     />
-                    {/* Fin de Paginacion */}
+
+                    <button
+                      type="button"
+                      className="ml-4 bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                      onClick={handleSearchChange}
+                    >
+                      Buscar
+                    </button>
+                  </div>
+
+                  {/* Lista de Productos */}
+                  <div className="border rounded w-full shadow-md mb-4 mt-4 py-2">
+                    <div className="w-full justify-center items-center">
+                      <h3 className="text-center font-bold text-gray-800 mb-4">
+                        Lista de Productos Existentes
+                      </h3>
+
+                      <ProductGrid
+                        products={products}
+                        isLoading={isLoading}
+                        onProductSelect={handleProductSelect}
+                      />
+                      {/* Paginación */}
+                      <Pagination
+                        totalPages={products?.data?.totalPages}
+                        hasNextPage={products?.data?.hasNextPage}
+                        hasPreviousPage={products?.data?.hasPreviousPage}
+                        currentPage={currentPage}
+                        handleNextPage={handleNextPage}
+                        handlePreviousPage={handlePreviousPage}
+                        setCurrentPage={setCurrentPage}
+                        handleCurrentPage={handleCurrentPage}
+                      />
+                      {/* Fin de Paginacion */}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="grid grid-flow-row lg:grid-flow-col gap-3 mt-1">
+              {/* Fin Lista de Productos Existentes */}
+            </section>
+             {/* Fin SecciónProductos   */}
+
+             {/* Inicio Botones  */}     
+            <section className="grid grid-flow-row lg:grid-flow-col gap-3 mt-1">
               <FormButtons onSubmit={handleSubmit} onCancel={handleCancel} />
-            </div>
+            </section>
+             {/* Fin Botones */}
           </div>
         </form>
       </div>

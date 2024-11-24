@@ -15,9 +15,8 @@ export const LoginPage = () => {
 
   const login = useAuthStore((state) => state.login);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const validateAuthentication = useAuthStore((state) => state.validateAuthentication);
   
-
-
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/my-events");
@@ -33,6 +32,7 @@ export const LoginPage = () => {
       console.log(formValues);
       setLoading(true);
       const { error, message } = await login(formValues);
+      validateAuthentication();
       setLoading(false);
       console.log('error es: -->', error)  
       
@@ -62,15 +62,11 @@ export const LoginPage = () => {
     },
   });
 
-
-
-
   return (
     <section
-      className="flex justify-center items-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('/path/to/your/background.jpg')" }}
+      className="flex justify-center items-center min-h-screen w-full"
     >
-        <div className="bg-white bg-opacity-20 backdrop-blur-lg rounded-lg shadow-lg p-8 w-full max-w-md">
+        <div className="bg-gray-950 bg-opacity-20 backdrop-blur-lg  rounded-lg shadow-lg p-8 w-full max-w-md">
                 <ToastContainer
                   position="top-center"
                   autoClose={1300}
@@ -83,19 +79,19 @@ export const LoginPage = () => {
                   pauseOnHover
                   theme="colored"
                 />
-        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+        <h2 className="text-2xl font-bold text-white mb-6 text-center">
           Iniciar Sesión
         </h2>
         <form onSubmit={formik.handleSubmit} id='loginForm'>
           <div className="mb-4">
             <label
-              className="block text-gray-900 text-sm font-bold mb-2"
+              className="block text-white text-sm font-bold mb-2"
               htmlFor="email"
             >
               Email
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
               id="email"
               type="email"
               name="email"
@@ -111,13 +107,13 @@ export const LoginPage = () => {
           </div>
           <div className="mb-6">
             <label
-              className="block text-gray-900 text-sm font-bold mb-2"
+              className="block text-white text-sm font-bold mb-2"
               htmlFor="password"
             >
               Password
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
               type="password"
               name="password"
               id="password"

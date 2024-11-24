@@ -27,7 +27,7 @@ return (
       <button
         key={generateId()}
         onClick={() => handleCurrentPage(index + 1)}
-        className={`px-3 py-2 mx-1 font-medium rounded-md ${
+        className={`px-3 py-2 mx-1 font-medium rounded-md hover:shadow-sm hover:shadow-black ${
           currentPage === index + 1
             ? "bg-cyan-800 text-white"
             : "bg-white text-gray-700 hover:bg-cyan-100"

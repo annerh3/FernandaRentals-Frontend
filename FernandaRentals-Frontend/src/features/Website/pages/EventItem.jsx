@@ -5,7 +5,7 @@ import {
   MdOutlineEventNote,
 } from "react-icons/md";
 import { TbCalendarTime, TbFilePencil } from "react-icons/tb";
-import { VscEye } from "react-icons/vsc";
+import { VscEye, VscEyeClosed } from "react-icons/vsc";
 import { formatDate } from "../../../shared/utils";
 import { Link } from "react-router-dom";
 import { FaLocationDot } from "react-icons/fa6";
@@ -40,7 +40,7 @@ export const EventItem = ({ event, onDelete }) => {
 
   const days = calculateDaysBetweenDates(event.startDate, event.endDate);
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 hover:bg-slate-100">
+    <div className="event rounded-lg shadow-md p-4  text-white">
       <div className="mb-4 flex items-center">
         <MdOutlineEventNote className="text-xl text-green-600 mr-1" />
         <h2 className="text-lg font-bold">{event.name}</h2>
@@ -50,7 +50,7 @@ export const EventItem = ({ event, onDelete }) => {
         <span>{event.location}</span>
       </span>
       <span className="flex items-center">
-        <TbCalendarTime className="text-xl mr-1" />
+        <TbCalendarTime className="text-xl mr-1 text-blue-400 " />
         <span className="mr-1">
           {days} {days === 1 ? "día" : "días"}
         </span>
@@ -62,32 +62,32 @@ export const EventItem = ({ event, onDelete }) => {
 
       <div className="mb-4">
         {showDetails && (
-          <section>
+          <section className=" text-white">
             <hr className="m-4" />
-            <p className="text-sm text-gray-500">
+            <p className="text-sm  ">
               <strong className="mr-1">Fecha de Inicio:</strong>
               {formatDate(event.startDate)}
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm  ">
               <strong className="mr-1">Fecha de Fin:</strong>
               {formatDate(event.endDate)}
             </p>
 
-            <p className="text-sm text-gray-500 flex items-center">
+            <p className="text-sm   flex items-center">
               <SiVirustotal className="mr-1" />
               <strong className="mr-1">Costo del Evento:</strong> $
               {event.eventCost.toFixed(2)}
             </p>
-            <p className="text-sm text-gray-500 flex items-center">
+            <p className="text-sm   flex items-center">
               <MdDiscount className="mr-1" />
               <strong className="mr-1">Descuento:</strong> $
               {event.discount.toFixed(2)}
             </p>
             <br />
             <strong>Lista de Productos Reservados</strong>
-            <table className="min-w-full bg-white mt-4 border">
+            <table className="min-w-full  mt-4 border">
               <thead>
-                <tr className="bg-gray-100">
+                <tr className="">
                   <th className="py-2 px-4 border">Imagen</th>
                   <th className="py-2 px-4 border">Producto</th>
                   <th className="py-2 px-4 border">Cantidad</th>
@@ -132,14 +132,24 @@ export const EventItem = ({ event, onDelete }) => {
       <div className="flex justify-between">
         <button
           onClick={toggleDetails}
-          className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 hover:bg-blue-200"
+          className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 hover:bg-blue-200 hover:text-black"
         >
-          <VscEye className="h-4 w-4 mr-2" />
-          {showDetails ? "Ocultar Detalles" : "Ver Detalles"}
+          {showDetails ? (
+            <>
+              <VscEyeClosed className="h-4 w-4 mr-2" />
+              Ocultar Detalles
+            </>
+          ) : (
+            <>
+              <VscEye className="h-4 w-4 mr-2" />
+              Ver Detalles
+            </>
+          )}
         </button>
+
         <Link
           to={`/my-event/edit/${event.id}`}
-          className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 hover:bg-orange-300"
+          className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 hover:bg-orange-300 hover:text-black"
         >
           <TbFilePencil className="h-4 w-4 mr-2" />
           Editar
@@ -147,7 +157,7 @@ export const EventItem = ({ event, onDelete }) => {
 
         <Popup
           trigger={
-            <span className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 hover:bg-orange-300 hover:cursor-pointer">
+            <span className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 hover:bg-red-500 hover:cursor-pointer hover:text-black">
               <MdOutlineCancel className="h-4 w-4 mr-2" />
               Cancelar
             </span>

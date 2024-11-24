@@ -1,20 +1,25 @@
 import { useEffect, useState } from "react";
 import { useEvents } from "../hooks/data";
 import { EventItem } from "./EventItem";
-import { EventsListSkeleton } from "../components/events/EventsListSkeleton";
-import { Link } from "react-router-dom";
+import { EventItemSkeleton } from "../components/events/EventsListSkeleton";
 import { AlertPopUpGeneric } from "../components/utils";
+import { NotFound } from "../../../shared/components";
+import { generateId } from "../../../shared/utils";
+import { useAuthStore } from "../../security/store/useAuthStore";
 
 export const MyEvents = () =>  {
 
-  const {events, loadUserEvents} = useEvents();
+  const {events, isLoading, loadUserEvents, } = useEvents();
   const [fetching, setFetching] = useState(true);
   const [showAlert, setShowAlert] = useState(false);  // Estado para controlar la alerta
+
+  const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
     if(fetching) {
       loadUserEvents();
       setFetching(false);
+       
     }
   }, [fetching]);
 
@@ -28,33 +33,46 @@ export const MyEvents = () =>  {
   }
 
   return (
-    <section className="py-28 mx-auto px-4 md:px-6 bg-gray-100">
-      <header className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-semibold">Mis Eventos</h1>
+
+
+
+    
+    <section className="min-h-screen mx-auto px-4 md:px-6 bg-gray-100 bg-my-events-pattern bg-cover">
+      <header className="flex items-center justify-center mb-8">
+        {/* <h1 className="mt-28 text-3xl font-semibold text-white shadow-2xl event rounded-lg">{isLoading || !user ? "" : (<>Eventos de {user.name}</>)}</h1> */}
+        {/* <h1 className="mt-28 text-3xl font-semibold text-white shadow-lg">Eventos de {user.name}</h1> */}
+        {isLoading || !user ? (
+          <div className="mt-28 event animate-pulse flex items-center rounded-lg">
+            <div className=" bg-gray-50 rounded-full w-96 h-6 mr-1"></div>
+          </div>
+        ) : (
+          <h1 className="mt-28 text-3xl font-semibold text-white shadow-2xl event rounded-lg">
+            Eventos de {user.name}
+          </h1>
+        )}
       </header>
 
-      <section className="bg-white p-6 rounded-md">
+      <section className="bg-transparent p-6 rounded-md mb-0">
         <div className="grid gap-6 ">
           {
-            fetching ? (
-              <EventsListSkeleton size={6}/>
+            isLoading ? (
+              [...Array(4)].map(() => (
+                <EventItemSkeleton key={generateId()} />)
+              )            
             ) : (
+              
             events?.data?.length ? (
               events.data.map((event) => (
+                <>
+                {console.log("USER en MyEvents.jsx, isLoading = false:  ", user)  }
                 <EventItem key={event.id} event={event} onDelete={handleAfterDelete} />
+                </>
               ))
             ) : (
-              <section className="w-full justify-center">
-                <span className="flex justify-center mb-4 text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Parece que no tienes evento...</span>
-                <span className="flex justify-center">
-                  <Link
-                    to='/reservation'
-                    className="md:text-xl lg:text-base xl:text-xl inline-flex items-center justify-center rounded-md bg-siidni-gold px-6 py-3 text-base font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer"
-                  >
-                    Reserva Ahora
-                  </Link>
-                </span>
-              </section>
+              <>
+              <NotFound message={"No hay eventos."} />
+              </>
+             
             )
           )
           }

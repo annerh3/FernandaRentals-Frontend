@@ -4,7 +4,7 @@ import { LoginPage } from "../pages";
 
 export const SecurityRouter = () => {
   return (
-    <main className="flex flex-col min-h-screen bg-hero-pattern w-full  bg-cover"> {/* en esta clases se determina que ocupe toda la pantalla*/}
+    <main className="flex flex-col min-h-screen bg-login-pattern w-full bg-cover bg-center"> {/* en esta clases se determina que ocupe toda la pantalla*/}
       <Header />
       {/* <div className="py-10"></div> */}
       {/* <section className="flex-grow px-6 py-28"> */}

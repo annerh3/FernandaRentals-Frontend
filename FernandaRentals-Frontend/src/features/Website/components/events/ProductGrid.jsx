@@ -6,7 +6,7 @@ export const ProductGrid = ({ products, isLoading, onProductSelect }) => {
     };
   
     return (
-      <div className="mt-6">
+      <div className="border rounded w-full shadow-md mb-4 mt-4 px-4 py-2 max-h-80 overflow-y-auto">
         {isLoading ? (
           <p className="text-gray-500">Cargando productos...</p> 
         ) : (

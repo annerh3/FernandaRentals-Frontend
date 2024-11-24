@@ -1,47 +1,82 @@
-import { CiSearch } from "react-icons/ci";
-import { FaHome } from "react-icons/fa";
-import { IoExitOutline, IoHomeOutline } from "react-icons/io5";
-import { MdExpandCircleDown, MdOutlineProductionQuantityLimits } from "react-icons/md";
-import { IoIosArrowDown } from "react-icons/io";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { FaHome, FaRegUserCircle } from "react-icons/fa";
+import { IoHomeOutline } from "react-icons/io5";
+import React, { useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { LuCalendarPlus } from "react-icons/lu";
 import { RiCalendarScheduleLine } from "react-icons/ri";
+import { HiOutlineLogout } from "react-icons/hi";
+import { useAuthStore } from "../../features/security/store/useAuthStore";
+import { PackageSearch } from "lucide-react";
+import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
+import { MdOutlineLogin } from "react-icons/md";
 
 //Este es el sidebar ajustado y responsivo en cierta manera
 export const SideBar2 = React.forwardRef(({ isOpen, toggleSidebar }, ref) => {
   // se usa 'React.forwardRef' para permitir recibir la referencia (ref) junto con las demás propiedades
   // Se debe colocar las iguientes declaraciones dentro del componente SideBar para manejar el comportamiento
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const btnClose = useRef(null);
+  const logout = useAuthStore((state) => state.logout);
+  const navigate = useNavigate();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const user = useAuthStore((state) => state.user);
 
-  const toggleDropdown = () => {
-    setIsOpenMenu(!isOpenMenu);
+  const handleLogout = () => {
+    logout();
+    setTimeout(() => navigate("/home", { replace: true }), 0); // ejecutar navigate luego que procesos anteriores terminen
   };
+
+  // Cierra el sidebar al presionar Esc
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        toggleSidebar(); // por algun motivo este evento se dispara aun estando el sideBar cerrado
+        console.log("esc");
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [btnClose]);
+
   return (
-    <div className="items-center">
+    <div className="items-center" ref={ref}>
       {/* Inicio del Aside  */}
       <div
-        ref={ref}
-        className={`sidebar fixed top-0 bottom-0 p-2 w-[300px] overflow-y-auto text-center bg-gray-900 ${
+        className={`sidebar fixed top-0 bottom-0 p-2 w-[300px]  text-center bg-gray-900 ${
           isOpen ? "left-0" : "left-[-300px]"
         } transition-all duration-300
         
         `}
       >
         {/* PARTE DE LA IDENTIDAD  */}
-        <div className="text-gray-100 text-xl">
+        <div className="text-gray-100 text-sm">
           {/* Nombre Principal e Icono */}
           <div className="p-2 mt-1 flex items-center justify-between">
             <div className="flex items-center">
-              <FaHome className="py-0.3 cursor-pointer" />
-              <span className="font-bold text-gray-200 ml-3 text-3xl">
-                Siidni{" "}
-              </span>
+              {isAuthenticated ? (
+                <>
+                  <FaRegUserCircle className="py-0.3 w-7 h-7" />
+                  <span className="font-bold text-gray-200 ml-3 text-xl pointer-events-none">
+                    {user.name}{" "}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <FaHome className="py-0.3" />
+                  <span className="font-bold text-gray-200 ml-3 text-xl pointer-events-none">
+                    Fernanda Rentals{" "}
+                  </span>
+                </>
+              )}
             </div>
 
-            <div className="mr-3">
-              <IoExitOutline
-                className=" cursor-pointer text-white rotate-180"
+            <div className="flex space-x-1">
+              <TbLayoutSidebarLeftExpandFilled
+                className="text-3xl cursor-pointer text-white rotate-180 hover:border-2 hover:border-transparent hover:text-gray-400"
+                ref={btnClose}
                 onClick={toggleSidebar}
               />
             </div>
@@ -49,96 +84,65 @@ export const SideBar2 = React.forwardRef(({ isOpen, toggleSidebar }, ref) => {
           {/* Fin del Nombre Principal e Icono */}
           <hr className="my-2 text-gray-600" />
         </div>
-        {/* PARTE DE LA BÚSQUEDA  */}
-        <div className=" flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer bg-gray-700">
-          <CiSearch />
-          <input
-            type="text"
-            placeholder="Search"
-            className="text-sm ml-4 w-full bg-transparent focus:outline-none"
-          />
-        </div>
-        {/* PARTE DE LOS MENU  */}
-        {/* Item de Menu  */}
-        <Link to="/home">
-          <div className=" flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500">
-            <IoHomeOutline className="text-white" />
-            <span className=" text-sm ml-4 text-gray-200">Home</span>
-          </div>
-        </Link>
 
-        {/* Fin de Item de Menu  */}
-        {/* Item de Menu  */}
+        {/* Item de Header  */}
+        {isAuthenticated ? (
+          <Link to="/home">
+            <div className=" flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500">
+              <IoHomeOutline className="text-white" />
+              <span className=" text-sm ml-4 text-gray-200">Home</span>
+            </div>
+          </Link>
+        ) : (
+          ""
+        )}
+
+        {/* Item de Producos  */}
         <Link to="/products">
           <div className=" flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500">
-            <MdOutlineProductionQuantityLimits className="text-white" />
-            <span className=" text-sm ml-4 text-gray-200">Productos</span>
+            <PackageSearch className="text-white" size={17} />
+            <span className="text-sm ml-4 text-gray-200">Productos</span>
           </div>
         </Link>
 
-        {/* Fin de Item de Menu  */}
-        {/* Item de Menu  */}
-        <Link to="/reservation">
-          <div className=" flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500">
-          <LuCalendarPlus  className="text-white" />
-            <span className=" text-sm ml-4 text-gray-200">Crear Reservación</span>
-          </div>
-        </Link>
+        {isAuthenticated ? (
+          <>
+            <Link to="/reservation">
+              <div className=" flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500">
+                <LuCalendarPlus className="text-white" />
+                <span className=" text-sm ml-4 text-gray-200">
+                  Crear Reservación
+                </span>
+              </div>
+            </Link>
 
-        {/* Item de Menu  */}
-        <Link to="/my-events">
-          <div className=" flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500">
-          <RiCalendarScheduleLine  className="text-white" />
-            <span className=" text-sm ml-4 text-gray-200">Mis Eventos</span>
-          </div>
-        </Link>
+            <Link to="/my-events">
+              <div className=" flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500">
+                <RiCalendarScheduleLine className="text-white" />
+                <span className=" text-sm ml-4 text-gray-200">Mis Eventos</span>
+              </div>
+            </Link>
 
-        {/* Fin de Item de Menu  */}
-        {/* Item de Menu Desplegable  */}
-        <div
-          className="flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500 text-white"
-          onClick={toggleDropdown}
-        >
-          <MdExpandCircleDown className="text-white" size={20} />
-          <div className="flex ml-4 justify-between w-full items-center">
-            <span>ChatBox</span>
-            <span
-              className={`text-sm ${isOpenMenu ? "rotate-180" : ""}`}
-              id="arrow"
-            >
-              <IoIosArrowDown />
-            </span>
-          </div>
-        </div>
-
-        {isOpenMenu && (
-          <div
-            className="flex flex-col text-left text-sm font-thin mt-2 w-4/5 mx-auto"
-            id="submenu"
-          >
-            <span className="cursor-pointer p-2 hover:bg-blue-500 rounded-md mt-1 text-white">
-              Opción 1
-            </span>
-            <span className="cursor-pointer p-2 hover:bg-blue-500 rounded-md mt-1 text-white">
-              Opción 2
-            </span>
-            <span className="cursor-pointer p-2 hover:bg-blue-500 rounded-md mt-1 text-white">
-              Opción 3
-            </span>
-          </div>
+            <Link onClick={handleLogout}>
+              <div className="flex mt-3 p-2 ml-0 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-red-500">
+                <HiOutlineLogout className="text-white" />
+                <span className=" text-sm ml-4 text-gray-200">
+                  Cerrar Sesión
+                </span>
+              </div>
+            </Link>
+          </>
+        ) : (
+          <Link to="security/login">
+            <div className="flex mt-3 p-2 ml-0 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-[#a96b2e]">
+              <MdOutlineLogin className="text-white" />
+              <span className=" text-sm ml-4 text-gray-200">
+                Iniciar Sesión
+              </span>
+            </div>
+          </Link>
         )}
-        {/* Fin de Item de Menu  Desplegable*/}
-
-        <hr className="my-2 text-gray-600" />
-
-        {/* Item de Menu  */}
-        <div className=" flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500">
-          <IoHomeOutline className="text-white" />
-          <span className=" text-sm ml-4 text-gray-200">Bookmark</span>
-        </div>
-        {/* Fin del Item de MENU  */}
       </div>
-      {/* Fin del Aside  */}
     </div>
   );
 });

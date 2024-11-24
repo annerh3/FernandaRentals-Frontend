@@ -60,7 +60,7 @@ export const ProductsSelectGrid = ({
   const currentProducts = selectedProducts.slice(startIndex, endIndex);
 
   return (
-    <div className="mt-6">
+    <div className="mt-6 overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
@@ -96,7 +96,7 @@ export const ProductsSelectGrid = ({
                     onChange={(e) =>
                       handleQuantityChange(product.id, e.target.value)
                     }
-                    className="border rounded px-2 py-1"
+                    className="border rounded px-2 py-1 w-20"
                   />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

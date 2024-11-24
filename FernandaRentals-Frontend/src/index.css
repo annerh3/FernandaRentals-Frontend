@@ -44,3 +44,12 @@ body {
   color: white; /* Color del texto */
   font-size: 1.5rem;
 }
+
+
+.event{
+  padding: 1rem;
+  background: rgba(8, 7, 7, 0.575); /* Fondo blanco con opacidad */
+  backdrop-filter: blur(10px); /* Aplica un desenfoque al fondo */
+  border-bottom: 1px solid rgba(15, 13, 13, 0.2); /* Línea de separación */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
