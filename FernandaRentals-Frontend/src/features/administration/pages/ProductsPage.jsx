@@ -19,6 +19,12 @@ export const ProductsPage = ({ darkMode }) => {
     setModalType(type);
     setSelectedProduct(product);
     setShowModal(true);
+    
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    setFetchingProducts(true); // Activar el refresco
   };
 
   useEffect(() => {
@@ -223,6 +229,7 @@ export const ProductsPage = ({ darkMode }) => {
           modalType={modalType}
           selectedProduct={selectedProduct}
           setShowModal={setShowModal} 
+          handleModalClose={handleModalClose}
         />
       )}
     </div>
