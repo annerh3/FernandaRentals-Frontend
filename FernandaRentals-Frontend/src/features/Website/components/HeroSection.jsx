@@ -15,7 +15,7 @@ export const HeroSection = () => {
           <div className="flex flex-col gap-2 min-[400px]:flex-row justify-center font-pluto-light font-bold">
             <Link
               to="/products"
-              className="inline-flex items-center justify-center rounded-md bg-[#d68a3d] px-6 py-3 text-base font-medium text-primary-foreground shadow-sm transition-transform transform hover:translate-y-1 hover:border-transparent cursor-pointer hover:bg-[#a96b2e]"
+              className="inline-flex items-center justify-center rounded-md bg-siidni-goldDark px-6 py-3 text-base font-medium text-primary-foreground shadow-sm transition-transform transform hover:translate-y-1 hover:border-transparent cursor-pointer hover:bg-[#a96b2e]"
               >
               Ver Productos
             </Link>

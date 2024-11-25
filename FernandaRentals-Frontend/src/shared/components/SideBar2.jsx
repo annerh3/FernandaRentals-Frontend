@@ -43,15 +43,12 @@ export const SideBar2 = React.forwardRef(({ isOpen, toggleSidebar }, ref) => {
 
   return (
     <div className="items-center" ref={ref}>
-      {/* Inicio del Aside  */}
       <div
         className={`sidebar fixed top-0 bottom-0 p-2 w-[300px]  text-center bg-gray-900 ${
           isOpen ? "left-0" : "left-[-300px]"
-        } transition-all duration-300
-        
+        } transition-all duration-300     
         `}
       >
-        {/* PARTE DE LA IDENTIDAD  */}
         <div className="text-gray-100 text-sm">
           {/* Nombre Principal e Icono */}
           <div className="p-2 mt-1 flex items-center justify-between">
@@ -86,15 +83,13 @@ export const SideBar2 = React.forwardRef(({ isOpen, toggleSidebar }, ref) => {
         </div>
 
         {/* Item de Header  */}
-        {isAuthenticated ? (
+        {isAuthenticated ? ("") : (
           <Link to="/home">
             <div className=" flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500">
               <IoHomeOutline className="text-white" />
               <span className=" text-sm ml-4 text-gray-200">Home</span>
             </div>
           </Link>
-        ) : (
-          ""
         )}
 
         {/* Item de Producos  */}

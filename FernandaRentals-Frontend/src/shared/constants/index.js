@@ -1,1 +1,1 @@
-export * from './hotKeys';
+export * from './DashBoard';

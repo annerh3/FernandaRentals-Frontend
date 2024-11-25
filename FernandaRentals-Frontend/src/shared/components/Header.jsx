@@ -3,13 +3,13 @@ import { useRef, useState, useEffect } from "react";
 
 import "./../../index.css";
 import { SideBar2 } from "./SideBar2";
-import { BsFilterLeft } from "react-icons/bs";
 import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
+import { useAuthStore } from "../../features/security/store/useAuthStore";
 
 export const Header = () => {
   const sideBar = useRef(null); // useRef para referenciar el componente SideBar2.
   const [isOpen, setIsOpen] = useState(false); // para controlar si el SideBar2 está abierto o cerrado.
-
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const toggleSidebar = () => {
     setIsOpen(!isOpen); // Invierte el valor de 'isOpen' cuando se llama.
   };
@@ -63,7 +63,7 @@ export const Header = () => {
 
     {/* Logo y nombre */}
     <Link
-      to="/home"
+      to={isAuthenticated ? "/my-events" : "/home"}
       className="flex items-center space-x-4 cursor-pointer"
     >
       <div className="flex items-center space-x-2">

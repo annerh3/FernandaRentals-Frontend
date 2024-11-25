@@ -53,9 +53,13 @@ export const createProduct = async (productData) => {
   
   // Editar un producto
   export const updateProduct = async (id, updatedData) => {
+    console.log("Este es el id: ", id)
+    // console.log(id);
+    console.log("Este es body: ", updatedData)
+    // console.log(updatedData);
     try {
       const { data } = await webApi.put(`/products/${id}`, updatedData);
-  
+      console.log("API Raw Response:", data);
       return data;
     } catch (error) {
       console.error(error);

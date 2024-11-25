@@ -20,6 +20,7 @@ export default {
         {
           siidni: {
             gold: "#e8a06d",
+            goldDark: "#d68a3d",
             goldLight: "#ea995e",
             brown: "#443e38",
             blue: "#002D72", // Azul marino oscuro
@@ -28,6 +29,9 @@ export default {
             yellow: "#FFD700", // Amarillo dorado
             yellowLight: "#FFE033", // Amarillo claro
             yellowDark: "#CCAC00", // Amarillo más oscuro
+            dark: "#0D0D0D",
+            darkLight: "#171717",
+            darkCard: "#1C1C1E"
           },
           semiBlack: "rgba(8, 7, 7, 0.575)",
         }

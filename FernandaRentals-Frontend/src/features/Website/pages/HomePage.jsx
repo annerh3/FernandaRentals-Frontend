@@ -1,6 +1,5 @@
 import { useAuthStore } from "../../security/store";
-import { Carousel, HeroSection } from "../components";
-import { Link } from "react-router-dom";
+import { ActionSection, Carousel, HeroSection, Testimonials } from "../components";
 
 export const HomePage = () => {
   // Imágenes del carrusel
@@ -95,7 +94,7 @@ export const HomePage = () => {
                 </div>
                 <h2 className="text-3xl  font-bold tracking-tighter sm:text-4xl">
                   ¿Por qué elegir{" "}
-                  <a className="text-siidni-goldLight">Siidni Rentals®</a> ?
+                  <a className="text-siidni-goldLight">Fernanda Rentals®</a> ?
                 </h2>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl lg:text-base xl:text-xl">
                   Nuestro servicio de alquiler de muebles ofrece una variedad de
@@ -135,139 +134,16 @@ export const HomePage = () => {
         {/* Fin Seccion Beneficios */}
 
         {/* Inicio Seccion Testimonios */}
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
-          <div className=" grid items-center justify-center gap-4 px-4 text-center md:px-6 lg:gap-10">
-            <div className="space-y-3">
-              <div className="inline-block rounded-lg bg-gray-200 px-3 py-3 text-sm">
-                Testimonios
-              </div>
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                Lo que dicen nuestros clientes
-              </h2>
-              <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl lg:text-base xl:text-xl">
-                Escuche a nuestros clientes satisfechos sobre su experiencia con
-                nuestros servicios de alquiler de muebles.
-              </p>
-            </div>
-            <div className="divide-y rounded-lg border">
-              <div className="grid w-full grid-cols-1 items-stretch justify-center divide-x md:grid-cols-2">
-                <div className="mx-auto flex w-full items-center justify-start p-4 sm:p-8">
-                  <div className="grid gap-2">
-                    <div className="flex items-center gap-2">
-                      <a
-                        href="https://github.com/annerh3"
-                        target="_blank"
-                        className="w-16 h-16 bg-gray-200 rounded-full overflow-hidden"
-                      >
-                        <img
-                          src="https://i.postimg.cc/5NPm7mZy/gfemale-person.jpg"
-                          alt="Avatar"
-                          className="w-full h-full rounded-full object-cover"
-                        />
-                      </a>
-                      <aside className="font-medium">
-                        Fernanda Quintanilla
-                      </aside>
-                    </div>
-                    <p className="italic opacity-70">
-                      "A chinga, tengo una tienda. Es un servicio de primera. El
-                      de al lado va a coronar esta noche."
-                    </p>
-                  </div>
-                </div>
-                <div className="mx-auto flex w-full items-center justify-center p-4 sm:p-8">
-                  <div className="grid gap-2">
-                    <div className="flex items-center gap-2">
-                      <div className="flex items-center gap-2">
-                        <a
-                          href="https://github.com/TETvega"
-                          target="_blank"
-                          className="w-16 h-16 bg-gray-200 rounded-full overflow-hidden"
-                        >
-                          <img
-                            src="https://i.postimg.cc/g21LXYM6/hector-profile.jpg"
-                            alt="Avatar"
-                            className="w-full h-full rounded-full object-cover"
-                          />
-                        </a>
-                        <aside className="font-medium">Héctor Vega</aside>
-                      </div>
-                    </div>
-                    <p className="italic opacity-70">
-                      "Me impresionó la amplia selección de muebles y el proceso
-                      de entrega e instalación impecable. ¡Muy recomendable!"
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="grid w-full grid-cols-1 items-stretch justify-center divide-x md:grid-cols-2">
-                <div className="mx-auto flex w-full items-center justify-center p-4 sm:p-8">
-                  <div className="grid gap-2">
-                    <div className="flex items-center gap-2">
-                      <div className="flex items-center gap-2">
-                        <span className="w-16 h-16 rounded-full overflow-hidden">
-                          <img
-                            src="https://i.postimg.cc/15ztH0Gv/padre.jpg"
-                            alt="Avatar"
-                            className="w-full h-full rounded-full object-cover"
-                          />
-                        </span>
-                        <aside className="font-medium">
-                          Jonahthan Velasquez
-                        </aside>
-                      </div>
-                    </div>
-                    <p className="italic opacity-70">
-                      "Las sillas de madera con cojín fueron perfectas para mi
-                      babyshower. ¡Quiero otro bebé!"
-                    </p>
-                  </div>
-                </div>
-                <div className="mx-auto flex w-full items-center justify-center p-4 sm:p-8">
-                  <div className="grid gap-2">
-                    <div className="flex items-center gap-2">
-                      <div className="flex items-center gap-2">
-                        <span className="w-16 h-16  rounded-full overflow-hidden shadow-md">
-                          <img
-                            src="https://i.postimg.cc/MpFdTYDN/mewin.jpg"
-                            alt="Avatar"
-                            className="w-full h-full rounded-full object-cover"
-                          />
-                        </span>
-                        <aside className="font-medium">Rolando Mejia</aside>
-                      </div>
-                    </div>
-                    <p className="italic opacity-70">
-                      "Ocupabamos 100 mesas para un evento de la Escuela de
-                      Mewing ®. Fernanda Rentals nos dió el servicio al dia
-                      siguiente. ¡Son increíbles!"
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+       <Testimonials     />
         {/* Inicio Seccion Testimonios */}
 
-        <section className="w-full h-96 justify-center bg-black/50 bg-action-pattern bg-cover flex items-center">
-          <section className="w-full h-96 flex justify-center items-center bg-black/50">
-            <div>
-              <span className="flex justify-center mb-4 text-3xl text-white font-bold tracking-tighter sm:text-4xl md:text-5xl">
-               {!isAuthenticated ? "Tu Evento Perfecto Está a Un Clic" : ""} 
-              </span>
-              <span className="flex justify-center">
-                <Link
-                  to="/reservation"
-                  className="inline-flex items-center justify-center text-white rounded-md bg-[#d68a3d] px-6 py-3 text-base font-medium text-primary-foreground shadow-sm transition-transform transform hover:translate-y-1 hover:border-transparent cursor-pointer hover:bg-[#a96b2e]"
-                >
-                  Ver Productos
-                </Link>
-              </span>
-            </div>
-          </section>
-        </section>
+      <ActionSection   isAuthenticated={isAuthenticated}  />
       </main>
     </div>
   );
 };
+
+   
+
+   
+    

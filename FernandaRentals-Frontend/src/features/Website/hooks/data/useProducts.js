@@ -1,8 +1,10 @@
 import { useState } from "react"
-import {getProductsList} from "../../../../shared/actions/products/products"
+import {getProductsList, updateProduct} from "../../../../shared/actions/products/products"
+import LazyResult from "postcss/lib/lazy-result";
 
 export const useProducts = () => {
   const [products, setProducts] = useState({});
+  const [newProductData, setnewProductData] = useState({});
   const [prodCats, setProductsCategory] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -20,6 +22,16 @@ export const useProducts = () => {
     setIsLoading(false);
   }
 
+  const editProduct = async (id, updatedData) => {
+    setIsLoading(true);
+    // console.log("useProducts. Id => ", id)
+    // console.log("useProducts. Data => ", updatedData)
+    const result = await updateProduct(id, updatedData);
+    console.log("API useProduct Response:", result);
+    setnewProductData(result);
+    setIsLoading(false);
+  }
+
 //getProductsList
 
   return {
@@ -27,8 +39,11 @@ export const useProducts = () => {
     products,
     isLoading,
     prodCats,
+    newProductData,
     // Methods
     loadProducts,
     loadProductsByCategory,
+
+    editProduct,
   }
 }

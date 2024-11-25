@@ -1,4 +1,4 @@
-export const rolesListConstant ={
+export const rolesListConstant = {
     ADMIN: 'ADMIN',
     CLIENT: 'CLIENT' 
 }

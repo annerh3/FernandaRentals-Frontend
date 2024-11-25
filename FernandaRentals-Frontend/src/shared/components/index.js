@@ -5,3 +5,5 @@ export * from './Pagination';
 export * from './Loading.jsx'
 export * from './NotFound.jsx'
 export * from './ProtectedComponent.jsx'
+export * from './NotFoundProducts.jsx';
+export * from './ProtectedLayout.jsx';

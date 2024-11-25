@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import {useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginInitValues, loginValidationSchema } from "../forms/login_data";
 import { isObjectEmpty } from "../../../shared/utils";
@@ -7,82 +7,87 @@ import { mirage } from "ldrs";
 import { toast, ToastContainer } from "react-toastify";
 import { useAuthStore } from "../store/useAuthStore";
 import "react-toastify/dist/ReactToastify.css";
+import { rolesListConstant } from "../../../shared/constants/roles-list.constants";
 
 export const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  mirage.register();
 
-  const login = useAuthStore((state) => state.login);
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const validateAuthentication = useAuthStore((state) => state.validateAuthentication);
-  
+  const { login, isAuthenticated, validateAuthentication, roles } = useAuthStore();
+
+    useEffect(() => {
+      if (!isAuthenticated) return;
+    console.log(roles)
+      const hasAdminRole = roles.includes(rolesListConstant.ADMIN);
+      console.log("tiene admin role?  ",hasAdminRole)
+    
+      const destination = hasAdminRole ? "/administration/dashboard" : "/my-events";
+      console.log("dest => ",destination)
+      navigate(destination);
+    }, [roles]);
+
+    // useEffect(() => {
+    //   if(isAuthenticated) navigate("/administration/dashboard");
+    // })
+    
+
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/my-events");
-    }
-  }, [isAuthenticated]);
+    mirage.register(); // Para segurar que se registre al montar el componente
+  }, []);
 
   const formik = useFormik({
     initialValues: loginInitValues,
     validationSchema: loginValidationSchema,
     validateOnChange: true,
     onSubmit: async (formValues) => {
-      //formik.resetForm(); // <-- Vaciar inputs del form
-      console.log(formValues);
       setLoading(true);
-      const { error, message } = await login(formValues);
-      validateAuthentication();
-      setLoading(false);
-      console.log('error es: -->', error)  
-      
-      
-      if (error) {
-        toast.error(`${message}`, {
+      try {
+        const { error, message } = await login(formValues);
+        validateAuthentication();
+        toast[error ? "error" : "success"](message, {
           position: "top-center",
-          autoClose: 2500, 
+          autoClose: 2500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
         });
-       
-      } else{
-        toast.success(`${message}`, {
+      } catch (e) {
+        toast.warning("Sin conexión al servidor", {
           position: "top-center",
-          autoClose: 2500,  // <----------------
+          autoClose: 2500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
         });
+      } finally {
+        setLoading(false);
       }
     },
   });
 
   return (
-    <section
-      className="flex justify-center items-center min-h-screen w-full"
-    >
-        <div className="bg-gray-950 bg-opacity-20 backdrop-blur-lg  rounded-lg shadow-lg p-8 w-full max-w-md">
-                <ToastContainer
-                  position="top-center"
-                  autoClose={1300}
-                  hideProgressBar={false}
-                  newestOnTop={false}
-                  closeOnClick
-                  rtl={false}
-                  pauseOnFocusLoss
-                  draggable
-                  pauseOnHover
-                  theme="colored"
-                />
+    <section className="flex justify-center items-center min-h-screen w-full">
+      <div className="bg-gray-950 bg-opacity-20 backdrop-blur-lg  rounded-lg shadow-lg p-8 w-full max-w-md">
+        <ToastContainer
+          position="top-center"
+          autoClose={1300}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
         <h2 className="text-2xl font-bold text-white mb-6 text-center">
           Iniciar Sesión
         </h2>
-        <form onSubmit={formik.handleSubmit} id='loginForm'>
+        <form onSubmit={formik.handleSubmit} id="loginForm">
           <div className="mb-4">
             <label
               className="block text-white text-sm font-bold mb-2"
