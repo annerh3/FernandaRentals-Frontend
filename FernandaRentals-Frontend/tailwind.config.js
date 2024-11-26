@@ -31,7 +31,7 @@ export default {
             yellowDark: "#CCAC00", // Amarillo más oscuro
             dark: "#0D0D0D",
             darkLight: "#171717",
-            darkCard: "#1C1C1E"
+            darkCard: "#1e1e1e"
           },
           semiBlack: "rgba(8, 7, 7, 0.575)",
         }

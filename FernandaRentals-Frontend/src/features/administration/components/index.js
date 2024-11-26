@@ -8,3 +8,7 @@ export * from './ProductsGrid';
 export * from './CategoryGrid';
 export * from './DataNotFound';
 export * from './CategoryModal';
+export * from './users-page/ClientsGrid';
+export * from './users-page/AdminsGrid';
+export * from './users-page/ClientTypesGrid';
+export * from './users-page/ClientsModal';
