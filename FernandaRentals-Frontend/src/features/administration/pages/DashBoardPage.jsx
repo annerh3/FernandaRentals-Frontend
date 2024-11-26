@@ -53,7 +53,7 @@ export const DashBoardPage = ({ darkMode }) => {
     >
       <div className="flex">
         {/* Main Content */}
-        <main className="ml-64 flex-1 p-8">
+        <main className="ml-20 sm:ml-30 md:ml-60 flex-1 p-8">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-2xl font-bold">Overview</h1>
           </div>

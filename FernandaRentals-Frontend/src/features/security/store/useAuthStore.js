@@ -89,7 +89,7 @@ export const useAuthStore = create((set, get) => ({
 
             const roles = decodeJwt["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
 
-            console.log(roles);
+            console.log("Roles en useAuthStore --> ",roles);
 
 
             set(

@@ -8,7 +8,6 @@ import { ProtectedLayout } from "../shared/components";
 
 export const AppRouter = () => {
   const location = useLocation();
-
   useEffect(() => {
     const loadFlyonui = async () => {
       try {
@@ -29,9 +28,10 @@ export const AppRouter = () => {
 
   return (
     <Routes>
-      {/* <Route element={<ProtectedLayout />}> */}
+      <Route element={<ProtectedLayout />}>
         <Route path="/administration/*" element={<AdministrationRouter />} />
-      {/* </Route> */}
+      </Route>
+      
       <Route path="/security/*" element={<SecurityRouter />} />
 
       <Route path="/*" element={<WebRouter />} />

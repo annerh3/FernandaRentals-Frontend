@@ -24,7 +24,7 @@ export const ProductsPage = ({ darkMode }) => {
 
   const handleModalClose = () => {
     setShowModal(false);
-    setFetchingProducts(true); // Activar el refresco
+    setFetchingProducts(true); // actualizar lista de productos
   };
 
   useEffect(() => {
@@ -76,77 +76,7 @@ export const ProductsPage = ({ darkMode }) => {
     };
   }, [products]);
 
-  // const proDucts = {
-  //   data: {
-  //     hasNextPage: true,
-  //     hasPreviousPage: false,
-  //     currentPage: 1,
-  //     pageSize: 4,
-  //     totalItems: 33,
-  //     totalPages: 9,
-  //     items: [
-  //       {
-  //         id: "ed94b902-dc8b-4f40-9c4f-8cf5f00c35a4",
-  //         name: "Candelabro de Cristal",
-  //         description: "Candelabro de cristal con detalles dorados.",
-  //         urlImage: "https://i.postimg.cc/zG8FFyQW/Candelabro-de-Cristal.jpg",
-  //         category: {
-  //           id: "ecd0a6b2-b849-4b34-9602-125524a4e931",
-  //           name: "Decoración",
-  //           description: "Categoría para decoración de eventos y espacios.",
-  //         },
-  //         stock: 20,
-  //         cost: 35,
-  //       },
-  //       {
-  //         id: "f5e99eb9-4353-49f2-a2db-57c9982eaff8",
-  //         name: "Carpa Transparente",
-  //         description:
-  //           "Carpa transparente para eventos nocturnos al aire libre.",
-  //         urlImage: "https://i.postimg.cc/HxcwkXJG/Carpa-Transparente.png",
-  //         category: {
-  //           id: "1e011229-5619-436d-b405-39e18889a6d8",
-  //           name: "Carpas y Toldos",
-  //           description:
-  //             "Categoría para carpas y toldos para eventos al aire libre.",
-  //         },
-  //         stock: 5,
-  //         cost: 200,
-  //       },
-  //       {
-  //         id: "d01c78d4-3e7d-4d4d-bfee-749d5f78d66f",
-  //         name: "Carpa Verde Militar",
-  //         description: "Carpa verde de estilo militar para eventos rústicos.",
-  //         urlImage: "https://i.postimg.cc/Qdmk4XLz/Carpa-Verde-Militar.jpg",
-  //         category: {
-  //           id: "1e011229-5619-436d-b405-39e18889a6d8",
-  //           name: "Carpas y Toldos",
-  //           description:
-  //             "Categoría para carpas y toldos para eventos al aire libre.",
-  //         },
-  //         stock: 6,
-  //         cost: 180,
-  //       },
-  //       {
-  //         id: "edbf7a6f-7d65-4708-89fc-18c61ed2a452",
-  //         name: "Centro de Mesa con Velas",
-  //         description: "Centro de mesa decorativo con velas perfumadas.",
-  //         urlImage:
-  //           "https://i.postimg.cc/Bvv5Rd4n/Centro-de-Mesa-con-Velas.jpg",
-  //         category: {
-  //           id: "ecd0a6b2-b849-4b34-9602-125524a4e931",
-  //           name: "Decoración",
-  //           description: "Categoría para decoración de eventos y espacios.",
-  //         },
-  //         stock: 40,
-  //         cost: 22,
-  //       },
-  //     ],
-  //   },
-  //   message: "Listado de Productos Obtenida Correctamente",
-  //   status: true,
-  // };
-
+ 
   return (
     <div
       className={`min-h-screen ${
@@ -155,41 +85,45 @@ export const ProductsPage = ({ darkMode }) => {
     >
       <div className="flex">
         {/* Main Content */}
-        <main className="ml-20 sm:ml-64  flex-1 p-8">
-          <div className="flex justify-between items-center mb-8">
-            <div className="flex gap-2">
-              <h1 className="text-3xl font-bold">Productos</h1>
-              <form onSubmit={formik.handleSubmit} className="flex items-center w-full sm:w-64 rounded-lg mb-2 sm:mb-0">
-                  <input
-                    type="text"
-                    id="searchTerm"
-                    name="searchTerm"
-                    placeholder="Busca productos..."
-                    value={formik.values.searchTerm}
-                    onChange={formik.handleChange}
-                    className="px-4 py-2 border rounded-lg w-full ml-3"
-                  />
-                <button
-                  type="submit"
-                  className="mt-2 sm:mt-0 sm:ml-2 px-4 py-2 bg-yellow-100 hover:bg-yellow-200 text-black rounded-lg shadow-lg"
-                >
-                  <Search className="mx-3" />
-                </button>
-              </form>
-            </div>
+        <main className="ml-20 sm:ml-30 md:ml-60 flex-1 p-8 container">
+        <div className="flex flex-wrap justify-between items-center mb-8">
+  <div className="flex flex-wrap gap-2 items-start sm:items-center">
+    <h1 className="text-3xl font-bold w-full sm:w-auto">Productos</h1>
+    <form
+      onSubmit={formik.handleSubmit}
+      className="flex items-center w-full sm:w-64 rounded-lg mb-2 sm:mb-0"
+    >
+      <input
+        type="text"
+        id="searchTerm"
+        name="searchTerm"
+        placeholder="Busca productos..."
+        value={formik.values.searchTerm}
+        onChange={formik.handleChange}
+        className={`px-4 py-2 border rounded-lg w-full ${darkMode ? "bg-siidni-darkLight" : "bg-white"}`}
+      />
+      <button
+        type="submit"
+        className="mt-2 sm:mt-0 sm:ml-2 px-4 py-2 bg-yellow-200 hover:bg-yellow-300 text-black rounded-lg shadow-lg"
+      >
+        <Search className="mx-3" />
+      </button>
+    </form>
+  </div>
 
-            <div className="flex space-x-4">
-              <button
-                onClick={() => handleModalOpen("create")}
-                className={`mr-8 flex items-center space-x-2 px-4 py-2 rounded-lg ${
-                  darkMode ? "bg-blue-600" : "bg-blue-500"
-                } text-white`}
-              >
-                <FiPlus />
-                <span>New Product</span>
-              </button>
-            </div>
-          </div>
+  <div className="flex sm:ml-2 mr-5 ">
+    <button
+      onClick={() => handleModalOpen("create")}
+      className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${
+        darkMode ? "bg-blue-600" : "bg-blue-500"
+      } text-white transition-transform hover:scale-105 mr-8`}
+    >
+      <FiPlus />
+      <span>Nuevo Producto</span>
+    </button>
+  </div>
+</div>
+
 
           {/* products Grid */}
           {
@@ -235,6 +169,3 @@ export const ProductsPage = ({ darkMode }) => {
     </div>
   );
 };
-
-    
-  

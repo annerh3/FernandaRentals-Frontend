@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getAllCategoryProducts } from "../../../../shared/actions/categoryProducts/categoryProduct";
+import { createCategoryProduct, getAllCategoryProducts, updateCategoryProduct } from "../../../../shared/actions/categoryProducts/categoryProduct";
 
 export const useCategoryProduct = () => {
 
@@ -12,6 +12,21 @@ export const useCategoryProduct = () => {
       setCategoriesProd(result);
       setIsLoading(false);
     } 
+
+    const createCategoryProd = async (categoryData) => {
+      setIsLoading(true);
+      const result = await createCategoryProduct(categoryData);
+      setCategoriesProd(result);
+      setIsLoading(false);
+    }
+
+    const editCategoryProd = async (id, updatedData) => {
+      setIsLoading(true);
+      const result = await updateCategoryProduct(id, updatedData);
+      setCategoriesProd(result);
+      setIsLoading(false);
+    }
+
   
     return {
       //Properties
@@ -19,6 +34,8 @@ export const useCategoryProduct = () => {
       isLoading,
           //Methods
           loadCategoriesProd,
+          createCategoryProd,
+          editCategoryProd
     }
   
 }

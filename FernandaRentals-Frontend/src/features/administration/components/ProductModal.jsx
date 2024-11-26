@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useCategoryProduct } from "../../Website/hooks/data/useCategoryProduct";
-import { ProductValidationSchema } from "../forms/products.data";
+import { productInitialValues, ProductValidationSchema } from "../forms/products.data";
 import { toast, ToastContainer } from "react-toastify";
 import { useFormik } from "formik";
 import { mirage } from "ldrs";
@@ -30,8 +30,8 @@ export const ProductModal = ({
   
   const editProduct = async (id, updatedData) => {
     try {
-      const response = await webApi.put(`/products/${id}`, updatedData);
-      return response.data; // Asegúrate de devolver solo los datos necesarios
+      const {data} = await webApi.put(`/products/${id}`, updatedData);
+      return data; // Asegúrate de devolver solo los datos necesarios
     } catch (error) {
       console.error("Error en editProduct:", error);
       throw error; // Esto asegura que el error se propague hacia arriba
@@ -79,14 +79,7 @@ export const ProductModal = ({
   };
   // Configura valores iniciales para Formik
   const formik = useFormik({
-    initialValues: {
-      name: selectedProduct?.name || "",
-      cost: selectedProduct?.cost || "",
-      categoryId: selectedProduct?.category?.id || "",
-      description: selectedProduct?.description || "",
-      stock: selectedProduct?.stock || "",
-      urlImage: selectedProduct?.urlImage || "",
-    },
+    initialValues: productInitialValues(selectedProduct),
     validationSchema: ProductValidationSchema,
     validateOnChange: true,
     onSubmit: async (values) => {
@@ -100,7 +93,7 @@ export const ProductModal = ({
 
         if (selectedProduct == null) {
           console.log("dentro if: ", selectedProduct);
-          result = await createProduct(values);
+          result = await createProduct(values); // de actions
         } else {
           result = await editProduct(selectedProduct.id, values);
         }

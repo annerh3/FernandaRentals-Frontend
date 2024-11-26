@@ -1,12 +1,15 @@
 import * as Yup from 'yup';
-export const productInitialValues = {
-    "name": "",
-    "description": "",
-    "urlImage": "",
-    "categoryId": "",
-    "stock": 0,
-    "cost": 0
+export const productInitialValues = (selectedProduct) => {
+  const initValues = {
+    "name": `${selectedProduct?.name || ""}`,
+    "description": `${selectedProduct?.description || ""}`,
+    "urlImage": `${selectedProduct?.urlImage|| ""}`,
+    "categoryId": `${selectedProduct?.category?.id || ""}`,
+    "stock": `${selectedProduct?.stock || ""}`,
+    "cost": `${selectedProduct?.cost || ""}`
   }
+  return initValues;
+}
 
 
 export const ProductValidationSchema = Yup.object({

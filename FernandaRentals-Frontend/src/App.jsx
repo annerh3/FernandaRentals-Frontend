@@ -2,22 +2,22 @@ import { BrowserRouter } from "react-router-dom";
 import { AppRouter } from "./routes/AppRouter";
 import { useAuthStore } from "./features/security/store";
 import { useEffect, useState } from "react";
+import { Loading } from "./shared/components/Loading";
 
 export const App = () => {
-  const [fetching, setFetching] = useState(true);
+  const [isLoading, setLoading] = useState(true);
   const validateAuthentication = useAuthStore((state) => state.validateAuthentication);
-  const isLoading = useAuthStore((state) => state.isLoading);
 
   useEffect(() => {
-      if (fetching) {
+      if (isLoading) {
           validateAuthentication();
-          setFetching(false);
+          setLoading(false)
       }
-  }, [fetching]);
+  }, [validateAuthentication]);
 
   // Mientras se valida la autenticación
   if (isLoading) {
-      return null; 
+      return <Loading />
   }
 
  return (

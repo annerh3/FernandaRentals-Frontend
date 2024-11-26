@@ -5,3 +5,6 @@ export * from './UpcomingEventsCard';
 export * from './ProductModal';
 export * from './AdminPagination';
 export * from './ProductsGrid';
+export * from './CategoryGrid';
+export * from './DataNotFound';
+export * from './CategoryModal';

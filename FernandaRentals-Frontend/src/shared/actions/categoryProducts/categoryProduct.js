@@ -27,7 +27,6 @@ export const getCategoryProductById = async (id = 0) => {
 export const createCategoryProduct = async (categoryData) => {
   try {
     const { data } = await webApi.post(`/categoriesproducts`, categoryData);
-
     return data;
   } catch (error) {
     console.error(error);
@@ -39,9 +38,17 @@ export const createCategoryProduct = async (categoryData) => {
 export const updateCategoryProduct = async (id, updatedData) => {
   try {
     const { data } = await webApi.put(`/categoriesproducts/${id}`, updatedData);
-
     return data;
   } catch (error) {
-    console.error(error);
+    return error.response;
+  }
+};
+
+export const deleteCategoryProduct = async (id) => {
+  try {
+    const { data } = await webApi.delete(`/categoriesproducts/${id}`);
+    return data;
+  } catch (error) {
+    return error.response;
   }
 };

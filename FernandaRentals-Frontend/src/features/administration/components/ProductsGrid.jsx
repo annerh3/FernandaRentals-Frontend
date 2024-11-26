@@ -6,6 +6,7 @@ import {
   MdOutlinePriceChange,
 } from "react-icons/md";
 import ModalImage from "react-modal-image";
+import { DataNotFound } from "./DataNotFound";
 
 export const ProductsGrid = ({ products, darkMode, handleModalOpen }) => {
   return (
@@ -25,7 +26,7 @@ export const ProductsGrid = ({ products, darkMode, handleModalOpen }) => {
               alt={product.description}
               width={128}
               height={128}
-              className="w-full sm:w-32 sm:h-32 rounded-lg object-cover shadow-2xl"
+              className="w-full sm:w-32 sm:h-32 rounded-lg object-cover shadow-2xl transition-transform hover:scale-105"
               style={{
                 aspectRatio: "400/300",
                 objectFit: "cover",
@@ -67,7 +68,7 @@ export const ProductsGrid = ({ products, darkMode, handleModalOpen }) => {
           </div>
         ))
       ) : (
-        <p className="text-center text-gray-500">No products found</p>
+        <DataNotFound message={"No se encontraron los productos"} darkMode={darkMode} />
       )}
     </div>
   );
