@@ -12,3 +12,6 @@ export * from './users-page/ClientsGrid';
 export * from './users-page/AdminsGrid';
 export * from './users-page/ClientTypesGrid';
 export * from './users-page/ClientsModal';
+export * from './users-page/UsersNavBar';
+export * from './users-page/ClientTypeModal.jsx';
+export * from './users-page/ClientDataItem.jsx';

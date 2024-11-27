@@ -10,7 +10,9 @@ export const UpcomingEventsCard = ({darkMode, dashboard}) => {
                   </Link>
                 </div>
                 <div className="space-y-4">
-                  {dashboard?.data?.upcomingEvents.length > 0 ? dashboard?.data?.upcomingEvents.map(event => <div key={event.id} className={`${darkMode ? "bg-[#171717]" : "bg-gray-100"} p-4 rounded-lg shadow-md `}>
+                  {dashboard?.data?.upcomingEvents.length > 0 
+                  ? dashboard?.data?.upcomingEvents.map(event => 
+                  <div key={event.id} className={`${darkMode ? "bg-[#171717]" : "bg-gray-100"} p-4 rounded-lg shadow-md `}>
                         <h3 className="font-semibold">{event.name}</h3>
                         <p className="text-sm opacity-70">
                           {formatDate(event.startDate)}

@@ -2,32 +2,72 @@ import { useFormik } from "formik";
 import { useEffect, useRef, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import { mirage } from "ldrs";
+import { useClientType } from "../../hooks/useClientType";
+import { clientInitialValues, ClientValidationSchema } from "../../forms";
 
 export const ClientsModal = ({
     darkMode,
     modalType,
-    selectedClient,
+    selectedItem,
     setShowModal,
     handleModalClose
   }) => {
     const modalRef = useRef(null);
-  
+    
+    const {  clientTypes, isLoading, loadClientTypes} = useClientType();
     const [fetching, setFetching] = useState(true);
     const [loading, setLoading] = useState(false);
+    
+   
     useEffect(() => {
       mirage.register(); // Para segurar que se registre al montar el componente
     }, []);
     
-   
-    const handleDeleteProduct = async () => {
-      console.log(selectedClient.id);
-    //   setLoading(true);
-    //   try {
-    //     const result = await deleteProduct(selectedClient.id);
-    //     console.log("Response:", result);  
-    //     toast[result?.status ? "success" : "error"](
-    //       result?.message || "Hubo un error al procesar la solicitud.",
-    //       {
+    useEffect(() => {
+      if (fetching) {
+        loadClientTypes();
+        setFetching(false);
+      }
+    }, [fetching]);
+
+
+ 
+    const formik = useFormik({  
+      initialValues: clientInitialValues(selectedItem), 
+      validationSchema: ClientValidationSchema,
+      validateOnChange: true,
+      onSubmit: async (values) => {
+        // Procesar el envío del formulario aquí
+        console.log(values);
+        console.log(selectedItem.clientId)
+        // console.log(selectedProduct.id);
+  
+    //      setLoading(true);
+    //      try {
+    //        let result;
+  
+    //        if (selectedClient == null) {
+    //          console.log("dentro if: ", selectedClient);
+    //          result = await createProduct(values); // de actions
+    //       } else {
+    //         result = await editProduct(selectedClient.id, values);
+    //       }
+    //       console.log("Response:", result);
+  
+    //       toast[result?.status ? "success" : "error"](
+    //         result?.message || "Hubo un error al procesar la solicitud.",
+    //         {
+    //           position: "top-center",
+    //           autoClose: 2500,
+    //           hideProgressBar: false,
+    //           closeOnClick: true,
+    //           pauseOnHover: true,
+    //           draggable: true,
+    //           progress: undefined,
+    //         }
+    //       );
+    //     } catch (e) {
+    //       toast.warning("Sin conexión al servidor", {
     //         position: "top-center",
     //         autoClose: 2500,
     //         hideProgressBar: false,
@@ -35,89 +75,18 @@ export const ClientsModal = ({
     //         pauseOnHover: true,
     //         draggable: true,
     //         progress: undefined,
-    //       }
-    //     );
-  
-    //     setFetchingProducts(true);
-    //   } catch (e) {
-    //    if(!result?.status){
-    //     toast.warning("Sin conexión al servidor", {
-    //       position: "top-center",
-    //       autoClose: 2500,
-    //       hideProgressBar: false,
-    //       closeOnClick: true,
-    //       pauseOnHover: true,
-    //       draggable: true,
-    //       progress: undefined,
-    //     });
-    //    }
-    //   } finally {
-    //     setLoading(false);
-    //     await new Promise((resolve) => setTimeout(resolve, 3000)); 
-    //     handleModalClose()
-    //     setShowModal(false)
-    //   }
-    };
-    // Configura valores iniciales para Formik
-    // const formik = useFormik({
-    //   initialValues: productInitialValues(selectedClient),
-    //   validationSchema: ProductValidationSchema,
-    //   validateOnChange: true,
-    //   onSubmit: async (values) => {
-    //     // Procesar el envío del formulario aquí
-    //     console.log(values);
-    //     // console.log(selectedProduct.id);
-  
-    //     // setLoading(true);
-    //     // try {
-    //     //   let result;
-  
-    //     //   if (selectedClient == null) {
-    //     //     console.log("dentro if: ", selectedClient);
-    //     //     result = await createProduct(values); // de actions
-    //     //   } else {
-    //     //     result = await editProduct(selectedClient.id, values);
-    //     //   }
-    //     //   console.log("Response:", result);
-  
-    //     //   toast[result?.status ? "success" : "error"](
-    //     //     result?.message || "Hubo un error al procesar la solicitud.",
-    //     //     {
-    //     //       position: "top-center",
-    //     //       autoClose: 2500,
-    //     //       hideProgressBar: false,
-    //     //       closeOnClick: true,
-    //     //       pauseOnHover: true,
-    //     //       draggable: true,
-    //     //       progress: undefined,
-    //     //     }
-    //     //   );
-    //     // } catch (e) {
-    //     //   toast.warning("Sin conexión al servidor", {
-    //     //     position: "top-center",
-    //     //     autoClose: 2500,
-    //     //     hideProgressBar: false,
-    //     //     closeOnClick: true,
-    //     //     pauseOnHover: true,
-    //     //     draggable: true,
-    //     //     progress: undefined,
-    //     //   });
-    //     // } finally {
-    //     //   setLoading(false);
-    //     //   handleModalClose()
-    //     //   await new Promise((resolve) => setTimeout(resolve, 3000)); 
-    //     //   setShowModal(false)
-    //     // }
+    //       });
+    //     } finally {
+    //       setLoading(false);
+    //       handleModalClose()
+    //       await new Promise((resolve) => setTimeout(resolve, 3000)); 
+    //       setShowModal(false)
+    //     }
     //   },
-    // });
+    },
+  });
   
-    // useEffect(() => {
-    //   if (fetching) {
-    //     loadCategoriesProd();
-    //     setFetching(false);
-    //     console.log(selectedClient);
-    //   }
-    // }, [fetching]);
+
   
     useEffect(() => {
       const handleClickOutside = (e) => {
@@ -139,7 +108,7 @@ export const ClientsModal = ({
           className={`${
             darkMode ? "bg-siidni-darkLight text-white" : "bg-white text-black"
           } p-8 rounded-xl w-full max-w-md`}
-          id={selectedClient}
+          id={selectedItem}
         >
           <ToastContainer
             position="top-center"
@@ -154,120 +123,64 @@ export const ClientsModal = ({
             theme="colored"
           />
           <h2 className="text-xl font-bold mb-4">
-            {modalType === "create"
-              ? "Añadir Nuevo Producto"
-              : modalType === "edit"
-              ? "Editar Producto"
-              : "Eliminar Producto"}
+            {modalType === "edit"
+              ? "Editar Información Cliente"
+              : "Eliminar Cliente?"}
           </h2>
   
-          {/* {modalType !== "delete" ? (
-            <form className="space-y-4" onSubmit={formik.handleSubmit}>
-              <div>
-                <label className="block mb-1">Nombre de Producto</label>
+          {modalType !== "delete" ? (
+            <form className="" 
+            onSubmit={formik.handleSubmit}
+            >
+              <div className="mb-4"> 
+                <label className="block mb-1">Nombre de Cliente</label>
                 <input
                   type="text"
-                  name="name"
-                  id="name"
+                  name="clientName"
+                  id="clientName"
                   className="w-full p-2 border rounded-lg"
-                  value={formik.values.name} // Usar value en lugar de defaultValue
-                  {...formik.getFieldProps("name")}
+                   value={formik.values.clientName} 
+                  {...formik.getFieldProps("clientName")}
                 />
-                {formik.touched.name && formik.errors.name ? (
-                  <div className="text-red-500 text-sm">{formik.errors.name}</div>
+                 {formik.touched.clientName && formik.errors.clientName ? (
+                  <div className="text-red-500 text-sm">{formik.errors.clientName}</div>
                 ) : null}
               </div>
-              <div className="flex justify-between">
+              
                 <span>
-                  <label className="block mb-1">Precio</label>
-                  <input
-                    type="number"
-                    id="cost"
-                    name="cost"
-                    step="0.01"
-                    className="w-20 p-2 border rounded-lg"
-                    value={formik.values.cost} // Usar value en lugar de defaultValue
-                    {...formik.getFieldProps("cost")}
-                  />
-                  {formik.touched.cost && formik.errors.cost ? (
-                    <div className="text-red-500 text-sm">
-                      {formik.errors.cost}
-                    </div>
-                  ) : null}
-                </span>
-                <span>
-                  <label className="block mb-1">Categoría de Producto</label>
+                  <label className="block mb-1">Tipo de Cliente</label>
                   <select
-                    name="categoryId"
-                    id="categoryId"
+                    name="clientTypeId"
+                    id="clientTypeId"
                     className={`${
                       darkMode
                         ? "bg-siidni-darkLight border text-white"
                         : "bg-white text-black"
                     } w-full h-11 rounded-lg p-2 cursor-pointer`}
-                    value={formik.values.categoryId} // Usar value en lugar de defaultValue
-                    {...formik.getFieldProps("categoryId")}
+                     value={formik.values.clientTypeId} 
+                     {...formik.getFieldProps("clientTypeId")}
                   >
-                    <option value="default">Seleccione categoría</option>
+                    <option disabled>Seleccione tipo</option>
                     {isLoading ? (
-                      <option disabled>Cargando categorías...</option>
-                    ) : categoriesProd?.data?.length ? (
-                      categoriesProd.data.map((category) => (
-                        <option key={category.id} value={category.id}>
-                          {category.name}
+                      <option disabled>Cargando tipos de clientes...</option>
+                    ) : clientTypes?.data?.length ? (
+                      clientTypes.data.map((ctype) => (
+                        <option key={ctype.id} value={ctype.id}>
+                          {ctype.name}
                         </option>
                       ))
                     ) : (
-                      <option disabled>No hay categorías disponibles</option>
+                      <option disabled>No hay tipos de clientes disponibles</option>
                     )}
                   </select>
-                  {formik.touched.categoryId && formik.errors.categoryId ? (
+                  {formik.touched.clientTypeId && formik.errors.clientTypeId ? (
                     <div className="text-red-500 text-sm">
-                      {formik.errors.categoryId}
+                      {formik.errors.clientTypeId}
                     </div>
-                  ) : null}
+                  ) : null} 
                 </span>
-              </div>
-              <div>
-                <label className="block mb-1">Descripción</label>
-                <textarea
-                  className="w-full p-2 border rounded-lg"
-                  value={formik.values.description} // Usar value en lugar de defaultValue
-                  {...formik.getFieldProps("description")}
-                />
-              </div>
-              <div>
-                <label className="block mb-1">Stock</label>
-                <input
-                  type="number"
-                  name="stock"
-                  id="stock"
-                  className="w-full p-2 border rounded-lg"
-                  value={formik.values.stock} // Usar value en lugar de defaultValue
-                  {...formik.getFieldProps("stock")}
-                />
-                {formik.touched.stock && formik.errors.stock ? (
-                  <div className="text-red-500 text-sm">
-                    {formik.errors.stock}
-                  </div>
-                ) : null}
-              </div>
-              <div>
-                <label className="block mb-1">Imagen URL</label>
-                <input
-                  type="text"
-                  id="urlImage"
-                  name="urlImage"
-                  className="w-full p-2 border rounded-lg"
-                  value={formik.values.urlImage} // Usar value en lugar de defaultValue
-                  {...formik.getFieldProps("urlImage")}
-                />
-                {formik.touched.urlImage && formik.errors.urlImage ? (
-                  <div className="text-red-500 text-sm">
-                    {formik.errors.urlImage}
-                  </div>
-                ) : null}
-              </div>
+             
+  
               <div className="flex justify-end space-x-4 mt-6">
                 <button
                   onClick={() => setShowModal(false)}
@@ -282,7 +195,7 @@ export const ClientsModal = ({
                   className={`px-4 py-2 rounded-lg ${
                     modalType === "delete" ? "bg-red-600" : "bg-blue-600"
                   } text-white`}
-                  disabled={!formik.isValid || formik.isSubmitting} // Deshabilitar si el formulario tiene errores o se está enviando
+                   disabled={!formik.isValid || formik.isSubmitting} // Deshabilitar si el formulario tiene errores o se está enviando
                 >
                   {formik.isSubmitting ? (
                     <span className="flex justify-center">
@@ -299,43 +212,9 @@ export const ClientsModal = ({
               </div>
             </form>
           ) : (
-            <p>
-              ¿Estás seguro de eliminar este producto? Esta acción no tiene vuelta
-              atrás.
-            </p>
+           ""
           )}
-  
-          {modalType === "delete" ? (
-            <div className="flex justify-end space-x-4 mt-6">
-              <button
-                onClick={() => setShowModal(false)}
-                className={`px-4 py-2 rounded-lg ${
-                  darkMode ? "bg-gray-600" : "bg-gray-200"
-                }`}
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={handleDeleteProduct}
-                className={`px-4 py-2 rounded-lg ${
-                  modalType === "delete" ? "bg-red-600" : "bg-blue-600"
-                } text-white`}
-              >
-                {loading
-                ?(
-                  <span className="flex justify-center">
-                      <l-mirage size="80" speed="2.5" color="#ffffff"></l-mirage>
-                    </span>
-                )
-              :(
-  
-                modalType === "delete" ? "Eliminar" : ""
-              )}
-              </button>
-            </div>
-          ) : (
-            ""
-          )} */}
+
         </div>
       </div>
     );

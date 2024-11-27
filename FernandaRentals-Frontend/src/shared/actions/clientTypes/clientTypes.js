@@ -1,11 +1,11 @@
 import { webApi } from "../../../config/api/WebApi";
 
 // Obtener todos los tipos de clientes
-//TODO REVISAR SI HAY PAGINACION POR PARTE DEL BACKEND
-export const getAllClientTypes = async (searchTerm = "", page = 1) => {
+//TODO REVISAR SI HAY PAGINACION POR PARTE DEL BACKEND 
+ // --> NO, no tiene xd
+export const getAllClientTypes = async () => {
   try {
-    const { data } = await webApi.get(`/clientstypes?searchTerm=${searchTerm}&page=${page}`);
-
+    const { data } = await webApi.get(`/clientstypes`);
     return data;
   } catch (error) {
     console.error(error);
