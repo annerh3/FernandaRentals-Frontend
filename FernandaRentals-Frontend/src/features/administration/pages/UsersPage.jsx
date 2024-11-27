@@ -7,6 +7,7 @@ export const UsersPage = ({darkMode}) => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState(""); // "edit", "delete", 
   const [selectedItem, setselectedItem] = useState(null);
+  // const [fetching, setFetching] = useState(true);
 
   const modalComponents = {
     clients: ClientsModal,
@@ -24,7 +25,7 @@ export const UsersPage = ({darkMode}) => {
 
   const handleModalClose = () => {
     setShowModal(false);
-    // setFetchingProducts(true); // actualizar lista de productos
+     //setFetching(true); 
   };
 
 

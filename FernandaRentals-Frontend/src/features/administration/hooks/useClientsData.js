@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { getClientsData } from "../../../shared/actions/Admin/clientsData.actions";
+import { updateClientAsync } from "../../../shared/actions/clients/clients.action";
 
 export const useClientsData = () => {
     const [clientsData, setClientsData] = useState({});
@@ -18,9 +19,22 @@ const loadClientsData = async () => {
       }
 }
 
+const editClientData = async (id, updatedData) => {
+    setIsLoadingClientsData(true);
+    try
+    {
+        const result = await updateClientAsync(id, updatedData);
+        setClientsData(result) 
+    } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoadingClientsData(false);
+      }
+}
     return{
        clientsData,
        isLoadingClientsData,
        loadClientsData,
+       editClientData,
     }
-}
+};

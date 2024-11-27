@@ -1,9 +1,12 @@
 import { useFormik } from "formik";
 import { useEffect, useRef, useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { mirage } from "ldrs";
 import { useClientType } from "../../hooks/useClientType";
 import { clientInitialValues, ClientValidationSchema } from "../../forms";
+import { updateClientAsync } from "../../../../shared/actions/clients/clients.action";
+import "react-toastify/dist/ReactToastify.css";
+import { useFetchStore } from "../../store/useFetchStore";
 
 export const ClientsModal = ({
     darkMode,
@@ -13,11 +16,11 @@ export const ClientsModal = ({
     handleModalClose
   }) => {
     const modalRef = useRef(null);
-    
+  
     const {  clientTypes, isLoading, loadClientTypes} = useClientType();
     const [fetching, setFetching] = useState(true);
     const [loading, setLoading] = useState(false);
-    
+    const setFetch = useFetchStore((state) => state.setFetch);
    
     useEffect(() => {
       mirage.register(); // Para segurar que se registre al montar el componente
@@ -37,53 +40,46 @@ export const ClientsModal = ({
       validationSchema: ClientValidationSchema,
       validateOnChange: true,
       onSubmit: async (values) => {
-        // Procesar el envío del formulario aquí
         console.log(values);
-        console.log(selectedItem.clientId)
-        // console.log(selectedProduct.id);
+        console.log('clientId: ',selectedItem.clientId)
   
-    //      setLoading(true);
-    //      try {
-    //        let result;
+         setLoading(true);
+         try {
+
+          const result = await updateClientAsync(selectedItem.clientId, values);         
+          console.log("Response:", result);
   
-    //        if (selectedClient == null) {
-    //          console.log("dentro if: ", selectedClient);
-    //          result = await createProduct(values); // de actions
-    //       } else {
-    //         result = await editProduct(selectedClient.id, values);
-    //       }
-    //       console.log("Response:", result);
-  
-    //       toast[result?.status ? "success" : "error"](
-    //         result?.message || "Hubo un error al procesar la solicitud.",
-    //         {
-    //           position: "top-center",
-    //           autoClose: 2500,
-    //           hideProgressBar: false,
-    //           closeOnClick: true,
-    //           pauseOnHover: true,
-    //           draggable: true,
-    //           progress: undefined,
-    //         }
-    //       );
-    //     } catch (e) {
-    //       toast.warning("Sin conexión al servidor", {
-    //         position: "top-center",
-    //         autoClose: 2500,
-    //         hideProgressBar: false,
-    //         closeOnClick: true,
-    //         pauseOnHover: true,
-    //         draggable: true,
-    //         progress: undefined,
-    //       });
-    //     } finally {
-    //       setLoading(false);
-    //       handleModalClose()
-    //       await new Promise((resolve) => setTimeout(resolve, 3000)); 
-    //       setShowModal(false)
-    //     }
-    //   },
-    },
+          toast[result?.status ? "success" : "error"](
+            result?.message || "Hubo un error al procesar la solicitud.",
+            {
+              position: "top-center",
+              autoClose: 1500,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            }
+          );
+        } catch (e) {
+          toast.warning("Sin conexión al servidor", {
+            position: "top-center",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } finally {
+          setLoading(false);
+          await new Promise((resolve) => setTimeout(resolve, 3000)); 
+          handleModalClose()
+          setFetch(true);
+          setShowModal(false)
+        }
+      },
+    
   });
   
 

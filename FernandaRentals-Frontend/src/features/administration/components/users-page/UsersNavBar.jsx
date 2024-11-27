@@ -5,6 +5,7 @@ import { ClientTypesGrid } from "./ClientTypesGrid";
 import { FiUserPlus, FiUsers } from "react-icons/fi";
 
 export const UsersNavBar = ({darkMode, setActiveTab, activeTab, handleModalOpen}) => {
+
     return (<div className={`${darkMode ? "bg-siidni-darkLight" : "bg-white"} rounded-lg shadow-lg overflow-hidden ml-20 sm:ml-30 mt-13 md:ml-60 min-h-fit`}>
         <div className={`border-b ${darkMode ? "border-gray-700" : "border-gray-200"}`}>
           <nav className="-mb-px flex" aria-label="Tabs">
