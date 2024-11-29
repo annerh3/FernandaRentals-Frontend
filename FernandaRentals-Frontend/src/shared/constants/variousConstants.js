@@ -1,0 +1,1 @@
+export const toastAutoClose = 1500;

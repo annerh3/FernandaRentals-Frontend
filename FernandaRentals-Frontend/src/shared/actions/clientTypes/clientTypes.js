@@ -24,7 +24,7 @@ export const getClientTypeById = async (id = 0) => {
     return error.response;
   }
 };
-// Crear un evento
+// Crear un clientType
 export const createClientType = async (clientTypeData) => {
     try {
       const { data } = await webApi.post('/clientstypes', clientTypeData);
@@ -40,7 +40,6 @@ export const createClientType = async (clientTypeData) => {
 export const updateClientType = async (id, updatedData) => {
   try {
     const { data } = await webApi.put(`/clientstypes/${id}`, updatedData);
-
     return data;
   } catch (error) {
     console.error(error);

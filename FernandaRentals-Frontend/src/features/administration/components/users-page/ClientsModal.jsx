@@ -4,8 +4,8 @@ import { toast, ToastContainer } from "react-toastify";
 import { mirage } from "ldrs";
 import { useClientType } from "../../hooks/useClientType";
 import { clientInitialValues, ClientValidationSchema } from "../../forms";
+import { toastAutoClose } from "../../../../shared/constants/variousConstants";
 import { updateClientAsync } from "../../../../shared/actions/clients/clients.action";
-import "react-toastify/dist/ReactToastify.css";
 import { useFetchStore } from "../../store/useFetchStore";
 
 export const ClientsModal = ({
@@ -16,8 +16,8 @@ export const ClientsModal = ({
     handleModalClose
   }) => {
     const modalRef = useRef(null);
-  
-    const {  clientTypes, isLoading, loadClientTypes} = useClientType();
+    
+    const { clientTypes, isLoading, loadClientTypes} = useClientType();
     const [fetching, setFetching] = useState(true);
     const [loading, setLoading] = useState(false);
     const setFetch = useFetchStore((state) => state.setFetch);
@@ -40,12 +40,12 @@ export const ClientsModal = ({
       validationSchema: ClientValidationSchema,
       validateOnChange: true,
       onSubmit: async (values) => {
+        // Procesar el envío del formulario aquí
         console.log(values);
         console.log('clientId: ',selectedItem.clientId)
   
          setLoading(true);
          try {
-
           const result = await updateClientAsync(selectedItem.clientId, values);         
           console.log("Response:", result);
   
@@ -53,7 +53,7 @@ export const ClientsModal = ({
             result?.message || "Hubo un error al procesar la solicitud.",
             {
               position: "top-center",
-              autoClose: 1500,
+              autoClose: toastAutoClose,
               hideProgressBar: false,
               closeOnClick: true,
               pauseOnHover: true,
@@ -64,7 +64,7 @@ export const ClientsModal = ({
         } catch (e) {
           toast.warning("Sin conexión al servidor", {
             position: "top-center",
-            autoClose: 1500,
+            autoClose: toastAutoClose,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -74,7 +74,7 @@ export const ClientsModal = ({
         } finally {
           setLoading(false);
           await new Promise((resolve) => setTimeout(resolve, 3000)); 
-          handleModalClose()
+          handleModalClose();
           setFetch(true);
           setShowModal(false)
         }
@@ -193,7 +193,7 @@ export const ClientsModal = ({
                   } text-white`}
                    disabled={!formik.isValid || formik.isSubmitting} // Deshabilitar si el formulario tiene errores o se está enviando
                 >
-                  {formik.isSubmitting ? (
+                  {formik.isSubmitting && loading ? (
                     <span className="flex justify-center">
                       <l-mirage size="80" speed="2.5" color="#ffffff"></l-mirage>
                     </span>

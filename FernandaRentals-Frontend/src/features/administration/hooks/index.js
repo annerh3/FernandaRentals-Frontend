@@ -1,3 +1,4 @@
 export * from './useDashBoard'
 export * from './useClientType';
-export * from './useClientsDataa';
+export * from './useClientsData';
+export * from './useAdminUsers';

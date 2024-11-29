@@ -12,11 +12,15 @@ export const AdminSideBar = ({ darkMode }) => {
   return (
     <aside
       className={`fixed h-screen w-20 md:w-64 ${
-        darkMode ? "bg-siidni-darkLight text-white" : "bg-white"
-      } shadow-lg flex flex-col`}
+        darkMode ? "bg-siidni-darkLight text-white" : "bg-white shadow-slate-600"
+      } shadow-sm flex flex-col rounded-r-2xl`}
     >
       <div className="p-4">
-        <div className="flex items-center justify-center md:justify-start space-x-3 pointer-events-none mb-3">
+        <Link
+          to="/home"
+          title="Ir a Pagina Principal"
+          className="flex items-center justify-center md:justify-start space-x-3 mb-3"
+        >
           <img
             src="https://i.postimg.cc/Y02vKjST/siidni-logo.png"
             alt="Siidni Icon"
@@ -31,13 +35,12 @@ export const AdminSideBar = ({ darkMode }) => {
           >
             Fernanda Rentals
           </span>
-        </div>
+        </Link>
         <nav>
           <ul className="space-y-2">
             <li>
               <Link
-              dataTooltipTarget="tooltip-top"
-              dataTooltipPlacement="top" 
+                title="DashBoard"
                 to="/administration/dashboard"
                 className={`flex items-center justify-center md:justify-start space-x-3 w-full p-3 rounded-lg ${
                   darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
@@ -47,7 +50,7 @@ export const AdminSideBar = ({ darkMode }) => {
                 <span className="hidden md:inline">Dashboard</span>
               </Link>
             </li>
-         
+
             <li>
               <button
                 className={`flex items-center justify-center md:justify-start space-x-3 w-full p-3 rounded-lg ${
@@ -61,6 +64,7 @@ export const AdminSideBar = ({ darkMode }) => {
             <hr className="border-gray-200 rounded-lg dark:border-gray-700" />
             <li>
               <Link
+                title="Productos"
                 to="/administration/manage-products"
                 className={`flex items-center justify-center md:justify-start space-x-3 w-full p-3 rounded-lg ${
                   darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
@@ -72,6 +76,7 @@ export const AdminSideBar = ({ darkMode }) => {
             </li>
             <li>
               <Link
+                title="Categorías de Productos"
                 to="/administration/manage-products-categories"
                 className={`flex items-center justify-center md:justify-start space-x-3 w-full p-3 rounded-lg ${
                   darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
@@ -82,25 +87,40 @@ export const AdminSideBar = ({ darkMode }) => {
               </Link>
             </li>
             <hr className="border-gray-200 rounded-lg dark:border-gray-700" />
-            <li>
-              <Link to="/administration/manage-users"
+            <li >
+              <Link
+              title="Usuarios"
+                to="/administration/manage-users"
                 className={`flex items-center justify-center md:justify-start space-x-3 w-full p-3 rounded-lg ${
                   darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
                 }`}
               >
-                <FiUsers className="text-xl text-purple-500" />
+                <FiUsers className="text-xl text-purple-500" title="Usuarios" />
                 <span className="hidden md:inline">Usuarios</span>
               </Link>
             </li>
-            <li>
-            <Link onClick={handleLogout}>
-              <div className={`flex items-center justify-start  md:justify-start space-x-3 w-full p-3 rounded-lg hover:bg-red-500`}>
-                <HiOutlineLogout className={` ${darkMode ? "text-gray-200" : "text-gray-950"}`} />
-                <span className={` ${darkMode ? "text-gray-200" : "text-gray-950"}text-sm ml-4 hidden md:inline`}>
-                  Cerrar Sesión
-                </span>
-              </div>
-            </Link>
+
+            <li >
+              <Link onClick={handleLogout}>
+                <div
+                  title="Cerrar Sesión"
+                  className={`flex items-center justify-start  md:justify-start space-x-3 w-full p-3 rounded-lg hover:bg-red-500`}
+                >
+                  <HiOutlineLogout
+                
+                    className={` ${
+                      darkMode ? "text-gray-200" : "text-gray-950"
+                    }`}
+                  />
+                  <span
+                    className={` ${
+                      darkMode ? "text-gray-200" : "text-gray-950"
+                    }text-sm ml-4 hidden md:inline`}
+                  >
+                    Cerrar Sesión
+                  </span>
+                </div>
+              </Link>
             </li>
           </ul>
         </nav>

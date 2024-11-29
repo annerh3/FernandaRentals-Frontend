@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ClientsModal, ClientTypeModal, UsersNavBar } from "../components";
+import { AdminModal, ClientsModal, ClientTypeModal, UsersNavBar } from "../components";
 
 export const UsersPage = ({darkMode}) => {
   const [activeTab, setActiveTab] = useState("clients");
@@ -12,7 +12,7 @@ export const UsersPage = ({darkMode}) => {
   const modalComponents = {
     clients: ClientsModal,
     types: ClientTypeModal,
-    // admins: AdminModal,
+     admins: AdminModal,
   };
   const ModalComponent = modalComponents[activeTab];
 
@@ -25,7 +25,7 @@ export const UsersPage = ({darkMode}) => {
 
   const handleModalClose = () => {
     setShowModal(false);
-     //setFetching(true); 
+    //  setFetching(true); 
   };
 
 

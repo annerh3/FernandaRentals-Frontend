@@ -10,6 +10,7 @@ import {
   createProduct,
   deleteProduct,
 } from "../../../shared/actions/products/products";
+import { useFetchStore } from "../store/useFetchStore";
 
 export const ProductModal = ({
   darkMode,
@@ -19,6 +20,7 @@ export const ProductModal = ({
   handleModalClose,
 }) => {
   const modalRef = useRef(null);
+  const setFetch = useFetchStore((state) => state.setFetch);
   const { categoriesProd, loadCategoriesProd, isLoading } =
     useCategoryProduct();
   const [fetching, setFetching] = useState(true);
@@ -123,7 +125,8 @@ export const ProductModal = ({
         });
       } finally {
         setLoading(false);
-        handleModalClose()
+        handleModalClose();
+        setFetch(true);
         await new Promise((resolve) => setTimeout(resolve, 3000)); 
         setShowModal(false)
       }

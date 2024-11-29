@@ -15,3 +15,6 @@ export * from './users-page/ClientsModal';
 export * from './users-page/UsersNavBar';
 export * from './users-page/ClientTypeModal.jsx';
 export * from './users-page/ClientDataItem.jsx';
+export * from './users-page/ClientTypeItem.jsx';
+export * from './users-page/AdminUserItem.jsx';
+export * from './users-page/AdminModal.jsx';

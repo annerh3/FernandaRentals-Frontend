@@ -3,7 +3,7 @@ import { useFetchStore } from "../../store/useFetchStore";
 import { ClientDataItem, ClientDataItemSkeleton } from "./ClientDataItem";
 import { useEffect, useState } from "react";
 
-export const ClientsGrid = ({ darkMode, handleModalOpen }) => {
+export const ClientsGrid = ({ darkMode, handleModalOpen , icon}) => {
 
   const {clientsData, isLoadingClientsData, loadClientsData} = useClientsData();
   const [fetching, setFetching] = useState(true);
@@ -29,7 +29,7 @@ export const ClientsGrid = ({ darkMode, handleModalOpen }) => {
         ?(
           <ClientDataItemSkeleton darkMode={darkMode}  />
         ):(
-          <ClientDataItem   clients={clientsData}  darkMode={darkMode} handleModalOpen={handleModalOpen}  handleModalClose={handleModalClose}/>
+          <ClientDataItem   clients={clientsData}  darkMode={darkMode} handleModalOpen={handleModalOpen}  handleModalClose={handleModalClose} icon={icon}/>
         )
       }
     </div>
