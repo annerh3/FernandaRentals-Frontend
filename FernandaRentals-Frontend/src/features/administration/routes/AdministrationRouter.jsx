@@ -6,6 +6,7 @@ import { DarkModeBtn } from "../components/DarkModeBtn";
 import { ProductsPage } from "../pages/ProductsPage";
 import { CategoryProductPage } from "../pages/CategoryProductPage";
 import {UsersPage} from "../pages/UsersPage";
+import { EventsPage } from "../pages/EventsPage";
 
 export const AdministrationRouter = () => {
   const [darkMode, setDarkMode] = useState(true);
@@ -21,6 +22,7 @@ export const AdministrationRouter = () => {
         <section className="flex-1 pl-4">
           <Routes>
             <Route path="/dashboard" element={<DashBoardPage darkMode={darkMode} />} />
+            <Route path="/manage-events" element={<EventsPage darkMode={darkMode} />} />
             <Route path="/manage-products" element={<ProductsPage darkMode={darkMode} />} />
             <Route path="/manage-products-categories" element={<CategoryProductPage darkMode={darkMode} />} />
             <Route path="/manage-users" element={<UsersPage darkMode={darkMode} />} />

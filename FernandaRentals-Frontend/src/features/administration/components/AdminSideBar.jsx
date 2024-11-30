@@ -57,14 +57,15 @@ export const AdminSideBar = ({ darkMode }) => {
             </li>
 
             <li>
-              <button
+              <Link
+              to='/administration/manage-events'
                 className={`flex items-center justify-center md:justify-start space-x-3 w-full p-3 rounded-lg ${
                   darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
                 }`}
               >
                 <FiCalendar className="text-xl text-blue-400" />
                 <span className="hidden md:inline">Eventos</span>
-              </button>
+              </Link>
             </li>
             <hr className="border-gray-200 rounded-lg dark:border-gray-700" />
             <li>
