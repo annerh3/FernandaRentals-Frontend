@@ -142,8 +142,3 @@ export const HomePage = () => {
     </div>
   );
 };
-
-   
-
-   
-    

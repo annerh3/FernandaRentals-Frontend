@@ -1,12 +1,17 @@
 import { FiCalendar, FiHome, FiPackage, FiUsers } from "react-icons/fi";
 import { HiOutlineLogout } from "react-icons/hi";
 import { MdOutlineCategory } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useAuthStore } from "../../security/store";
+import { Fingerprint } from "lucide-react";
 
 export const AdminSideBar = ({ darkMode }) => {
+  const logout = useAuthStore((state) => state.logout);
+  const user = useAuthStore((state) => state.user);
   const handleLogout = () => {
+    console.log("Cerrando Sesion ?")
     logout();
-    setTimeout(() => navigate("/home", { replace: true }), 0); // ejecutar navigate luego que procesos anteriores terminen
+    setTimeout(() => Navigate("/home", { replace: true }), 0); // ejecutar navigate luego que procesos anteriores terminen
   };
 
   return (
@@ -99,7 +104,32 @@ export const AdminSideBar = ({ darkMode }) => {
                 <span className="hidden md:inline">Usuarios</span>
               </Link>
             </li>
+            <hr className="border-gray-200 rounded-lg dark:border-gray-700" />
 
+            <li >
+              <div>
+                <div
+                  title="Cerrar Sesión"
+                  className={` rounded-lg pointer-events-none hidden md:inline`}
+                >
+                  <div className="flex items-center justify-start  md:justify-start space-x-3 w-full p-2 ">
+                  <Fingerprint size={22}
+                
+                className={` ${
+                  darkMode ? "text-gray-200" : "text-gray-950 "
+                }`}
+              />
+              <span
+                className={` ${
+                  darkMode ? "text-gray-200" : "text-gray-950"
+                }text-sm ml-4 `}
+              >
+                {user.name}
+              </span>
+                  </div>
+                </div>
+              </div>
+            </li>
             <li >
               <Link onClick={handleLogout}>
                 <div

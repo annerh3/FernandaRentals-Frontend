@@ -1,7 +1,11 @@
 import { FiEdit } from "react-icons/fi";
 import { DataNotFound } from "../DataNotFound";
+import { useAuthStore } from "../../../security/store/useAuthStore";
 
 export const AdminUserItem = ({ admins, darkMode, Icon, handleModalOpen }) => {
+  const user = useAuthStore((state) => state.user);
+  console.log(user);
+  
   return (
     <>
       {admins?.data?.length ? (
@@ -36,6 +40,7 @@ export const AdminUserItem = ({ admins, darkMode, Icon, handleModalOpen }) => {
                         }`}
                       >
                         {admin.userName}
+                        {admin.userEmail == user.email ? "   (Tú)" : ""}
                       </h3>
                       <p
                         className={`text-sm ${
