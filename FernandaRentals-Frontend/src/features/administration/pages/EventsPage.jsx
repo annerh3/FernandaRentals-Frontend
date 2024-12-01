@@ -42,7 +42,7 @@ console.log(e.target.value)
           darkMode ? "bg-siidni-darkCard" : "bg-white"
         } col-span-12 lg:col-span-7 rounded-md overflow-y-auto overflow-x-hidden flex flex-col items-center h-[600px]`}
       >
-        <div className="flex justify-between mt-5">
+        <div className="flex mt-5 mr-[330px]">
           <select
             name="select_order"
             id="select_order"
@@ -51,11 +51,11 @@ console.log(e.target.value)
             } focus:outline-none focus:ring-2 focus:ring-blue-500`}
             defaultValue="default"
           >
-            <option value="default" disabled>
+            <option disabled>
               Quiero ver los...
             </option>
-            <option value={selectValues.PAST} onClick={handleSelect}>Eventos Pasados</option>
             <option value={selectValues.FUTURE}  onClick={handleSelect}>Próximos Eventos</option>
+            <option value={selectValues.PAST} onClick={handleSelect}>Eventos Pasados</option>
           </select>
       </div>
 

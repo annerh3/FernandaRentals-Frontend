@@ -1,4 +1,4 @@
-import { BookX, CalendarDays, ChevronsUp, CircleDollarSign, MapPinHouse, Sofa, UserRound } from "lucide-react";
+import { CalendarDays, ChevronsUp, CircleDollarSign, MapPinHouse, Sofa, UserRound } from "lucide-react";
 import { formatDate } from "../../../../shared/utils";
 import { DataNotFound } from "../DataNotFound";
 
