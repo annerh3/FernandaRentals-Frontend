@@ -13,8 +13,6 @@ export const ClientsGrid = ({ darkMode, handleModalOpen , icon}) => {
      setFetching(true); 
   };
 
-
-  
   useEffect(() => {
     if (fetching || fetch) {
       loadClientsData();
@@ -29,7 +27,7 @@ export const ClientsGrid = ({ darkMode, handleModalOpen , icon}) => {
         ?(
           <ClientDataItemSkeleton darkMode={darkMode}  />
         ):(
-          <ClientDataItem   clients={clientsData}  darkMode={darkMode} handleModalOpen={handleModalOpen}  handleModalClose={handleModalClose} icon={icon}/>
+          <ClientDataItem clients={clientsData}  darkMode={darkMode} handleModalOpen={handleModalOpen}  handleModalClose={handleModalClose} icon={icon}/>
         )
       }
     </div>

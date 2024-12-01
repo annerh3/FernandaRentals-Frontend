@@ -25,6 +25,8 @@ export const AdminUserItem = ({ admins, darkMode, Icon, handleModalOpen }) => {
                         ? "bg-purple-800 text-purple-300"
                         : "bg-purple-300 text-purple-800"
                     } rounded-full flex items-center justify-center`}
+
+                    ${admin.userEmail == user.email ? "   (Tú)" : ""}
                   >
                     <Icon className={`w-6 h-6`} />
                   </div>

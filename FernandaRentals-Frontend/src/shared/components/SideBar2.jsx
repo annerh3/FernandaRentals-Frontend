@@ -6,26 +6,27 @@ import { LuCalendarPlus } from "react-icons/lu";
 import { RiCalendarScheduleLine } from "react-icons/ri";
 import { HiOutlineLogout } from "react-icons/hi";
 import { useAuthStore } from "../../features/security/store/useAuthStore";
-import { PackageSearch } from "lucide-react";
+import { FileSliders, PackageSearch } from "lucide-react";
 import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
 import { MdOutlineLogin } from "react-icons/md";
+import { rolesListConstant } from "../constants/roles-list.constants";
 
-//Este es el sidebar ajustado y responsivo en cierta manera
+// Este es el sidebar ajustado y responsivo en cierta manera
 export const SideBar2 = React.forwardRef(({ isOpen, toggleSidebar }, ref) => {
-  // se usa 'React.forwardRef' para permitir recibir la referencia (ref) junto con las demás propiedades
-  // Se debe colocar las iguientes declaraciones dentro del componente SideBar para manejar el comportamiento
   const btnClose = useRef(null);
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const user = useAuthStore((state) => state.user);
+  const roles = useAuthStore((state) => state.roles);
+  const containsRoleAdmin = roles.some(role => [rolesListConstant.ADMIN].includes(role));
 
   const handleLogout = () => {
     logout();
     setTimeout(() => navigate("/home", { replace: true }), 0); // ejecutar navigate luego que procesos anteriores terminen
   };
 
-  // Cierra el sidebar al presionar Esc
+  // Cierra el sidebar al presionar Esc..supuestamente xd
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
@@ -39,15 +40,14 @@ export const SideBar2 = React.forwardRef(({ isOpen, toggleSidebar }, ref) => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [btnClose]);
+  }, [btnClose, toggleSidebar]);
 
   return (
     <div className="items-center" ref={ref}>
       <div
-        className={`sidebar fixed top-0 bottom-0 p-2 w-[300px]  text-center bg-gray-900 ${
+        className={`sidebar fixed top-0 bottom-0 p-2 w-[300px] text-center bg-gray-900 ${
           isOpen ? "left-0" : "left-[-300px]"
-        } transition-all duration-300     
-        `}
+        } transition-all duration-300`}
       >
         <div className="text-gray-100 text-sm">
           {/* Nombre Principal e Icono */}
@@ -57,14 +57,14 @@ export const SideBar2 = React.forwardRef(({ isOpen, toggleSidebar }, ref) => {
                 <>
                   <FaRegUserCircle className="py-0.3 w-7 h-7" />
                   <span className="font-bold text-gray-200 ml-3 text-xl pointer-events-none">
-                    {user.name}{" "}
+                    {user.name} {" - "} {user.clientTypeName}
                   </span>
                 </>
               ) : (
                 <>
                   <FaHome className="py-0.3" />
                   <span className="font-bold text-gray-200 ml-3 text-xl pointer-events-none">
-                    Fernanda Rentals{" "}
+                    Fernanda Rentals
                   </span>
                 </>
               )}
@@ -82,48 +82,47 @@ export const SideBar2 = React.forwardRef(({ isOpen, toggleSidebar }, ref) => {
           <hr className="my-2 text-gray-600" />
         </div>
 
-        {/* Item de Header  */}
-        {isAuthenticated ? ("") : (
-          <Link to="/home">
-            <div className=" flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500">
-              <IoHomeOutline className="text-white" />
-              <span className=" text-sm ml-4 text-gray-200">Home</span>
-            </div>
-          </Link>
-        )}
-
-        {/* Item de Producos  */}
-        <Link to="/products">
-          <div className=" flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500">
-            <PackageSearch className="text-white" size={17} />
-            <span className="text-sm ml-4 text-gray-200">Productos</span>
-          </div>
-        </Link>
-
+        {/* Items */}
         {isAuthenticated ? (
           <>
-            <Link to="/reservation">
-              <div className=" flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500">
-                <LuCalendarPlus className="text-white" />
-                <span className=" text-sm ml-4 text-gray-200">
-                  Crear Reservación
-                </span>
+            {/* Producos */}
+            <Link to="/products">
+              <div className="flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500">
+                <PackageSearch className="text-white" size={17} />
+                <span className="text-sm ml-4 text-gray-200">Productos</span>
               </div>
             </Link>
 
-            <Link to="/my-events">
-              <div className=" flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500">
-                <RiCalendarScheduleLine className="text-white" />
-                <span className=" text-sm ml-4 text-gray-200">Mis Eventos</span>
-              </div>
-            </Link>
+            {!containsRoleAdmin ? (
+              <>
+                <Link to="/reservation">
+                  <div className="flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500">
+                    <LuCalendarPlus className="text-white" />
+                    <span className="text-sm ml-4 text-gray-200">Crear Reservación</span>
+                  </div>
+                </Link>
 
+                <Link to="/my-events">
+                  <div className="flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500">
+                    <RiCalendarScheduleLine className="text-white" />
+                    <span className="text-sm ml-4 text-gray-200">Mis Eventos</span>
+                  </div>
+                </Link>
+              </>
+            ) : (
+              <Link to="/administration/dashboard">
+                <div className="flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-purple-500">
+                  <FileSliders size={16} className="text-white" />
+                  <span className="text-sm ml-4 text-gray-200">Volver a Dashboard</span>
+                </div>
+              </Link>
+            )}
+
+            {/* Cerrar Sesión */}
             <Link onClick={handleLogout}>
               <div className="flex mt-3 p-2 ml-0 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-red-500">
                 <HiOutlineLogout className="text-white" />
-                <span className=" text-sm ml-4 text-gray-200">
-                  Cerrar Sesión
-                </span>
+                <span className="text-sm ml-4 text-gray-200">Cerrar Sesión</span>
               </div>
             </Link>
           </>
@@ -131,9 +130,17 @@ export const SideBar2 = React.forwardRef(({ isOpen, toggleSidebar }, ref) => {
           <Link to="security/login">
             <div className="flex mt-3 p-2 ml-0 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-[#a96b2e]">
               <MdOutlineLogin className="text-white" />
-              <span className=" text-sm ml-4 text-gray-200">
-                Iniciar Sesión
-              </span>
+              <span className="text-sm ml-4 text-gray-200">Iniciar Sesión</span>
+            </div>
+          </Link>
+        )}
+
+        {/* Enlaces de Inicio */}
+        {!isAuthenticated && (
+          <Link to="/home">
+            <div className="flex mt-3 p-2 items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-500">
+              <IoHomeOutline className="text-white" />
+              <span className="text-sm ml-4 text-gray-200">Home</span>
             </div>
           </Link>
         )}
@@ -141,5 +148,6 @@ export const SideBar2 = React.forwardRef(({ isOpen, toggleSidebar }, ref) => {
     </div>
   );
 });
+
 // Asigna un displayName al componente
 SideBar2.displayName = "SideBar2";

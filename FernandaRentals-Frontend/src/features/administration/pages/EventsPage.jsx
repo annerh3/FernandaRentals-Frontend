@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { EventPreviewItem, EventPreviewSkeleton } from "../components/events-page/EventPreviewItem";
 import { useEvents } from "../../Website/hooks/data/useEvents";
 import { SeeMoreModal } from "../components/events-page/SeeMoreModal";
+import { selectValues } from "../../../shared/constants/variousConstants";
+import { EventCalendar } from "../components";
 
 
 // const isLoading = false;
@@ -9,7 +11,8 @@ import { SeeMoreModal } from "../components/events-page/SeeMoreModal";
 export const EventsPage = ({ darkMode }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setselectedItem] = useState(null);
-  const selectValues  = {PAST: "past", FUTURE:"future"}
+
+  
 
 
   const handleModalOpen = (data) => {
@@ -20,29 +23,33 @@ export const EventsPage = ({ darkMode }) => {
   const [fetching, setFetching] = useState(true);
   const { events, isLoading, loadEvents } = useEvents();
 
-const handleSelect = (e) => {
-console.log(e.target.value)
-}
+  const handleSelect = (e) => {
+    const selectedValue = e.target.value;
+    console.log("Selected Value: ", selectedValue);
+
+    if (Object.values(selectValues).includes(selectedValue)) {
+      loadEvents(selectedValue);
+    }
+  };
 
   useEffect(() => {
     if (fetching) {
-      loadEvents();
+      loadEvents(selectValues.TODAY);
       setFetching(false);
     }
   }, [fetching]);
 
-  
 
   return (
     <div className={`min-h-screen ${darkMode ? "bg-siidni-dark" : "bg-gray-200"} p-4 sm:p-6 lg:p-8`}>
-    <div className="grid grid-cols-12 gap-4 ml-20 sm:ml-30 md:ml-60 flex-1 p-8">
+    <div className="grid grid-cols-12 gap-4 ml-20 sm:ml-30 md:ml-60 flex-1 p-4 min-w-fit">
       {/* Primera sección (EventPreview) */}
       <div
         className={`${
           darkMode ? "bg-siidni-darkCard" : "bg-white"
-        } col-span-12 lg:col-span-7 rounded-md overflow-y-auto overflow-x-hidden flex flex-col items-center h-[600px]`}
+        } col-span-12 lg:col-span-7 rounded-md overflow-y-auto overflow-x-hidden flex flex-col items-center  min-h-fit max-h-[600px]`}
       >
-        <div className="flex mt-5 mr-[330px]">
+        <div className="flex mt-5 mr-[330px] ">
           <select
             name="select_order"
             id="select_order"
@@ -54,28 +61,29 @@ console.log(e.target.value)
             <option disabled>
               Quiero ver los...
             </option>
+            <option value={selectValues.TODAY} onClick={handleSelect}>Eventos Hoy</option>
             <option value={selectValues.FUTURE}  onClick={handleSelect}>Próximos Eventos</option>
             <option value={selectValues.PAST} onClick={handleSelect}>Eventos Pasados</option>
+            <option value={selectValues.ALL} onClick={handleSelect}>Todo el historial</option>
           </select>
       </div>
 
         {isLoading ? (
-          <EventPreviewSkeleton />
+          <EventPreviewSkeleton darkMode={darkMode} />
         ) : (
           <EventPreviewItem events={events} darkMode={darkMode} handleModalOpen={handleModalOpen} />
         )}
       </div>
   
       {/* Secciones 2 */}
-      <div className="col-span-12 lg:col-span-4 flex flex-col space-y-4">
+      <div className="col-span-12 lg:col-span-5 flex flex-col space-y-4">
         {/* Sección Calendario */}
-        <div className="rounded-md bg-green-400 h-[300px]">
-          2
+        <div className="rounded-md h-[400px] w-full">
+          <EventCalendar darkMode={darkMode} events={events} handleModalOpen={handleModalOpen}/>
+     
         </div>
         {/* Sección Ingreso Ultima semana */}
-        <div className="rounded-md bg-purple-400 h-[200px]">
-          3
-        </div>
+        <div className="rounded-md bg-transparent h-[200px]"></div>
       </div>
     </div>
   
@@ -84,6 +92,7 @@ console.log(e.target.value)
         darkMode={darkMode}
         selectedItem={selectedItem}
         setShowModal={setShowModal}
+        setFetching={setFetching}
       />
     )}
   </div>

@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useAuthStore } from "../../security/store";
 
 export const HeroSection = () => {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
   return (
     <div className="flex items-center justify-center h-[100vh] bg-hero-pattern w-full bg-cover">
       <div className="h-screen w-screen bg-black/50 flex items-center justify-center">
@@ -19,13 +22,14 @@ export const HeroSection = () => {
               >
               Ver Productos
             </Link>
-            <Link
+            {
+              !isAuthenticated && <Link
               to="/security/login"
               className="inline-flex items-center justify-center rounded-md border t px-6 py-3 text-base font-medium text-primary-foreground shadow-sm transition-transform transform hover:translate-y-1 hover:border-transparent cursor-pointer hover:shadow-2xl hover:bg-[#A99C2E]"
-              // className="inline-flex items-center justify-center rounded-md px-6 py-3 border border-input text-base text-primary-foreground font-medium shadow-sm transition-transform transform  hover:bg-gray-400 hover:border-none hover:text-black hover:translate-y-1"
             >
               Iniciar Sesión
             </Link>
+            }
           </div>
         </div>
       </div>

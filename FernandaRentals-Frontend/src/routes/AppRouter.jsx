@@ -7,24 +7,24 @@ import { AdministrationRouter } from "../features/administration/routes/Administ
 import { ProtectedLayout } from "../shared/components";
 
 export const AppRouter = () => {
-  const location = useLocation();
-  useEffect(() => {
-    const loadFlyonui = async () => {
-      try {
-        await import("flyonui/flyonui");
-        if (
-          window.HSStaticMethods &&
-          typeof window.HSStaticMethods.autoInit === "function"
-        ) {
-          window.HSStaticMethods.autoInit();
-        }
-      } catch (error) {
-        console.error("Error loading Flyonui:", error);
-      }
-    };
+  // const location = useLocation();
+  // useEffect(() => {
+  //   const loadFlyonui = async () => {
+  //     try {
+  //       await import("flyonui/flyonui");
+  //       if (
+  //         window.HSStaticMethods &&
+  //         typeof window.HSStaticMethods.autoInit === "function"
+  //       ) {
+  //         window.HSStaticMethods.autoInit();
+  //       }
+  //     } catch (error) {
+  //       console.error("Error loading Flyonui:", error);
+  //     }
+  //   };
 
-    loadFlyonui();
-  }, [location.pathname]);
+  //   loadFlyonui();
+  // }, [location.pathname]);
 
   return (
     <Routes>

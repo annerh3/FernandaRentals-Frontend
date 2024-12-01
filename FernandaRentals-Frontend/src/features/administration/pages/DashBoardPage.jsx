@@ -1,6 +1,7 @@
 import { UsersRound } from "lucide-react";
 import { FiCalendar, FiPackage } from "react-icons/fi";
 import {
+  EventCalendar,
   StatsGrid,
   StatsGridSkeleton,
   UpcomingEventsCard,
@@ -8,12 +9,15 @@ import {
 } from "../components";
 import { useDashBoard } from "../hooks/useDashBoard";
 import { useEffect, useState } from "react";
+import { selectValues } from "../../../shared/constants/variousConstants";
+import { useEvents } from "../../Website/hooks/data";
 // import Calendar from "react-calendar";
 
 export const DashBoardPage = ({ darkMode }) => {
   //   const [date, setDate] = useState(new Date());
   const [fetching, setFetching] = useState(true);
   const { dashboard, isLoading, loadDashBoardData } = useDashBoard();
+  const { events, loadEvents } = useEvents();
   const statsIcons = {
     totalProducts: <FiPackage className="text-siidni-gold" />,
     totalUpcomingEvents: <FiCalendar className="text-blue-400" />,
@@ -23,6 +27,8 @@ export const DashBoardPage = ({ darkMode }) => {
   useEffect(() => {
     if (fetching) {
       loadDashBoardData();
+      loadEvents(selectValues.ALL);
+      console.log(dashboard)
       setFetching(false);
     }
   }, [fetching]);
@@ -53,7 +59,8 @@ export const DashBoardPage = ({ darkMode }) => {
     >
       <div className="flex">
         {/* Main Content */}
-        <main className="ml-20 sm:ml-30 md:ml-60 flex-1 p-8">
+        <main className="ml-20 sm:ml-30 md:ml-60 flex-1 p-4 md:p-8">
+          {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-2xl font-bold">Overview</h1>
           </div>
@@ -65,7 +72,8 @@ export const DashBoardPage = ({ darkMode }) => {
             <StatsGrid stats={stats} darkMode={darkMode} />
           )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Main Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
             {/* Upcoming Events */}
             <div
               className={`${
@@ -73,10 +81,22 @@ export const DashBoardPage = ({ darkMode }) => {
               } p-6 rounded-xl shadow-md`}
             >
               {isLoading ? (
-                <UpcomingEventsCardSkeleton   darkMode={darkMode}  />
+                <UpcomingEventsCardSkeleton darkMode={darkMode} />
               ) : (
                 <UpcomingEventsCard darkMode={darkMode} dashboard={dashboard} />
-                
+              )}
+            </div>
+
+            {/* Calendar */}
+            <div
+              className={`${
+                darkMode ? "bg-siidni-darkCard" : "bg-white"
+              } p-6 rounded-xl shadow-md`}
+            >
+              {fetching ? (
+                <p className="text-center text-gray-500">Cargando calendario...</p>
+              ) : (
+                <EventCalendar darkMode={darkMode} events={events} />
               )}
             </div>
           </div>

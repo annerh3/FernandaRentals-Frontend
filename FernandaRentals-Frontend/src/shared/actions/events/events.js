@@ -6,9 +6,9 @@ import { webApi } from "../../../config/api/WebApi";
 //TODO MODIFICAR EL BACKEND PARA EL EVENTOS DE TODOS Y DE PAGINATION
 //TODO REVISAR SI HAY PAGINACION POR PARTE DEL BACKEND
 
-export const getAllEvents = async () => {
+export const getAllEvents = async (value) => {
   try{
-    const {data} = await webApi.get('/eventos');
+    const {data} = await webApi.get(`/eventos/get/${value}`);
 
     return data;
   }catch (error){

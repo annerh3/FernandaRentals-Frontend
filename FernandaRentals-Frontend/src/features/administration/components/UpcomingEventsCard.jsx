@@ -4,8 +4,8 @@ import { formatDate } from "../../../shared/utils";
 export const UpcomingEventsCard = ({darkMode, dashboard}) => {
     return (<>
                 <div className="flex justify-between items-center">
-                  <h2 className="text-xl font-bold mb-4">Próximos Eventos</h2>
-                  <Link to="#" className={`${darkMode ? "bg-siidni-dark text-white hover:shadow-white" : "bg-gray-100 text-black hover:shadow-black"} p-2 rounded-lg shadow-sm transition-transform hover:scale-105 mb-3`}>
+                  <h2 className="text-xl font-bold mb-4">Eventos en las proximas dos semanas</h2>
+                  <Link to="/administration/manage-events" className={`${darkMode ? "bg-siidni-dark text-white hover:shadow-white" : "bg-gray-100 text-black hover:shadow-black"} p-2 rounded-lg shadow-sm transition-transform hover:scale-105 mb-3`}>
                     Ver todo
                   </Link>
                 </div>
@@ -17,7 +17,7 @@ export const UpcomingEventsCard = ({darkMode, dashboard}) => {
                         <p className="text-sm opacity-70">
                           {formatDate(event.startDate)}
                         </p>
-                      </div>) : <p>Estas libre durante dos semanas.</p>}
+                      </div>) : <p>Estas libre.</p>}
                 </div>
               </>);
   }

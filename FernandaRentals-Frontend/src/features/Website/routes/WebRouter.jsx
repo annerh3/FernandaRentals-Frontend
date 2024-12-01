@@ -18,10 +18,10 @@ export const WebRouter = () => {
     [rolesListConstant.ADMIN].includes(role));
 
     
-  if (constainsRoleAdmin) {
-    // Si el usuario es administrador, redirígelo a una página específica
-    return <Navigate to={"/administration/dashboard"} />;
-  }
+  // if (constainsRoleAdmin) {
+  //   // Si el usuario es administrador, redirígelo a una página específica
+  //   return <Navigate to={"/administration/dashboard"} />;
+  // }
    
   return (
     <div className="flex flex-col min-h-screen">
@@ -30,10 +30,17 @@ export const WebRouter = () => {
         <Routes>
           <Route path="/reservation" element={<FormEventPage />} />
           <Route path="/not-found" element={<PageNotFound />} />
-          <Route path="/my-events" element={<MyEvents />} />
+          {
+            constainsRoleAdmin ? ( // si es ADMIN, no dejar entrar a myevents
+              <Route path="*" element={<Navigate to={"/home"} />} />
+            ):(
+
+              <Route path="/my-events" element={<MyEvents />} />
+            )
+          }
           <Route path="/products" element={<CatalagoProducts />} />
           <Route path="/my-event/edit/:id" element={<FormEditEventPage />} />
-          {isAuthenticated ? (
+          {isAuthenticated && !constainsRoleAdmin ? ( // aqui solo entran los clientes autenticados
             <Route path="*" element={<Navigate to={"/my-events"} />} />
           ) : (
             <>

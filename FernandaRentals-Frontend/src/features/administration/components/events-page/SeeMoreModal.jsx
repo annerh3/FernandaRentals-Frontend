@@ -1,30 +1,15 @@
 import { BookX, CalendarDays, CircleDollarSign, MapPinHouse, UserRound } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { formatDate } from "../../../../shared/utils";
 import { CancelEventModal } from "./CancelEventModal";
 
-export const SeeMoreModal = ({ darkMode, selectedItem, setShowModal }) => {
-  const modalRef = useRef(null);
+export const SeeMoreModal = ({ darkMode, selectedItem, setShowModal, setFetching }) => {
   const [showCancelModal, setShowCancelModal] = useState(false);
 
   const handleCancelModalOpen = () => {
     setShowCancelModal(true);     
   };
 
-
-
-  // useEffect(() => {
-  //   const handleClickOutside = (e) => {
-  //     if (modalRef.current && !modalRef.current.contains(e.target)) {
-  //       setShowModal(false);
-  //     }
-  //   };
-
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [setShowModal]);
 
   if (!selectedItem) return null; 
 
@@ -40,13 +25,13 @@ export const SeeMoreModal = ({ darkMode, selectedItem, setShowModal }) => {
       >
 
         <div className="flex justify-between ">
-        <h2 className="text-2xl font-bold mb-6 ">{name}</h2>
+        <h2 className="text-2xl font-bold mb-6 ">{name || selectedItem.name} </h2>
         <button
-          onClick={handleCancelModalOpen}
-          className="p-2 rounded-lg flex gap-2 text-gray-700 hover:text-red-500 top-4 right-4"
-        >
-          <BookX /> Cancelar Evento
-        </button>
+            onClick={() => setShowModal(false)}
+            className={`px-4 py-2 h-10 rounded-lg bg-siidni-goldLight text-white hover:bg-siidni-goldDark`}
+          >
+            Cerrar
+          </button>
         </div>
 
         {/* Información general */}
@@ -58,6 +43,10 @@ export const SeeMoreModal = ({ darkMode, selectedItem, setShowModal }) => {
             <strong className="flex gap-2 items-center"><CalendarDays  size={17} className="text-yellow-500" /> </strong> {formatDate(startDate)} -{" "}
             {formatDate(endDate)}
           </p>
+          {/* <p className="flex gap-2">
+            <strong className="flex gap-2 items-center"><CalendarDays  size={17} className="text-yellow-500" /> </strong> {startDate} -{" "}
+            {endDate}
+          </p> */}
           <p className="flex gap-2">
             <strong className="flex gap-2 items-center"><MapPinHouse size={17} className="text-red-500" /> </strong> {location}</p>
           <p>
@@ -105,15 +94,18 @@ export const SeeMoreModal = ({ darkMode, selectedItem, setShowModal }) => {
           </tbody>
         </table>
 
-        {/* Botón para cerrar */}
-        <div className="flex justify-end mt-6">
+       {/* Botón para cerrar */}
+      <div className="flex justify-end mt-6">
+        {new Date(endDate).getTime() >= Date.now() && (  // convierte endDate en un objeto Date valido y obtiene su tiempo en milisegundos 
           <button
-            onClick={() => setShowModal(false)}
-            className={`px-4 py-2 rounded-lg bg-siidni-goldLight text-white hover:bg-siidni-goldDark`}
+            onClick={handleCancelModalOpen}
+            className="p-2 rounded-lg flex gap-2 text-gray-700 hover:text-red-500 top-4 right-4"
           >
-            Cerrar
+            <BookX /> Cancelar Evento
           </button>
-        </div>
+        )}
+      </div>
+
       </div>
       {showCancelModal && (
       <CancelEventModal
@@ -121,6 +113,7 @@ export const SeeMoreModal = ({ darkMode, selectedItem, setShowModal }) => {
         selectedItem={selectedItem}
         setShowCancelModal={setShowCancelModal}
         setShowModal={setShowModal}
+        setFetching={setFetching}
       />
     )}
     </div>

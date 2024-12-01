@@ -5,10 +5,10 @@ export const useEvents = () => {
   const [events, setEvents] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-
-  const loadEvents = async () => {
+// esteeeeeeeeeeeeeeeee
+  const loadEvents = async (value) => {
     setIsLoading(true);
-    const result = await getAllEvents();
+    const result = await getAllEvents(value);
     setEvents(result);
     setIsLoading(false);
   };
