@@ -33,7 +33,7 @@ const handleSelectEvent = (event) => {
       };
       
 
-      const calendarEvents = transformEvents(events.data);
+      const calendarEvents = transformEvents(events?.data);
       
     return(
         <div  className={`rounded-lg shadow-md ${

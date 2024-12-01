@@ -24,9 +24,11 @@ export const AdminUserItem = ({ admins, darkMode, Icon, handleModalOpen }) => {
                       darkMode
                         ? "bg-purple-800 text-purple-300"
                         : "bg-purple-300 text-purple-800"
-                    } rounded-full flex items-center justify-center`}
+                    } rounded-full flex items-center justify-center
+                    ${admin.userEmail == user.email ? "bg-orange-800 text-orange-300" : ""}
+                    `}
 
-                    ${admin.userEmail == user.email ? "   (Tú)" : ""}
+                    
                   >
                     <Icon className={`w-6 h-6`} />
                   </div>
@@ -42,7 +44,7 @@ export const AdminUserItem = ({ admins, darkMode, Icon, handleModalOpen }) => {
                         }`}
                       >
                         {admin.userName}
-                        {admin.userEmail == user.email ? "   (Tú)" : ""}
+                        {admin.userEmail == user.email ? "\n(Tú)" : ""}
                       </h3>
                       <p
                         className={`text-sm ${
