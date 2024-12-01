@@ -1,7 +1,7 @@
 import { FiEdit, FiUsers } from "react-icons/fi";
 import { DataNotFound } from "../DataNotFound";
 
-export const ClientDataItem = ({ clients, darkMode, handleModalOpen }) => {
+export const ClientDataItem = ({ clients, darkMode, handleModalOpen, icon }) => {
   return (
     <>
       {clients?.data?.length ? (

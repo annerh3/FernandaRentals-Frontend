@@ -226,12 +226,6 @@ export const CategoryModal = ({
         {modalType === "delete" ? (
           <div className="flex justify-end space-x-4 mt-6">
             <button
-              onClick={() => setShowModal(false)}
-              className={`px-4 py-2 rounded-lg  bg-blue-600 text-white`}
-            >
-              Cancelar
-            </button>
-            <button
               onClick={handleDeleteCategory}
               
               className={`px-4 py-2 rounded-lg ${
@@ -247,6 +241,12 @@ export const CategoryModal = ({
               ) : (
                 ""
               )}
+            </button>
+            <button
+              onClick={() => setShowModal(false)}
+              className={`px-4 py-2 rounded-lg  bg-blue-600 text-white`}
+            >
+              Cancelar
             </button>
           </div>
         ) : (

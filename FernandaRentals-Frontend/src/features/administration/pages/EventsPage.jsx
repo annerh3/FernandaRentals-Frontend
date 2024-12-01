@@ -9,6 +9,7 @@ import { SeeMoreModal } from "../components/events-page/SeeMoreModal";
 export const EventsPage = ({ darkMode }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setselectedItem] = useState(null);
+  const selectValues  = {PAST: "past", FUTURE:"future"}
 
 
   const handleModalOpen = (data) => {
@@ -19,6 +20,9 @@ export const EventsPage = ({ darkMode }) => {
   const [fetching, setFetching] = useState(true);
   const { events, isLoading, loadEvents } = useEvents();
 
+const handleSelect = (e) => {
+console.log(e.target.value)
+}
 
   useEffect(() => {
     if (fetching) {
@@ -38,6 +42,23 @@ export const EventsPage = ({ darkMode }) => {
           darkMode ? "bg-siidni-darkCard" : "bg-white"
         } col-span-12 lg:col-span-7 rounded-md overflow-y-auto overflow-x-hidden flex flex-col items-center h-[600px]`}
       >
+        <div className="flex justify-between mt-5">
+          <select
+            name="select_order"
+            id="select_order"
+            className={`text-sm px-4 py-2 rounded-md border ${
+              darkMode ? "bg-siidni-darkCard text-white border-gray-700" : "bg-gray-100 text-gray-800 border-gray-300"
+            } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            defaultValue="default"
+          >
+            <option value="default" disabled>
+              Quiero ver los...
+            </option>
+            <option value={selectValues.PAST} onClick={handleSelect}>Eventos Pasados</option>
+            <option value={selectValues.FUTURE}  onClick={handleSelect}>Próximos Eventos</option>
+          </select>
+      </div>
+
         {isLoading ? (
           <EventPreviewSkeleton />
         ) : (
