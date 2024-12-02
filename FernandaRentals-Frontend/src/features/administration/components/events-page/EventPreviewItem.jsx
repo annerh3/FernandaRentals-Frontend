@@ -26,13 +26,13 @@ export const EventPreviewItem = ({ darkMode, handleModalOpen, events }) => {
 
   // Si hay eventos, se muestran normalmente
   return (
-    <div className="grid grid-cols-1 gap-4 w-5/6 p-4">
+    <div className="grid grid-cols-1 gap-4 w-full p-6">
       {events?.data?.map((event) => (
         <div
           key={event.id}
           className={`${
             darkMode ? "bg-siidni-dark" : "bg-gray-200"
-          } w-full max-w-[500px] h-[150px] p-4 mx-auto rounded-xl hover:border hover:border-siidni-goldLight shadow-md transition-transform hover:scale-105`}
+          } w-full max-w-[700px] h-[150px] max-h-[175px] p-4 mx-auto rounded-xl hover:border hover:border-siidni-goldLight shadow-md transition-transform hover:scale-105`}
         >
           <div className="flex justify-between items-start">
             <h3 className="text-lg font-bold">{event.name}</h3>
@@ -98,7 +98,7 @@ export const EventPreviewSkeleton = ({ darkMode }) => {
           key={index}
           className={`${
             darkMode ? "bg-siidni-dark" : "bg-gray-400"
-          } w-full max-w-[500px] h-[150px] p-4 mx-auto rounded-xl shadow-md animate-pulse`}
+          } w-full max-w-[650px] h-[150px] p-4 mx-auto rounded-xl shadow-md animate-pulse`}
         >
           <div className="flex justify-between items-start mb-4">
             <div className={`${darkMode ? "bg-gray-600" : "bg-white"} h-5 rounded w-2/3`}></div>

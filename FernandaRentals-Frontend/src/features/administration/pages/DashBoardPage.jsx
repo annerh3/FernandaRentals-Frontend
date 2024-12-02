@@ -11,13 +11,23 @@ import { useDashBoard } from "../hooks/useDashBoard";
 import { useEffect, useState } from "react";
 import { selectValues } from "../../../shared/constants/variousConstants";
 import { useEvents } from "../../Website/hooks/data";
+import { CurrentDate } from "../../../shared/components/Utils";
 // import Calendar from "react-calendar";
 
 export const DashBoardPage = ({ darkMode }) => {
   //   const [date, setDate] = useState(new Date());
   const [fetching, setFetching] = useState(true);
+
+  //para cargar el dashboard la información del Grid
+
   const { dashboard, isLoading, loadDashBoardData } = useDashBoard();
+
+  // para estar cargando los eventos
+  // se separo la carga de eventos para no tener que recargar completamente todo el dashboard
+  // esto por que se hace un llamado a la API de los 3 tipos de eventos
   const { events, loadEvents } = useEvents();
+
+  // iconos que se repiten para los eventos
   const statsIcons = {
     totalProducts: <FiPackage className="text-siidni-gold" />,
     totalUpcomingEvents: <FiCalendar className="text-blue-400" />,
@@ -28,11 +38,14 @@ export const DashBoardPage = ({ darkMode }) => {
     if (fetching) {
       loadDashBoardData();
       loadEvents(selectValues.ALL);
-      console.log(dashboard)
+      //console.log(dashboard)
+      //console.log(events);
+      
       setFetching(false);
     }
   }, [fetching]);
 
+  // estadísticas o diccionario del Dashboard
   const stats = [
     {
       title: "Productos Totales",
@@ -61,11 +74,14 @@ export const DashBoardPage = ({ darkMode }) => {
         {/* Main Content */}
         <main className="ml-20 sm:ml-30 md:ml-60 flex-1 p-4 md:p-8">
           {/* Header */}
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex justify-start items-center mb-8">
             <h1 className="text-2xl font-bold">Overview</h1>
+            {/* Muestra la Fecha Actual */}
+            <CurrentDate/>
           </div>
 
           {/* Stats Grid */}
+          {/* Squeleton que muestra mientras cargan los datos */}
           {isLoading ? (
             <StatsGridSkeleton darkMode={darkMode} />
           ) : (
@@ -80,6 +96,7 @@ export const DashBoardPage = ({ darkMode }) => {
                 darkMode ? "bg-siidni-darkCard" : "bg-white"
               } p-6 rounded-xl shadow-md`}
             >
+              {/* Las cartas de Eventos el skelento si esta cargando o la información ya cargada */}
               {isLoading ? (
                 <UpcomingEventsCardSkeleton darkMode={darkMode} />
               ) : (
@@ -94,7 +111,9 @@ export const DashBoardPage = ({ darkMode }) => {
               } p-6 rounded-xl shadow-md`}
             >
               {fetching ? (
-                <p className="text-center text-gray-500">Cargando calendario...</p>
+                <p className="text-center text-gray-500">
+                  Cargando calendario...
+                </p>
               ) : (
                 <EventCalendar darkMode={darkMode} events={events} />
               )}
@@ -105,6 +124,3 @@ export const DashBoardPage = ({ darkMode }) => {
     </div>
   );
 };
-
-
-  

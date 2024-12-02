@@ -9,6 +9,9 @@ import {UsersPage} from "../pages/UsersPage";
 import { EventsPage } from "../pages/EventsPage";
 
 export const AdministrationRouter = () => {
+
+  // Para manejar el uso de Dark Mode o Light Mode 
+  //Utiliza un ternario en la renderizacion del componente main principal según la configuración
   const [darkMode, setDarkMode] = useState(true);
 
   return (
@@ -17,15 +20,28 @@ export const AdministrationRouter = () => {
 
       <div className="flex-1 flex flex-col">
 
+        {/* Botón para manejar el DarkMode o LightMode */}
         <DarkModeBtn setDarkMode={setDarkMode} darkMode={darkMode} className="p-4" />
 
         <section className="flex-1 pl-4">
+          {/* Aquí se encuentran todas las rutas de Administrador  ASI COMO LOS CRUD*/}
           <Routes>
+            {/* Pagina Principal Dashboard */}
             <Route path="/dashboard" element={<DashBoardPage darkMode={darkMode} />} />
+
+            {/* Pagina de Eventos */}
             <Route path="/manage-events" element={<EventsPage darkMode={darkMode} />} />
+
+            {/* PRODUCTOS */}
             <Route path="/manage-products" element={<ProductsPage darkMode={darkMode} />} />
+
+            {/* Categorías de Productos */}
             <Route path="/manage-products-categories" element={<CategoryProductPage darkMode={darkMode} />} />
+
+            {/* Usuarios, Administradores */}
             <Route path="/manage-users" element={<UsersPage darkMode={darkMode} />} />
+
+            {/* Dashboard */}
             <Route path="/*" element={<Navigate to={"/dashboard"} />} />
           </Routes>
         </section>

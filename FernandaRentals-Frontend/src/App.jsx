@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { Loading } from "./shared/components/Loading";
 
 export const App = () => {
+  //Por si se actualiza la pagina se vuelve a leer el local store
+  // para la validacion de la autentificacion
   const [isLoading, setLoading] = useState(true);
   const validateAuthentication = useAuthStore((state) => state.validateAuthentication);
 
@@ -22,6 +24,11 @@ export const App = () => {
 
  return (
     <BrowserRouter>
+    {/* Se divude en 3 componentes de rutas
+        seguridad
+        Web Router
+        Administration
+    */}
       <AppRouter />
     </BrowserRouter>
   )

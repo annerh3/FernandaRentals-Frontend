@@ -4,6 +4,8 @@ import { formatDate } from "../../../../shared/utils";
 import { CancelEventModal } from "./CancelEventModal";
 
 export const SeeMoreModal = ({ darkMode, selectedItem, setShowModal, setFetching }) => {
+
+  // para cancelar el evento
   const [showCancelModal, setShowCancelModal] = useState(false);
 
   const handleCancelModalOpen = () => {

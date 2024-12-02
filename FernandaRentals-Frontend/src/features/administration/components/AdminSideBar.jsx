@@ -1,158 +1,101 @@
 import { FiCalendar, FiHome, FiPackage, FiUsers } from "react-icons/fi";
-import { HiOutlineLogout } from "react-icons/hi";
 import { MdOutlineCategory } from "react-icons/md";
-import { Link, Navigate } from "react-router-dom";
+import {  Navigate } from "react-router-dom";
 import { useAuthStore } from "../../security/store";
-import { Fingerprint } from "lucide-react";
+import { ItemNavAdministration, ItemPresentation, ItemUserLogout } from "./sidebard-Administration";
+import { ItemUserDetail } from "./sidebard-Administration/ItemUserDetail";
 
 export const AdminSideBar = ({ darkMode }) => {
   const logout = useAuthStore((state) => state.logout);
+
   const user = useAuthStore((state) => state.user);
+
   const handleLogout = () => {
-    console.log("Cerrando Sesion ?")
+    //console.log("Cerrando Sesión ?");
     logout();
     setTimeout(() => Navigate("/home", { replace: true }), 0); // ejecutar navigate luego que procesos anteriores terminen
   };
 
   return (
     <aside
+      // Elemento Aside
+      // Aquí se aplica el estilo según el botón de Dark o lig theme
       className={`fixed h-screen w-20 md:w-64 ${
-        darkMode ? "bg-siidni-darkLight text-white" : "bg-white shadow-slate-600"
+        darkMode
+          ? "bg-siidni-darkLight text-white"
+          : "bg-white shadow-slate-600"
       } shadow-sm flex flex-col rounded-r-2xl`}
     >
+      {/* Elementos del aside */}
       <div className="p-4">
-        <Link
-          to="/home"
-          title="Ir a Pagina Principal"
-          className="flex items-center justify-center md:justify-start space-x-3 mb-3"
-        >
-          <img
-            src="https://i.postimg.cc/Y02vKjST/siidni-logo.png"
-            alt="Siidni Icon"
-            className={`${
-              !darkMode ? "drop-shadow-sm shadow-black" : " "
-            } h-10 object-cover object-center`}
-          />
-          <span
-            className={`hidden md:inline ${
-              !darkMode ? "drop-shadow-sm shadow-black" : " "
-            } text-[#d56e18] text-xl font-semibold`}
-          >
-            Fernanda Rentals
-          </span>
-        </Link>
+        <ItemPresentation
+          isDarkMode={darkMode}
+          linkTo={"/home"}
+          titleLink={"Home"}
+          imgUrl={"https://i.postimg.cc/Y02vKjST/siidni-logo.png"}
+          alt={"Logo Fernanda Rentals"}
+          nameSpace={"Fernanda Rentals"}
+        />
         <nav>
           <ul className="space-y-2">
-            <li>
-              <Link
-                title="DashBoard"
-                to="/administration/dashboard"
-                className={`flex items-center justify-center md:justify-start space-x-3 w-full p-3 rounded-lg ${
-                  darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                }`}
-              >
-                <FiHome className="text-xl text-green-500" />
-                <span className="hidden md:inline">Dashboard</span>
-              </Link>
-            </li>
-
-            <li>
-              <Link
-              to='/administration/manage-events'
-                className={`flex items-center justify-center md:justify-start space-x-3 w-full p-3 rounded-lg ${
-                  darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                }`}
-              >
-                <FiCalendar className="text-xl text-blue-400" />
-                <span className="hidden md:inline">Eventos</span>
-              </Link>
-            </li>
+            
+            {/* dashboard */}
+            <ItemNavAdministration
+              titleLink="Dashboard"
+              linkTo={"/administration/dashboard"}
+              Icon={FiHome}
+              darkMode={darkMode}
+              iconClass="text-green-500"
+              spanTitle="Dashboard"
+            />
+            {/* eventos */}
+            <ItemNavAdministration
+              titleLink="Events"
+              linkTo={"/administration/manage-events"}
+              Icon={FiCalendar}
+              darkMode={darkMode}
+              iconClass="text-blue-400"
+              spanTitle="Eventos"
+            />
+          {/* Productos */}
             <hr className="border-gray-200 rounded-lg dark:border-gray-700" />
-            <li>
-              <Link
-                title="Productos"
-                to="/administration/manage-products"
-                className={`flex items-center justify-center md:justify-start space-x-3 w-full p-3 rounded-lg ${
-                  darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                }`}
-              >
-                <FiPackage className="text-xl text-siidni-gold" />
-                <span className="hidden md:inline">Productos</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                title="Categorías de Productos"
-                to="/administration/manage-products-categories"
-                className={`flex items-center justify-center md:justify-start space-x-3 w-full p-3 rounded-lg ${
-                  darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                }`}
-              >
-                <MdOutlineCategory className="text-xl text-red-600" />
-                <span className="hidden md:inline">Categorías</span>
-              </Link>
-            </li>
-            <hr className="border-gray-200 rounded-lg dark:border-gray-700" />
-            <li >
-              <Link
-              title="Usuarios"
-                to="/administration/manage-users"
-                className={`flex items-center justify-center md:justify-start space-x-3 w-full p-3 rounded-lg ${
-                  darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                }`}
-              >
-                <FiUsers className="text-xl text-purple-500" title="Usuarios" />
-                <span className="hidden md:inline">Usuarios</span>
-              </Link>
-            </li>
+            <ItemNavAdministration
+              titleLink="Products"
+              linkTo={"/administration/manage-products"}
+              Icon={FiPackage}
+              darkMode={darkMode}
+              iconClass="text-siidni-gold"
+              spanTitle="Productos"
+            />
+            
+            {/* categorías de Productos */}
+            <ItemNavAdministration
+              titleLink="Category Products"
+              linkTo={"/administration/manage-products-categories"}
+              Icon={MdOutlineCategory}
+              darkMode={darkMode}
+              iconClass="text-red-600"
+              spanTitle="Categorías"
+            />
+            
             <hr className="border-gray-200 rounded-lg dark:border-gray-700" />
 
-            <li >
-              <div>
-                <div
-                  title="Cerrar Sesión"
-                  className={` rounded-lg pointer-events-none hidden md:inline`}
-                >
-                  <div className="flex items-center justify-start  md:justify-start space-x-3 w-full p-2 ">
-                  <Fingerprint size={22}
-                
-                className={` ${
-                  darkMode ? "text-gray-200" : "text-gray-950 "
-                }`}
-              />
-              <span
-                className={` ${
-                  darkMode ? "text-gray-200" : "text-gray-950"
-                }text-sm ml-4 `}
-              >
-                {user.name}
-              </span>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li >
-              <Link onClick={handleLogout}>
-                <div
-                  title="Cerrar Sesión"
-                  className={`flex items-center justify-start  md:justify-start space-x-3 w-full p-3 rounded-lg hover:bg-red-500`}
-                >
-                  <HiOutlineLogout
-                
-                    className={` ${
-                      darkMode ? "text-gray-200" : "text-gray-950"
-                    }`}
-                  />
-                  <span
-                    className={` ${
-                      darkMode ? "text-gray-200" : "text-gray-950"
-                    }text-sm ml-4 hidden md:inline`}
-                  >
-                    Cerrar Sesión
-                  </span>
-                </div>
-              </Link>
-            </li>
+            <ItemNavAdministration
+              titleLink="Users"
+              linkTo={"/administration/manage-users"}
+              Icon={FiUsers}
+              darkMode={darkMode}
+              iconClass="text-purple-500"
+              spanTitle="Usuarios"
+            />
+            <hr className="border-gray-200 rounded-lg dark:border-gray-700" />
+
+            {/* Para mostrar el Nombre del Usuario conectado */}
+            <ItemUserDetail darkMode={darkMode} userName={user.name}/>
+            
+            {/* Maneja el cierre de Sesion   */}
+            <ItemUserLogout darkMode={darkMode} handleLogout={handleLogout}/>
+            
           </ul>
         </nav>
       </div>
