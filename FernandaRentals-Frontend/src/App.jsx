@@ -3,7 +3,6 @@ import { AppRouter } from "./routes/AppRouter";
 import { useAuthStore } from "./features/security/store";
 import { useEffect, useState } from "react";
 import { Loading } from "./shared/components/Loading";
-
 export const App = () => {
   //Por si se actualiza la pagina se vuelve a leer el local store
   // para la validacion de la autentificacion
@@ -11,6 +10,8 @@ export const App = () => {
   const validateAuthentication = useAuthStore((state) => state.validateAuthentication);
 
   useEffect(() => {
+    
+    
       if (isLoading) {
           validateAuthentication();
           setLoading(false)
