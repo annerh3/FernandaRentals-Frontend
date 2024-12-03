@@ -95,8 +95,8 @@ export const EventCalendar = ({ darkMode, events, handleModalOpen }) => {
         titleAccessor="title"
         style={{ height: "100%" }}
         defaultView="month"
-        views={false}
-        className="w-full h-[400px] sm:h-[500px] lg:h-[600px] text-[10px] rounded-md"
+        views={true}
+        className="w-full h-[400px] sm:h-[500px] lg:h-[600px] text-[10px] rounded-md text-slate-400"
         allDayMaxRows={2}
         popup
         //messages={messages}

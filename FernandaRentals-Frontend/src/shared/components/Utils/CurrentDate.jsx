@@ -1,9 +1,9 @@
 import { formatDate } from "../../utils";
 
-export const CurrentDate = () => {
+export const CurrentDate = ({darkMode}) => {
   return (
     <>
-      <span className=" ml-5 text-gray-500">
+      <span className={`${darkMode ? "text-white" : "text-gray-500 "} ml-5 `}>
         {formatDate(new Date().toLocaleDateString())}
       </span>
     </>

@@ -35,41 +35,39 @@ export const EventPreviewItem = ({ darkMode, handleModalOpen, events }) => {
 
   // Si hay eventos, se muestran normalmente
   return (
-    <div className="grid grid-cols-1 gap-4 w-full p-6">
+    <div className="grid grid-cols-1 gap-4 w-full p-4 sm:p-6 ">
       {events?.data?.map((event) => (
         <div
           key={event.id}
           className={`${
-            darkMode ? "bg-siidni-dark" : "bg-gray-200"
-          } w-full max-w-[700px] h-[150px] max-h-[175px] p-4 mx-auto rounded-xl hover:border hover:border-siidni-goldLight shadow-md transition-transform hover:scale-105`}
+            darkMode ? "bg-siidni-dark" : "bg-gray-100"
+          } w-full max-w-full sm:max-w-[500px] h-auto p-4 mx-auto rounded-xl hover:border hover:border-siidni-goldLight shadow-md transition-transform hover:scale-105`}
         >
-          <div className="flex justify-between items-start">
-            <h3 className="text-lg font-bold">{event.name}</h3>
+          <div className="flex justify-between items-start align-middle">
+            <h3 className="text-lg font-bold truncate max-w-[70%] md:max-w-[80%]">
+              {event.name}
+            </h3>
             <div className="flex space-x-2">
               <button
                 onClick={() => handleModalOpen(event)}
-                className="p-2 rounded-lg bg-siidni-gold flex text-white font-medium hover:bg-siidni-goldDark"
+                className="p-2 rounded-lg bg-siidni-gold flex items-center text-white font-medium hover:bg-siidni-goldDark"
               >
-                Ver Más <ChevronsUp />
+                Ver Más <ChevronsUp className="ml-1" />
               </button>
             </div>
           </div>
-          <section className="flex gap-6">
-            <div className="space-y-1">
-              {/* Información del Cliente */}
+          <section className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+            <div className="space-y-2">
               <InfoRow
                 icon={UserRound}
                 iconClass="text-purple-500"
                 label={event.client.name}
               />
-              {/* Información de Ubicación */}
               <InfoRow
                 icon={MapPinHouse}
                 iconClass="text-red-500"
                 label={event.location}
               />
-
-              {/*Información de Costo de Evento  */}
               <InfoRow
                 icon={CircleDollarSign}
                 iconClass="text-green-500"
@@ -77,15 +75,12 @@ export const EventPreviewItem = ({ darkMode, handleModalOpen, events }) => {
               />
             </div>
 
-            <div className="space-y-1">
-              {/* Información de los productos */}
+            <div className="space-y-2">
               <InfoRow
                 icon={Sofa}
                 iconClass="text-blue-500"
-                label={`${event.eventDetails.length}${" "}
-                ${event.eventDetails.length > 1 ? "Productos" : "Producto"}`}
+                label={`${event.eventDetails.length} ${event.eventDetails.length > 1 ? "Productos" : "Producto"}`}
               />
-              {/* Información de la fecha de inicio */}
               <InfoRow
                 icon={CalendarDays}
                 iconClass="text-yellow-500"
@@ -101,13 +96,13 @@ export const EventPreviewItem = ({ darkMode, handleModalOpen, events }) => {
 
 export const EventPreviewSkeleton = ({ darkMode }) => {
   return (
-    <div className="grid grid-cols-1 gap-4 w-full p-4">
+    <div className="grid grid-cols-1 gap-4 w-full p-4 sm:p-6 md:grid-cols-2 lg:grid-cols-3">
       {[...Array(4)].map((_, index) => (
         <div
           key={index}
           className={`${
             darkMode ? "bg-siidni-dark" : "bg-gray-400"
-          } w-full max-w-[650px] h-[150px] p-4 mx-auto rounded-xl shadow-md animate-pulse`}
+          } w-full max-w-full sm:max-w-[500px] h-[150px] p-4 mx-auto rounded-xl shadow-md animate-pulse`}
         >
           <div className="flex justify-between items-start mb-4">
             <div
@@ -128,7 +123,7 @@ export const EventPreviewSkeleton = ({ darkMode }) => {
               ></div>
             </div>
           </div>
-          <section className="flex gap-6">
+          <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <div
                 className={`${
@@ -164,3 +159,4 @@ export const EventPreviewSkeleton = ({ darkMode }) => {
     </div>
   );
 };
+

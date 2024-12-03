@@ -24,7 +24,6 @@ export const DashBoardPage = ({ darkMode }) => {
 
   const handleModalOpen = (data) => {
     setselectedItem(data);
-    //console.log(data);
     setShowModal(true);
   };
 
@@ -48,9 +47,6 @@ export const DashBoardPage = ({ darkMode }) => {
     if (fetching) {
       loadDashBoardData();
       loadEvents(selectValues.ALL);
-      //console.log(dashboard)
-      //console.log(events);
-      
       setFetching(false);
     }
   }, [fetching]);
@@ -85,9 +81,9 @@ export const DashBoardPage = ({ darkMode }) => {
         <main className="ml-20 sm:ml-30 md:ml-60 flex-1 p-4 md:p-8">
           {/* Header */}
           <div className="flex justify-start items-center mb-8">
-            <h1 className="text-2xl font-bold">Overview</h1>
+            <h1 className="text-2xl font-bold">DashBoard</h1>
             {/* Muestra la Fecha Actual */}
-            <CurrentDate/>
+            <CurrentDate darkMode={darkMode}/>
           </div>
 
           {/* Stats Grid */}
@@ -106,7 +102,7 @@ export const DashBoardPage = ({ darkMode }) => {
                 darkMode ? "bg-siidni-darkCard" : "bg-white"
               } p-6 rounded-xl shadow-md`}
             >
-              {/* Las cartas de Eventos el skelento si esta cargando o la información ya cargada */}
+              {/* Las cards de Eventos el skeleton si esta cargando o la información ya cargada */}
               {isLoading ? (
                 <UpcomingEventsCardSkeleton darkMode={darkMode} />
               ) : (
