@@ -5,7 +5,7 @@ export const Testimonials = () => {
     {
       name: "Fernanda Quintanilla",
       avatar: "https://i.postimg.cc/5NPm7mZy/gfemale-person.jpg",
-      quote: `"A chinga, tengo una tienda. Es un servicio de primera. El de al lado va a coronar esta noche."`,
+      quote: `"Es un servicio de primera. Es increible lo profesionales que son cuando se presentan problemas. Ellos resuelven."`,
     },
     {
       name: "Héctor Vega",
@@ -15,12 +15,12 @@ export const Testimonials = () => {
     {
       name: "Jonahthan Velasquez",
       avatar: "https://i.postimg.cc/15ztH0Gv/padre.jpg",
-      quote: `"Las sillas de madera con cojín fueron perfectas para mi babyshower. ¡Quiero otro bebé!"`
+      quote: `"Las sillas de madera con cojín fueron perfectas para mi fiesta de cumpleaños. ¡Son lo mejores!"`
     },
     {
       name: "Rolando Mejia",
       avatar: "https://i.postimg.cc/MpFdTYDN/mewin.jpg",
-      quote: `"Ocupabamos 100 mesas para un evento de la Escuela de Mewing ®. Fernanda Rentals nos dió el servicio al día siguiente. ¡Son increíbles!"`
+      quote: `"Ocupabamos 100 mesas para un evento de la Escuela de Mewing®. Fernanda Rentals nos dió el servicio al día siguiente. ¡Son increíbles!"`
     }
   ];
 

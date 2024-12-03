@@ -22,6 +22,7 @@ const calculateDaysBetweenDates = (startDate, endDate) => {
   const differenceInDays = Math.ceil(differenceInTime / (1000 * 60 * 60 * 24));
   return differenceInDays > 0 ? differenceInDays : 1; // Asegura que al menos sea 1 día
 };
+
 export const EventItem = ({ event, onDelete }) => {
   const [showDetails, setShowDetails] = useState(false);
   const { removeEvent } = useEvents(); // Obtén la función removeEvent desde el hook
@@ -32,11 +33,15 @@ export const EventItem = ({ event, onDelete }) => {
 
   const handleDelete = () => {
     console.log("Botón Cancelar Presionado");
+    console.log(event.id);
+    
     removeEvent(event.id).then(() => {
       onDelete(); // Llama a la función `onDelete` después de eliminar
     });
     //}
   };
+  const now = Date.now();
+const isCancellable = now < new Date(event.startDate).getTime();
 
   const days = calculateDaysBetweenDates(event.startDate, event.endDate);
   return (
@@ -157,10 +162,14 @@ export const EventItem = ({ event, onDelete }) => {
 
         <Popup
           trigger={
-            <span className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 hover:bg-red-500 hover:cursor-pointer hover:text-black">
-              <MdOutlineCancel className="h-4 w-4 mr-2" />
-              Cancelar
-            </span>
+            
+              isCancellable && (
+                <span className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 hover:bg-red-500 hover:cursor-pointer hover:text-black">
+                  <MdOutlineCancel className="h-4 w-4 mr-2" />
+                  Cancelar
+                </span>
+              )
+            
           }
           position="top right"
           className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 hover:bg-red-500"

@@ -1,9 +1,9 @@
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { deleteEvent } from "../../../../shared/actions/events";
 import { useEffect, useState } from "react";
-import { toastAutoClose } from "../../../../shared/constants/variousConstants";
 import "react-toastify/dist/ReactToastify.css";
 import { mirage } from "ldrs";
+import { showToast } from "../../../../shared/constants/toastify_config";
 
 export const CancelEventModal = ({ darkMode, selectedItem, setShowCancelModal, setShowModal, setFetching }) => {
     useEffect(() => {
@@ -18,41 +18,20 @@ const [loading, setLoading] = useState(false);
     setLoading(true);
     try {
       const result = await deleteEvent(selectedItem.id);
-      console.log("Response:", result);  
-      toast[result?.status ? "success" : "error"](
-        result?.message || "Hubo un error al procesar la solicitud.",
-        {
-          position: "top-center",
-          autoClose: toastAutoClose,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        }
+      console.log("Response:", result);
+      showToast(
+        result?.status ? "success" : "error",
+        result?.message || "Hubo un error al procesar la solicitud."
       );
-
-      setFetchingProducts(true);
+      setFetching(true);
     } catch (e) {
-     if(!result?.status){
-      toast.warning("Sin conexión al servidor", {
-        position: "top-center",
-        autoClose: toastAutoClose,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-     }
+      showToast("warning", "Sin conexión al servidor");
     } finally {
       setLoading(false);
-      await new Promise((resolve) => setTimeout(resolve, 3000)); 
-      setShowModal(false)
-      setFetching(true)
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      setShowModal(false);
+      setFetching(true);
     }
-    const result = await deleteEvent(selectedItem.id);
-    setShowModal(false)
   }
 
   return (

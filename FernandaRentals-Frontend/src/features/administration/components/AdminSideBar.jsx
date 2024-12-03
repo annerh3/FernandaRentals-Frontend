@@ -1,11 +1,15 @@
 import { FiCalendar, FiHome, FiPackage, FiUsers } from "react-icons/fi";
 import { MdOutlineCategory } from "react-icons/md";
-import {  Navigate } from "react-router-dom";
+import {  Navigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../security/store";
 import { ItemNavAdministration, ItemPresentation, ItemUserLogout } from "./sidebard-Administration";
 import { ItemUserDetail } from "./sidebard-Administration/ItemUserDetail";
 
 export const AdminSideBar = ({ darkMode }) => {
+
+  const location = useLocation();
+
+
   const logout = useAuthStore((state) => state.logout);
 
   const user = useAuthStore((state) => state.user);
@@ -47,6 +51,7 @@ export const AdminSideBar = ({ darkMode }) => {
               darkMode={darkMode}
               iconClass="text-green-500"
               spanTitle="Dashboard"
+              isActive={location.pathname === "/administration/dashboard"}
             />
             {/* eventos */}
             <ItemNavAdministration
@@ -56,6 +61,7 @@ export const AdminSideBar = ({ darkMode }) => {
               darkMode={darkMode}
               iconClass="text-blue-400"
               spanTitle="Eventos"
+              isActive={location.pathname === "/administration/manage-events"}
             />
           {/* Productos */}
             <hr className="border-gray-200 rounded-lg dark:border-gray-700" />
@@ -66,6 +72,7 @@ export const AdminSideBar = ({ darkMode }) => {
               darkMode={darkMode}
               iconClass="text-siidni-gold"
               spanTitle="Productos"
+              isActive={location.pathname === "/administration/manage-products"}
             />
             
             {/* categorías de Productos */}
@@ -76,6 +83,7 @@ export const AdminSideBar = ({ darkMode }) => {
               darkMode={darkMode}
               iconClass="text-red-600"
               spanTitle="Categorías"
+              isActive={location.pathname === "/administration/manage-products-categories"}
             />
             
             <hr className="border-gray-200 rounded-lg dark:border-gray-700" />
@@ -87,6 +95,7 @@ export const AdminSideBar = ({ darkMode }) => {
               darkMode={darkMode}
               iconClass="text-purple-500"
               spanTitle="Usuarios"
+              isActive={location.pathname === "/administration/manage-users"}
             />
             <hr className="border-gray-200 rounded-lg dark:border-gray-700" />
 

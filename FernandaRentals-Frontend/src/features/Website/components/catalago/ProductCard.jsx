@@ -1,9 +1,12 @@
 import ModalImage from "react-modal-image";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../../../security/store";
+import {rolesListConstant} from "../../../../shared/constants/roles-list.constants.js"
 
 export const ProductCard = ({ product }) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const roles = useAuthStore((state) => state.roles);
+  const containsRoleAdmin = roles.some(role => [rolesListConstant.ADMIN].includes(role));
   return (
     <div className="bg-background rounded-lg shadow-lg overflow-hidden max-w-sm mx-auto flex flex-col w-full">
       {/* <img
@@ -41,18 +44,21 @@ export const ProductCard = ({ product }) => {
           </div>
         </div>
         <div className="mt-4">
-        <Link
+          {containsRoleAdmin ? (
+            <Link
+              to="/administration/manage-products"
+              className="inline-flex items-center justify-center w-full rounded-md bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm transition-transform transform hover:translate-y-1 hover:bg-blue-500 cursor-pointer"
+            >
+              Administrar Productos
+            </Link>
+          ) : (
+            <Link
               to={isAuthenticated ? "/reservation" : "/security/login"}
-              className="inline-flex items-center justify-center w-full rounded-md bg-[#d68a3d] px-6 py-3 text-base font-medium text-primary-foreground shadow-sm transition-transform transform hover:translate-y-1 hover:border-transparent cursor-pointer hover:bg-[#a96b2e]"
-              >
+              className="inline-flex items-center justify-center w-full rounded-md bg-[#d68a3d] px-6 py-3 text-base font-medium text-primary-foreground shadow-sm transition-transform transform hover:translate-y-1 hover:bg-[#a96b2e] cursor-pointer"
+            >
               {isAuthenticated ? "Reserva Ahora" : "Reserva"}
             </Link>
-          {/* <a
-            href="/reservation"
-            className="inline-flex items-center justify-center w-full rounded-md bg-siidni-gold px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-          >
-            Reserva Ahora
-          </a> */}
+          )}
         </div>
       </div>
     </div>
