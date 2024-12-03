@@ -18,7 +18,7 @@ export const SeeMoreModal = ({
   };
 
   if (!selectedItem) return null;
-
+console.log(selectedItem)
   const {
     name,
     client,
@@ -41,7 +41,7 @@ export const SeeMoreModal = ({
       >
         <div className="flex justify-between ">
           <h2 className="text-2xl font-bold mb-6 ">
-            {name || selectedItem.name}{" "}
+            {name || selectedItem.title}{" "}
           </h2>
           <button
             onClick={() => setShowModal(false)}

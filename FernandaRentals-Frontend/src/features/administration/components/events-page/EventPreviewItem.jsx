@@ -1,9 +1,18 @@
-import { CalendarDays, CalendarX2, ChevronsUp, CircleDollarSign, MapPinHouse, Sofa, UserRound, Workflow } from "lucide-react";
+import {
+  CalendarDays,
+  CalendarX2,
+  ChevronsUp,
+  CircleDollarSign,
+  MapPinHouse,
+  Sofa,
+  UserRound,
+  Workflow,
+} from "lucide-react";
 import { formatDate } from "../../../../shared/utils";
 import { DataNotFound } from "../DataNotFound";
+import { InfoRow } from "./InfoRow";
 
 export const EventPreviewItem = ({ darkMode, handleModalOpen, events }) => {
-  
   if (events === undefined || events.status !== true) {
     return (
       <DataNotFound
@@ -47,39 +56,41 @@ export const EventPreviewItem = ({ darkMode, handleModalOpen, events }) => {
           </div>
           <section className="flex gap-6">
             <div className="space-y-1">
-              <p className="text-sm opacity-70 flex gap-2">
-                <span className="text-purple-500">
-                  <UserRound size={17} />
-                </span>
-                {event.client.name}
-              </p>
-              <p className="text-sm opacity-70 flex gap-2">
-                <span className="text-red-500">
-                  <MapPinHouse size={17} />
-                </span>
-                {event.location}
-              </p>
-              <p className="text-sm opacity-70 flex gap-2">
-                <span className="text-green-500">
-                  <CircleDollarSign size={17} />
-                </span>
-                {event.eventCost}
-              </p>
+              {/* Información del Cliente */}
+              <InfoRow
+                icon={UserRound}
+                iconClass="text-purple-500"
+                label={event.client.name}
+              />
+              {/* Información de Ubicación */}
+              <InfoRow
+                icon={MapPinHouse}
+                iconClass="text-red-500"
+                label={event.location}
+              />
+
+              {/*Información de Costo de Evento  */}
+              <InfoRow
+                icon={CircleDollarSign}
+                iconClass="text-green-500"
+                label={event.total}
+              />
             </div>
+
             <div className="space-y-1">
-              <p className="text-sm opacity-70 flex gap-2">
-                <span className="text-blue-500">
-                  <Sofa size={17} />
-                </span>
-                {event.eventDetails.length}{" "}
-                {event.eventDetails.length > 1 ? "Productos" : "Producto"}
-              </p>
-              <p className="text-sm opacity-70 flex gap-2">
-                <span className="text-yellow-500">
-                  <CalendarDays size={17} />
-                </span>
-                {formatDate(event.startDate)}
-              </p>
+              {/* Información de los productos */}
+              <InfoRow
+                icon={Sofa}
+                iconClass="text-blue-500"
+                label={`${event.eventDetails.length}${" "}
+                ${event.eventDetails.length > 1 ? "Productos" : "Producto"}`}
+              />
+              {/* Información de la fecha de inicio */}
+              <InfoRow
+                icon={CalendarDays}
+                iconClass="text-yellow-500"
+                label={formatDate(event.startDate)}
+              />
             </div>
           </section>
         </div>
@@ -87,8 +98,6 @@ export const EventPreviewItem = ({ darkMode, handleModalOpen, events }) => {
     </div>
   );
 };
-
-
 
 export const EventPreviewSkeleton = ({ darkMode }) => {
   return (
@@ -101,21 +110,53 @@ export const EventPreviewSkeleton = ({ darkMode }) => {
           } w-full max-w-[650px] h-[150px] p-4 mx-auto rounded-xl shadow-md animate-pulse`}
         >
           <div className="flex justify-between items-start mb-4">
-            <div className={`${darkMode ? "bg-gray-600" : "bg-white"} h-5 rounded w-2/3`}></div>
+            <div
+              className={`${
+                darkMode ? "bg-gray-600" : "bg-white"
+              } h-5 rounded w-2/3`}
+            ></div>
             <div className="flex space-x-2 items-center">
-              <div className={`${darkMode ? "bg-gray-700" : "bg-white"} h-7 w-6 rounded-md`}></div>
-              <div className={`${darkMode ? "bg-gray-700" : "bg-white"} h-8 w-13 rounded-md`}></div>
+              <div
+                className={`${
+                  darkMode ? "bg-gray-700" : "bg-white"
+                } h-7 w-6 rounded-md`}
+              ></div>
+              <div
+                className={`${
+                  darkMode ? "bg-gray-700" : "bg-white"
+                } h-8 w-13 rounded-md`}
+              ></div>
             </div>
           </div>
           <section className="flex gap-6">
             <div className="space-y-2">
-              <div className={`${darkMode ? "bg-gray-700" : "bg-white"} h-4 w-80 rounded`}></div>
-              <div className={`${darkMode ? "bg-gray-700" : "bg-white"} h-4 rounded w-2/3`}></div>
-              <div className={`${darkMode ? "bg-gray-700" : "bg-white"} h-4 rounded w-1/2`}></div>
+              <div
+                className={`${
+                  darkMode ? "bg-gray-700" : "bg-white"
+                } h-4 w-80 rounded`}
+              ></div>
+              <div
+                className={`${
+                  darkMode ? "bg-gray-700" : "bg-white"
+                } h-4 rounded w-2/3`}
+              ></div>
+              <div
+                className={`${
+                  darkMode ? "bg-gray-700" : "bg-white"
+                } h-4 rounded w-1/2`}
+              ></div>
             </div>
             <div className="space-y-2">
-              <div className={`${darkMode ? "bg-gray-700" : "bg-white"} h-4 rounded w-3/4`}></div>
-              <div className={`${darkMode ? "bg-gray-700" : "bg-white"} h-4 rounded w-2/3`}></div>
+              <div
+                className={`${
+                  darkMode ? "bg-gray-700" : "bg-white"
+                } h-4 rounded w-3/4`}
+              ></div>
+              <div
+                className={`${
+                  darkMode ? "bg-gray-700" : "bg-white"
+                } h-4 rounded w-2/3`}
+              ></div>
             </div>
           </section>
         </div>
@@ -123,4 +164,3 @@ export const EventPreviewSkeleton = ({ darkMode }) => {
     </div>
   );
 };
-

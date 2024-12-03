@@ -4,9 +4,12 @@ import { DataNotFound } from "./DataNotFound";
 import { CalendarX2, Workflow } from "lucide-react";
 import { FaUser } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
+import { InfoRow } from "./events-page/InfoRow";
+import { CiCalendarDate } from "react-icons/ci";
+import { BsCalendar2DateFill } from "react-icons/bs";
 
 
-// Relaciononado a la carga de los eventos
+// Relacionando a la carga de los eventos del dashboard
 export const UpcomingEventsCard = ({ darkMode, dashboard }) => {
   if (dashboard === undefined || dashboard.status !== true) {
     return (
@@ -32,10 +35,11 @@ export const UpcomingEventsCard = ({ darkMode, dashboard }) => {
     <>
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold mb-4">
-          Eventos en las proximas dos semanas
+          Eventos en las próximas dos semanas
         </h2>
 
-        {/* Boton que rediregue a la pagina de Eventos */}
+        {/* Botón que redirige a la pagina de Eventos */}
+
         <Link
           to="/administration/manage-events"
           className={`${
@@ -46,7 +50,7 @@ export const UpcomingEventsCard = ({ darkMode, dashboard }) => {
         >
           Ver todo
         </Link>
-        {/* Foin del Boton  */}
+        {/* Foin del Botón  */}
 
       </div>
       {/* Muestra los eventos si es que los hay */}
@@ -60,29 +64,24 @@ export const UpcomingEventsCard = ({ darkMode, dashboard }) => {
               } p-4 rounded-lg shadow-md `}
             >
               {/* Muestra el usuario y contacto , solo tenemos correos */}
-              <h3 className="font-semibold">{event.name}</h3>
-              <div className="flex items-center space-x-2">
-                <FaUser className="text-lg" />
-                <p>
-                    {event.clientName} : {event.clientEmail}
-                </p>
-              </div>
-              {/* Ubicacion e los Eventos */}
-              <div className="flex items-center space-x-2">
-                <FaLocationDot className="text-lg" />
-                <p>
-                    {event.location}
-                </p>
-              </div>
-              {/* Fecha del evento */}
-              <p className="text-sm opacity-70">{formatDate(event.startDate)}</p>
+              {/* <InfoRow  label={event.name} className="font-semibold" /> */}
+              <h3 className={`${
+                darkMode ? " text-siidni-goldLight" : "text-blue-900"
+              } rounded-lg shadow-md  font-semibold `}>{event.name}  </h3>
+
+              <InfoRow  icon={FaUser} iconClass="text-blue-500" label={`${event.clientName} : ${event.clientEmail}`} />
               
+              {/* Ubicación e los Eventos */}
+              <InfoRow  icon={FaLocationDot} iconClass="text-red-500" label={event.location} />
+
+              {/* Fecha del evento */}
+              <InfoRow  icon={BsCalendar2DateFill} iconClass="text-green-500" label={formatDate(event.startDate)} />
               
             </div>
           ))
         ) : (
-          // Muestra el emansaje si no es de esta manera
-          <p>No hay Eventos Proximos.</p>
+          // Muestra el mensaje si no es de esta manera
+          <p>No hay Eventos Próximos.</p>
         )}
       </div>
     </>
