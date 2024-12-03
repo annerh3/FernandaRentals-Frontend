@@ -1,18 +1,16 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 import { DashBoardPage } from "../pages/DashBoardPage"
 import { AdminSideBar } from "../components/AdminSideBar"
-import { useState } from "react";
 import { DarkModeBtn } from "../components/DarkModeBtn";
 import { ProductsPage } from "../pages/ProductsPage";
 import { CategoryProductPage } from "../pages/CategoryProductPage";
 import {UsersPage} from "../pages/UsersPage";
 import { EventsPage } from "../pages/EventsPage";
+import { useDarkMode } from "../hooks";
 
 export const AdministrationRouter = () => {
+  const [darkMode, setDarkMode] = useDarkMode();
 
-  // Para manejar el uso de Dark Mode o Light Mode 
-  //Utiliza un ternario en la renderizacion del componente main principal según la configuración
-  const [darkMode, setDarkMode] = useState(true);
 
   return (
     <main className={`flex min-h-screen ${darkMode ? "bg-black text-white" : "bg-white text-gray-900"}`}>
