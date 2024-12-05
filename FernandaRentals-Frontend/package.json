@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@paypal/react-paypal-js": "^8.7.0",
     "@react-spring/web": "^9.7.4",
     "@uiw/react-markdown-editor": "^6.1.2",
     "axios": "^1.7.3",
@@ -30,6 +31,7 @@
     "react-router-dom": "^6.26.0",
     "react-scroll": "^1.9.0",
     "react-toastify": "^10.0.6",
+    "react-use-cart": "^1.14.0",
     "reactjs-popup": "^2.0.6",
     "tailwindcss-animate": "^1.0.7",
     "yup": "^1.4.0",

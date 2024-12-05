@@ -3,6 +3,8 @@ import { AppRouter } from "./routes/AppRouter";
 import { useAuthStore } from "./features/security/store";
 import { useEffect, useState } from "react";
 import { Loading } from "./shared/components/Loading";
+import { initialOptions, PAYPAL_CLIENT_ID } from "./config/api/paypalCheckout";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 export const App = () => {
   //Por si se actualiza la pagina se vuelve a leer el local store
   // para la validacion de la autentificacion
@@ -23,14 +25,13 @@ export const App = () => {
       return <Loading />
   }
 
+ 
+
  return (
-    <BrowserRouter>
-    {/* Se divude en 3 componentes de rutas
-        seguridad
-        Web Router
-        Administration
-    */}
-      <AppRouter />
-    </BrowserRouter>
+  <PayPalScriptProvider options={initialOptions}>
+  <BrowserRouter>
+    <AppRouter />
+  </BrowserRouter>
+</PayPalScriptProvider>
   )
 }

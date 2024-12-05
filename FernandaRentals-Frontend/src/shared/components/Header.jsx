@@ -5,14 +5,22 @@ import "./../../index.css";
 import { SideBar2 } from "./SideBar2";
 import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
 import { useAuthStore } from "../../features/security/store/useAuthStore";
+import { ShoppingCart } from "../../features/Website/components/ShoppingCart";
 
 export const Header = () => {
   const sideBar = useRef(null); // useRef para referenciar el componente SideBar2.
   const [isOpen, setIsOpen] = useState(false); // para controlar si el SideBar2 está abierto o cerrado.
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+ 
   const toggleSidebar = () => {
     setIsOpen(!isOpen); // Invierte el valor de 'isOpen' cuando se llama.
   };
+
+  const toggleCart = () => {
+    setIsCartOpen((prev) => !prev);
+  };
+
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -28,6 +36,24 @@ export const Header = () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        sideBar.current &&
+        !sideBar.current.contains(event.target) &&
+        !event.target.closest(".shopping-cart-container")
+      ) {
+        setIsOpen(false);
+        setIsCartOpen(false); // Cierra el carrito si se hace clic fuera
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -73,12 +99,13 @@ export const Header = () => {
           className="h-10 object-cover object-center"
         />
       </div>
-      <span className="text-[#d56e18] text-2xl font-semibold">
+      <span className="text-white text-2xl font-bold">
         Fernanda Rentals
       </span>
     </Link>
-
-    <div className="h-10 bg-transparent w-48"></div>
+    <div className="shopping-cart-container relative transition-transform transform hover:translate-y-1">     
+      <ShoppingCart toggleCart={toggleCart} isCartOpen={isCartOpen}/>
+    </ div>
   </header>
 </section>
 

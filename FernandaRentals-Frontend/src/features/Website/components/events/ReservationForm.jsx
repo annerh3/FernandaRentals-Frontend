@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useProducts } from "../../hooks/data";
 import { ProductGrid } from "./ProductGrid";
 import { ProductsSelectGrid } from "./ProductsSelectGrid";
@@ -13,6 +13,7 @@ import { createEvent } from "../../../../shared/actions/events";
 import { AlertPopUp } from "../utils/AlertPopUp";
 import { AlertPopUp2 } from "../utils/AlertPopUp2";
 import { SelecOptions } from "./SelecOptions";
+import { useCart } from "react-use-cart";
 
 export const ReservationForm = () => {
   const { products, loadProducts, isLoading } = useProducts(); //para cargar los productos
@@ -23,6 +24,11 @@ export const ReservationForm = () => {
   const [selectedProducts, setSelectedProducts] = useState([]); // para almacenar los productos seleccionados
   const [alert, setAlert] = useState({ message: "", isVisible: false }); // la que salta por errores del backend
   const [errors, setErrors] = useState({}); //para almacenar los errores que viene del back y del form validation
+  
+  const { items, addItem, updateItemQuantity, removeItem, emptyCart  } = useCart();
+  const nameInputRef = useRef(null); // lo referencio para despues hacerle focus, cuando se renderice la pagina
+ 
+
   const [formData, setFormData] = useState({
     name: "",
     location: "",
@@ -34,6 +40,22 @@ export const ReservationForm = () => {
     isVisible: false,
     data: {},
   });
+
+
+  useEffect(() => {
+    if (nameInputRef.current) {
+      nameInputRef.current.focus();
+    }
+  }, []);
+
+  // Cargar productos cuando sea necesario
+  useEffect(() => {
+    if (!fetching) return;
+    console.log(selectedCategory);
+
+    loadProducts(searchTerm, currentPage, selectedCategory);
+    setFetching(false);
+  }, [fetching, searchTerm, currentPage, loadProducts]);
 
   const resetForm = () => {
     setFormData({
@@ -47,14 +69,7 @@ export const ReservationForm = () => {
     setErrors({});
     setAlert({ message: "", isVisible: false });
   };
-  // Cargar productos cuando sea necesario
-  useEffect(() => {
-    if (!fetching) return;
-    console.log(selectedCategory);
-
-    loadProducts(searchTerm, currentPage, selectedCategory);
-    setFetching(false);
-  }, [fetching, searchTerm, currentPage, loadProducts]);
+ 
 
   const handlePreviousPage = () => {
     if (products?.data?.hasPreviousPage) {
@@ -72,7 +87,7 @@ export const ReservationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log("Submitting . . ")
     // arreglando el Data que manda al backend
     const formDataToSubmit = {
       name: formData.name,
@@ -80,14 +95,15 @@ export const ReservationForm = () => {
       startDate: convertToISO(formData.startDate),
       endDate: convertToISO(formData.endDate),
       // mapeo correcto de los productos segun lo que espera el backend
-      productos: selectedProducts.map((product) => ({
+      productos: items.map((product) => ({
         productId: product.id,
         quantity: product.quantity || 1,
-      })),
+      }))
     };
-    //console.log(selectedProducts);
 
     console.log(formDataToSubmit);
+     
+  
 
     const validationErrors = validateFormCreateEvent(formDataToSubmit);
     if (Object.keys(validationErrors).length > 0) {
@@ -128,8 +144,9 @@ export const ReservationForm = () => {
       location: "",
       startDate: "",
       endDate: "",
-      selectedProducts: [{}],
+      products: [{}],
     });
+    emptyCart()
 
     setErrors({});
   };
@@ -150,14 +167,8 @@ export const ReservationForm = () => {
       e.preventDefault();
     }
   };
-  // Maneja la selección de productos
-  const handleProductSelect = (product) => {
-    setSelectedProducts((prevSelected) =>
-      prevSelected.find((item) => item.id === product.id)
-        ? prevSelected // Si ya está seleccionado, no agregarlo de nuevo
-        : [...prevSelected, product]
-    );
-  };
+  
+  
   const handlesearchChangeValue = (e) => {
     setSearchTerm(e.target.value);
     console.log(selectedProducts);
@@ -227,12 +238,13 @@ export const ReservationForm = () => {
                   </label>
                   <input
                     type="text"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-md"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight  focus:outline-none focus:ring focus:ring-blue-400"
                     id="name"
                     name="name"
                     value={formData.name}
                     placeholder="Presentación UNAH"
                     onChange={handleInputChange}
+                    ref={nameInputRef}
                   />
                   {errors.name && <Alert errorMessage={errors.name} />}
                 </div>
@@ -311,7 +323,9 @@ export const ReservationForm = () => {
                 </div>
                 {/* Cuerpo  */}
                 <ProductsSelectGrid
-                  selectedProducts={selectedProducts}
+                  items={items}
+                  updateItemQuantity = {updateItemQuantity}
+                  removeItem = {removeItem}
                   onRemoveProduct={handleRemoveProduct}
                   onUpdateQuantity={handleUpdateQuantity}
                 />
@@ -363,7 +377,7 @@ export const ReservationForm = () => {
                       <ProductGrid
                         products={products}
                         isLoading={isLoading}
-                        onProductSelect={handleProductSelect}
+                       
                       />
                       {/* Paginación */}
                       <Pagination
@@ -387,7 +401,7 @@ export const ReservationForm = () => {
 
              {/* Inicio Botones  */}     
             <section className="grid grid-flow-row lg:grid-flow-col gap-3 mt-1">
-              <FormButtons onSubmit={handleSubmit} onCancel={handleCancel} />
+              <FormButtons onSubmit={handleSubmit} onCancel={handleCancel} type={"create"} />
             </section>
              {/* Fin Botones */}
           </div>

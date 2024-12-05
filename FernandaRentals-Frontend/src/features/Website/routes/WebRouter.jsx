@@ -41,7 +41,10 @@ export const WebRouter = () => {
           <Route path="/products" element={<CatalagoProducts />} />
           <Route path="/my-event/edit/:id" element={<FormEditEventPage />} />
           {isAuthenticated && !constainsRoleAdmin ? ( // aqui solo entran los clientes autenticados
-            <Route path="*" element={<Navigate to={"/my-events"} />} />
+           <>
+              <Route path="*" element={<Navigate to={"/my-events"} />} />
+              {/* <Route path="/payment" element={<PaymentPage />} /> */}
+           </>
           ) : (
             <>
               <Route path="/home" element={<HomePage />} />
