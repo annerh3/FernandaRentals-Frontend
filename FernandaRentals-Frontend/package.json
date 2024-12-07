@@ -10,10 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@paypal/checkout-server-sdk": "^1.0.3",
     "@paypal/react-paypal-js": "^8.7.0",
     "@react-spring/web": "^9.7.4",
     "@uiw/react-markdown-editor": "^6.1.2",
     "axios": "^1.7.3",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "flyonui": "^1.1.0",
     "formik": "^2.4.6",
     "jwt-decode": "^4.0.0",

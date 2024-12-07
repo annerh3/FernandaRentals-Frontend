@@ -1,6 +1,5 @@
 import { useState } from "react"
-import {getProductsList, updateProduct} from "../../../../shared/actions/products/products"
-import LazyResult from "postcss/lib/lazy-result";
+import {getProductsList, updateProduct, validateProducts} from "../../../../shared/actions/products/products"
 
 export const useProducts = () => {
   const [products, setProducts] = useState({});
@@ -32,6 +31,15 @@ export const useProducts = () => {
     setIsLoading(false);
   }
 
+
+    // validar disponibilidad de productos entre fechas del evento
+    const getValidationProducts = async (values) => {
+      setIsLoading(true);
+      const result = await validateProducts(values);
+      setProducts(result);
+        setIsLoading(false);
+    };
+
 //getProductsList
 
   return {
@@ -43,7 +51,7 @@ export const useProducts = () => {
     // Methods
     loadProducts,
     loadProductsByCategory,
-
+    getValidationProducts,
     editProduct,
   }
 }

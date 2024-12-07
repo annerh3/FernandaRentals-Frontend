@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pagination } from "../../../../shared/components";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import { useEventsData } from "../../store/useEventsData";
 
 export const ProductsSelectGrid = ({
   items,
   updateItemQuantity,
   removeItem,
 }) => {
- 
+
+
+const { setEventProducts } = useEventsData();
   const PRODUCTS_PER_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -34,6 +37,12 @@ export const ProductsSelectGrid = ({
   const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
   const endIndex = Math.min(startIndex + PRODUCTS_PER_PAGE, items.length);
   const currentProducts = items.slice(startIndex, endIndex);
+
+  useEffect(() => {
+    setEventProducts(items)
+  }, [items])
+  
+  
 
   return (
     <div className="mt-6 overflow-x-auto">
@@ -83,18 +92,18 @@ export const ProductsSelectGrid = ({
                     <div className="text-gray-500 text-lg">
                       {product.quantity}
                     </div>
-                    {/* Boton Mas */}
-                      <button
-                        onClick={() =>
-                          updateItemQuantity(
-                            product.id,
-                            (product.quantity ?? 0) + 1
-                          )
-                        }
-                      >
-                        <FaPlus className="bg-gray-200 p-1 text-xl text-gray-400 hover:bg-green-300 rounded-sm" />
-                      </button>
-                    </div>
+                      {/* Boton Mas */}
+                        <button
+                          onClick={() =>
+                            updateItemQuantity(
+                              product.id,
+                              (product.quantity ?? 0) + 1
+                            )
+                          }
+                        >
+                          <FaPlus className="bg-gray-200 p-1 text-xl text-gray-400 hover:bg-green-300 rounded-sm" />
+                        </button>
+                      </div>
                   
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

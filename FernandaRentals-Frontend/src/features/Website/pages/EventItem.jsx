@@ -45,7 +45,7 @@ const isCancellable = now < new Date(event.startDate).getTime();
 
   const days = calculateDaysBetweenDates(event.startDate, event.endDate);
   return (
-    <div className="event rounded-lg shadow-md p-4  text-white">
+    <div className="bg-gray-200 rounded-lg shadow-md p-4  text-black">
       <div className="mb-4 flex items-center">
         <MdOutlineEventNote className="text-xl text-green-600 mr-1" />
         <h2 className="text-lg font-bold">{event.name}</h2>
@@ -67,7 +67,7 @@ const isCancellable = now < new Date(event.startDate).getTime();
 
       <div className="mb-4">
         {showDetails && (
-          <section className=" text-white">
+          <section className=" text-black">
             <hr className="m-4" />
             <p className="text-sm  ">
               <strong className="mr-1">Fecha de Inicio:</strong>
@@ -90,46 +90,49 @@ const isCancellable = now < new Date(event.startDate).getTime();
             </p>
             <br />
             <strong>Lista de Productos Reservados</strong>
-            <table className="min-w-full  mt-4 border">
-              <thead>
-                <tr className="">
-                  <th className="py-2 px-4 border">Imagen</th>
-                  <th className="py-2 px-4 border">Producto</th>
-                  <th className="py-2 px-4 border">Cantidad</th>
-                  <th className="py-2 px-4 border">Precio Unitario</th>
-                  <th className="py-2 px-4 border">Precio Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {event.eventDetails.map((detail) => (
-                  <tr key={detail.id} className="border-b">
-                    <td className="py-2 px-4 border">
-                      <a
-                        href={detail.product.urlImage}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="py-2 px-4 flex justify-center transform transition-transform duration-300 hover:scale-110"
-                      >
-                        <img
-                          src={detail.product.urlImage}
-                          width={50}
-                          alt="img-product"
-                          className="rounded-md shadow-md"
-                        />
-                      </a>
-                    </td>
-                    <td className="py-2 px-4 border">{detail.product.name}</td>
-                    <td className="py-2 px-4 border">{detail.quantity}</td>
-                    <td className="py-2 px-4 border">
-                      ${detail.unitPrice.toFixed(2)}
-                    </td>
-                    <td className="py-2 px-4 border">
-                      ${detail.totalPrice.toFixed(2)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <table className="min-w-full mt-4 border border-black ">
+  <thead>
+    <tr className="bg-gray-300 ">
+      <th className="py-2 px-4 border border-black rounded-l-md">Imagen</th>
+      <th className="py-2 px-4 border border-black">Producto</th>
+      <th className="py-2 px-4 border border-black">Cantidad</th>
+      <th className="py-2 px-4 border border-black">Precio Unitario</th>
+      <th className="py-2 px-4 border border-black">Precio Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    {event.eventDetails.map((detail) => (
+      <tr key={detail.id} className="border-b border-black">
+        <td className="py-2 px-4 border border-black">
+          <a
+            href={detail.product.urlImage}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="py-2 px-4 flex justify-center transform transition-transform duration-300 hover:scale-110"
+          >
+            <img
+              src={detail.product.urlImage}
+              width={50}
+              alt="img-product"
+              className="rounded-md shadow-md"
+            />
+          </a>
+        </td>
+        <td className="py-2 px-4 border border-black">
+          {detail.product.name}
+        </td>
+        <td className="py-2 px-4 border border-black">{detail.quantity}</td>
+        <td className="py-2 px-4 border border-black">
+          ${detail.unitPrice.toFixed(2)}
+        </td>
+        <td className="py-2 px-4 border border-black">
+          ${detail.totalPrice.toFixed(2)}
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
           </section>
         )}
       </div>
@@ -137,7 +140,7 @@ const isCancellable = now < new Date(event.startDate).getTime();
       <div className="flex justify-between">
         <button
           onClick={toggleDetails}
-          className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 hover:bg-blue-200 hover:text-black"
+          className="flex items-center text-sm border border-black rounded px-3 py-1 hover:bg-blue-200 hover:text-black"
         >
           {showDetails ? (
             <>
@@ -154,7 +157,7 @@ const isCancellable = now < new Date(event.startDate).getTime();
 
         <Link
           to={`/my-event/edit/${event.id}`}
-          className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 hover:bg-orange-300 hover:text-black"
+          className="flex items-center text-sm border border-black  rounded px-3 py-1 hover:bg-orange-300 hover:text-black"
         >
           <TbFilePencil className="h-4 w-4 mr-2" />
           Editar
@@ -164,7 +167,7 @@ const isCancellable = now < new Date(event.startDate).getTime();
           trigger={
             
               isCancellable && (
-                <span className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 hover:bg-red-500 hover:cursor-pointer hover:text-black">
+                <span className="flex items-center text-sm border border-black  rounded px-3 py-1 hover:bg-red-500 hover:cursor-pointer hover:text-black">
                   <MdOutlineCancel className="h-4 w-4 mr-2" />
                   Cancelar
                 </span>
@@ -172,7 +175,7 @@ const isCancellable = now < new Date(event.startDate).getTime();
             
           }
           position="top right"
-          className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 hover:bg-red-500"
+          className="flex items-center text-sm border border-black rounded px-3 py-1 hover:bg-red-500"
         >
           <aside className="bg-siidni-goldLight rounded-md p-4 flex flex-col items-center justify-center">
             <strong className="mb-2 text-center">
@@ -180,7 +183,7 @@ const isCancellable = now < new Date(event.startDate).getTime();
             </strong>
             <button
               onClick={handleDelete}
-              className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 bg-red-500"
+              className="flex items-center text-sm border border-black rounded px-3 py-1 bg-red-500"
             >
               <MdOutlineCancel className="h-4 w-4 mr-2" />
               SHI 😥

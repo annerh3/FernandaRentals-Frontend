@@ -70,7 +70,7 @@ export const ProductCard = ({ product }) => {
               onClick={() => addItem(product)}
               className="inline-flex items-center justify-center w-full rounded-md bg-[#d68a3d] px-6 py-3 text-white text-md font-bold text-primary-foreground shadow-sm transition-transform transform hover:translate-y-1 hover:bg-[#a96b2e] cursor-pointer"
             >
-              {isAuthenticated ? "Reserva Ahora" : "Agregar al Carrito"}
+              Agregar al Carrito
             </button>
           )}
         </div>

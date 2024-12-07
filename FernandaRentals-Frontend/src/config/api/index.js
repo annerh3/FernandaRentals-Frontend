@@ -1,1 +1,1 @@
-export * from './paypalCheckout'
+export * from './PaypalSandBoxApi';

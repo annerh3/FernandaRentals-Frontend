@@ -57,7 +57,7 @@ export const SideBar2 = React.forwardRef(({ isOpen, toggleSidebar }, ref) => {
                 <>
                   <FaRegUserCircle className="py-0.3 w-7 h-7" />
                   <span className="font-bold text-gray-200 ml-3 text-xl pointer-events-none">
-                    {user.name} {" - "} {user.clientTypeName}
+                    {user.name} {" - "} {user.clientType?.name}
                   </span>
                 </>
               ) : (

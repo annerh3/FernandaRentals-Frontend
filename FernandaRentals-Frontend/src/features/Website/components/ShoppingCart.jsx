@@ -1,10 +1,39 @@
+import { useFormik } from "formik";
 import { ShoppingCartIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import { BsCartDash, BsCartX } from "react-icons/bs";
 import { FaMinus, FaPlus } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import { useCart } from "react-use-cart";
+import {
+  checkProductsInitvalues,
+  checkProductsValidationSchema,
+} from "../forms/checkProductsAreAvaible.data";
+import { isObjectEmpty } from "../../../shared/utils";
+import { validateProducts } from "../../../shared/actions/products/products";
+
+import "react-toastify/dist/ReactToastify.css";
+import { useProductsValidation } from "../store/useProductsValidation";
+import { Link, useNavigate } from "react-router-dom";
+import { useEventsData } from "../store/useEventsData";
 
 export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
+  const [loading, setLoading] = useState(false);
+  const setShowModal = useProductsValidation((state) => state.setShowModal);
+
+  const setData = useProductsValidation((state) => state.setData);
+
+  const setSuccess = useProductsValidation((state) => state.setSuccess);
+  const success = useProductsValidation((state) => state.success);
+
+  const navigate = useNavigate();
+
+  const {
+    setEventStartDate,
+    setEventEndDate,
+    setEventProducts,
+    resetEventData,
+  } = useEventsData();
+
   const {
     cartTotal,
     isEmpty,
@@ -15,6 +44,64 @@ export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
     emptyCart,
   } = useCart();
 
+  const { eventData } = useEventsData();
+
+  useEffect(() => {
+    console.log("useEventData", eventData);
+  }, [eventData]);
+
+  // Manejador personalizado para agregar los productos
+  const handleAddProducts = (e) => {
+    e.preventDefault();
+    const formatedProducts = items.map((product) => ({
+      productId: product.id,
+      quantity: product.quantity || 1,
+    }));
+
+    // Actualizar `products` en los valores de Formik
+    formik.setFieldValue("products", formatedProducts).then(() => {
+      console.log("Productos actualizados en values:", formik.values.products);
+      formik.handleSubmit(); // Llamar al envío después de la actualización
+    });
+  };
+
+  const handleEmptyCart = () => {
+    resetEventData();
+    emptyCart();
+  };
+
+  const formik = useFormik({
+    initialValues: checkProductsInitvalues,
+    validationSchema: checkProductsValidationSchema,
+    validateOnChange: true,
+    onSubmit: async (values) => {
+      setEventStartDate(values.eventStartDate);
+      setEventEndDate(values.eventEndDate);
+      setEventProducts(values.products);
+
+      try {
+        const result = await validateProducts(values);
+        console.log("Response from server:", result);
+
+        console.log("carrito", success);
+        setData(result);
+        setShowModal(true);
+      } catch (error) {
+        // howToast("warning", "Sin conexión al servidor");
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (success) {
+      setSuccess(false);
+      // Navegar a la página de reserva solo si showModal es true
+      navigate("/reservation");
+      toggleCart(); // Cerrar el carrito al navegar
+    }
+  }, [success]);
   return (
     <>
       {/* Ícono del carrito */}
@@ -36,33 +123,104 @@ export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
               <h3 className="text-lg font-semibol flex justify-center font-bold">
                 Carrito
               </h3>
-              <div className="text-center text-gray-500 mt-4">
-                Tu carrito está vacío
+              <div className="grid mt-4 justify-center space-y-2">
+                <span className="text-center text-gray-400">Tu carrito está vacío</span>
+                <Link
+                  to="/products"
+                  onClick={toggleCart}
+                  className=" items-center justify-center w-44 text-center rounded-md bg-siidni-goldDark px-6 py-3 text-base font-medium text-primary-foreground shadow-sm transition-transform transform hover:translate-y-1 hover:border-transparent cursor-pointer hover:bg-[#a96b2e]"
+                >
+                  Ver Productos
+                </Link>
               </div>
             </>
           ) : (
             // text-red-500 hover:text-red-900  bg-red-200 hover:bg-red-300
             <>
               {/* Botón para crear evento */}
-              <section className="space-y-2">
+              <form className="space-y-2" onSubmit={handleAddProducts}>
                 <span className="flex justify-between">
                   <h3 className="text-2xl flex justify-center  font-bold">
                     Carrito
                   </h3>
-                  <h2 className="text-xl">Cotización: L {cartTotal}</h2>
-                </span>
-                <span className="flex justify-between">
                   <BsCartX
-                  onClick={() => emptyCart()}
+                    onClick={handleEmptyCart}
                     title="Vaciar Carrito"
                     size={35}
-                    className="text-red-500 p-1 hover:text-red-900  bg-red-200 hover:bg-red-300 rounded-md cursor-pointer min-w-fit min-h-fit"
+                    className="text-red-500 hover:text-red-900  bg-red-200 hover:bg-red-300 rounded-md cursor-pointer "
                   />
-              <Link to="reservation" onClick={toggleCart} className="w-1/3 bg-siidni-gold text-white font-bold py-2 rounded-lg hover:bg-siidni-goldDark focus:outline-none flex justify-center">
-                Continuar...
-              </Link>
                 </span>
-              </section>
+                <div className="grid grid-flow-row lg:grid-flow-col gap-3 mt-4 py-2">
+                  <div className="grid grid-flow-col gap-3">
+                    <div className="sm:col-span-4 justify-center">
+                      <label
+                        className="block text-gray-700 text-sm font-bold mb-2"
+                        htmlFor="eventStartDate"
+                      >
+                        Fecha de Inicio
+                      </label>
+                      <input
+                        type="date"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-md"
+                        id="eventStartDate"
+                        name="eventStartDate"
+                        value={formik.values.eventStartDate}
+                        onChange={formik.handleChange}
+                        // onBlur={formik.handleBlur}
+                      />
+                      {formik.touched.eventStartDate &&
+                        formik.errors.eventStartDate && (
+                          <div className="text-red-600 text-xs my-1">
+                            {formik.errors.eventStartDate}
+                          </div>
+                        )}
+                    </div>
+                    <div className="sm:col-span-4 justify-center">
+                      <label
+                        className="block text-gray-700 text-sm font-bold mb-2"
+                        htmlFor="enddate"
+                      >
+                        Fecha de Finalización
+                      </label>
+                      <input
+                        type="date"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-md"
+                        id="eventEndDate"
+                        name="eventEndDate"
+                        value={formik.values.eventEndDate}
+                        onChange={formik.handleChange}
+                        // onBlur={formik.handleBlur}
+                      />
+                      {formik.touched.eventEndDate &&
+                        formik.errors.eventEndDate && (
+                          <div className="text-red-600 text-xs my-1">
+                            {formik.errors.eventEndDate}
+                          </div>
+                        )}
+                    </div>
+                  </div>
+                </div>
+                <span className="flex justify-end gap-2 items-center py-3">
+                  <h2 className="text-lg font-semibold">
+                    Sub-Total: L {cartTotal}
+                  </h2>
+
+                  <button
+                    className={`transition duration-200 py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block w-2/5 
+                ${
+                  !isObjectEmpty(formik.errors)
+                    ? "cursor-not-allowed bg-gray-300 text-black"
+                    : "bg-siidni-gold text-white hover:bg-siidni-goldLight focus:bg-unah-blueLight"
+                }
+                `}
+                    type="submit"
+                    disabled={!isObjectEmpty(formik.errors)}
+                  >
+                    Ver disponibilidad
+                  </button>
+                </span>
+              </form>
+              <hr />
 
               {/* Productos en el carrito */}
               {items.map((product) => (
@@ -116,7 +274,7 @@ export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
                       L {product.price}
                     </div>
                     <div
-                    title="Quitar del carrito"
+                      title="Quitar del carrito"
                       onClick={() => removeItem(product.id)}
                       className="mt-2 w-6 h-6 flex items-center justify-center bg-yellow-200 hover:bg-yellow-300  rounded-full cursor-pointer"
                     >

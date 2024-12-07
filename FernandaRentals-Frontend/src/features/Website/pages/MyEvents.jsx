@@ -46,7 +46,7 @@ export const MyEvents = () =>  {
             <div className=" bg-gray-50 rounded-full w-96 h-6 mr-1"></div>
           </div>
         ) : (
-          <h1 className="mt-28 text-3xl font-semibold text-white shadow-2xl event rounded-lg">
+          <h1 className="mt-28 text-3xl font-semibold text-black shadow-2xl bg-gray-100 p-2 rounded-lg">
             Eventos de {user.name}
           </h1>
         )}
@@ -65,7 +65,7 @@ export const MyEvents = () =>  {
               events.data.map((event) => (
                 <>
                 {console.log("USER en MyEvents.jsx, isLoading = false:  ", user)  }
-                <EventItem key={event.id} event={event} onDelete={handleAfterDelete} />
+                <EventItem key={generateId()} event={event} onDelete={handleAfterDelete} />
                 </>
               ))
             ) : (
