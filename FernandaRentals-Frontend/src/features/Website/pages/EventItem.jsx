@@ -17,7 +17,7 @@ import { useEventEditStore } from "../store/useEventEditStore";
 import { useNavigate } from "react-router-dom";
 
 // Función para calcular la diferencia en días entre dos fechas
-const calculateDaysBetweenDates = (startDate, endDate) => {
+const calculateDaysBetweenDates = (startDate, endDate ) => {
   const start = new Date(startDate);
   const end = new Date(endDate);
   const differenceInTime = end - start;
@@ -25,7 +25,7 @@ const calculateDaysBetweenDates = (startDate, endDate) => {
   return differenceInDays > 0 ? differenceInDays : 1; // Asegura que al menos sea 1 día
 };
 
-export const EventItem = ({ event, onDelete }) => {
+export const EventItem = ({ event, onDelete, onViewNotes }) => {
   const { eventDataToEdit } = useEventEditStore();
   useEffect(() => {
     if(eventDataToEdit){
@@ -62,14 +62,15 @@ export const EventItem = ({ event, onDelete }) => {
   };
   const now = Date.now();
   const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000; // 3 días en milisegundos
-  const isCancellable = new Date(event.startDate).getTime() - now > threeDaysInMillis;
-  // const isEditable = new Date(event.endDate).getTime() >= now; //si la fecha de ninalizacion en mayor a la fecha actual, es editable. se podrá extender la fecha de finalizacion.
+  const isCancellable = new Date(event.startDate).getTime() - now > threeDaysInMillis; // para cancelar, tiene que haber un maximo de 3 dias entre la fecha actual y ka fecha de inicio del evento
 
   const isEditable = 
   now <= new Date(event.endDate).getTime(); //&&  La fecha actual es igual o menor a la fecha de finalización. esto sirve para extender la fecha finalizacion
 //  isCancellable; // La fecha de inicio es mayor o igual a 3 días desde la fecha actual
 
   const days = calculateDaysBetweenDates(event.startDate, event.endDate);
+
+
   return (
     <div className={`${
       eventDataToEdit?.id === event.id
@@ -80,6 +81,17 @@ export const EventItem = ({ event, onDelete }) => {
         <MdOutlineEventNote className="text-xl text-green-600 mr-1" />
         <h2 className="text-lg font-bold">{event.name}</h2>
       </div>
+      {/* // event.eventNotes.length > 0 */}
+      {isEditable && (
+      <button
+          onClick={() => onViewNotes(event)}  // Llamar a onViewNotes pasando el evento
+          className={`mb-3 transition-transform transform hover:translate-y-1 text-sm ${(event.eventNotes.length > 0) ? "bg-orange-400 hover:bg-orange-500" : "bg-blue-500 hover:bg-blue-600"} text-white py-1 px-3 rounded`}
+        >
+          {(event.eventNotes.length > 0) ? "Ver Notas" : "Añadir Notas"}
+        </button>
+
+      )}
+        
       <span className="flex items-center">
         <FaLocationDot className="text-red-800 mr-1" />
         <span>{event.location}</span>

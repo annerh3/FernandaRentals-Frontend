@@ -7,3 +7,4 @@ export * from './NotFound.jsx'
 export * from './ProtectedComponent.jsx'
 export * from './NotFoundProducts.jsx';
 export * from './ProtectedLayout.jsx';
+export * from './NotesModal.jsx';

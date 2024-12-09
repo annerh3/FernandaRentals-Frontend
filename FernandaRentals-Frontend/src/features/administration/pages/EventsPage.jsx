@@ -1,18 +1,23 @@
 import { useEffect, useState } from "react";
-import { EventPreviewItem, EventPreviewSkeleton } from "../components/events-page/EventPreviewItem";
+import {
+  EventPreviewItem,
+  EventPreviewSkeleton,
+} from "../components/events-page/EventPreviewItem";
 import { useEvents } from "../../Website/hooks/data/useEvents";
 import { SeeMoreModal } from "../components/events-page/SeeMoreModal";
 import { selectValues } from "../../../shared/constants/variousConstants";
 import { EventCalendar } from "../components";
 import { CurrentDate } from "../../../shared/components/Utils";
-
+import { NotesModal } from "../../../shared/components";
 
 // const isLoading = false;
 
-
 export const EventsPage = ({ darkMode }) => {
   const [showModal, setShowModal] = useState(false);
+
+  const [showNotesModal, setShowNotesModal] = useState(false);
   const [selectedItem, setselectedItem] = useState(null);
+
   const [fetching, setFetching] = useState(true);
   const { events, isLoading, loadEvents } = useEvents();
 
@@ -34,9 +39,22 @@ export const EventsPage = ({ darkMode }) => {
   useEffect(() => {
     if (fetching) {
       loadEvents(selectValues.TODAY);
-      setFetching(false);
+      setselectedItem(false);
     }
   }, [fetching]);
+
+  const openNotesModal = (event) => {
+    setselectedItem(event);
+    setShowNotesModal(true);
+    console.log(event);
+    
+  };
+
+  const closeNotesModal = () => {
+    setShowNotesModal(false);
+    setselectedItem(null);
+    // setFetching(true);
+  };
 
   //Obtener fecha actual
   // const currentDate = new Date().toLocaleDateString("es-ES", {
@@ -47,7 +65,11 @@ export const EventsPage = ({ darkMode }) => {
   // });
 
   return (
-    <div className={`min-h-screen ${darkMode ? "bg-siidni-dark" : "bg-gray-200"} p-4 sm:p-6 lg:p-8`}>
+    <div
+      className={`min-h-screen ${
+        darkMode ? "bg-siidni-dark" : "bg-gray-200"
+      } p-4 sm:p-6 lg:p-8`}
+    >
       <div className="grid grid-cols-12 gap-4 ml-20 sm:ml-30 md:ml-60 flex-1 p-4 min-w-fit">
         {/* Fecha del día */}
         <div
@@ -56,7 +78,7 @@ export const EventsPage = ({ darkMode }) => {
           }`}
         >
           {/* Componente que muestra la Fecha Actual */}
-        <CurrentDate/>
+          <CurrentDate />
         </div>
 
         {/* Primera sección (EventPreview) */}
@@ -99,6 +121,7 @@ export const EventsPage = ({ darkMode }) => {
               events={events}
               darkMode={darkMode}
               handleModalOpen={handleModalOpen}
+              onViewNotes={openNotesModal}
             />
           )}
         </div>
@@ -118,7 +141,7 @@ export const EventsPage = ({ darkMode }) => {
         </div>
       </div>
 
-          {/* Para mostrar los detalles de los eventos seleccionados */}
+      {/* Para mostrar los detalles de los eventos seleccionados */}
       {showModal && (
         <SeeMoreModal
           darkMode={darkMode}
@@ -127,9 +150,15 @@ export const EventsPage = ({ darkMode }) => {
           setFetching={setFetching}
         />
       )}
+
+      {showNotesModal && (
+        <NotesModal
+        darkMode={darkMode}
+          event={selectedItem}
+          onClose={closeNotesModal}
+          setFetching={setFetching}
+        />
+      )}
     </div>
   );
 };
-
-
-  

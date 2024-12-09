@@ -33,7 +33,7 @@ export const UpcomingEventsCard = ({ darkMode, dashboard }) => {
 
   return (
     <>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center ">
         <h2 className="text-xl font-bold mb-4">
           Eventos en las próximas dos semanas
         </h2>
@@ -54,7 +54,7 @@ export const UpcomingEventsCard = ({ darkMode, dashboard }) => {
 
       </div>
       {/* Muestra los eventos si es que los hay */}
-      <div className="space-y-4">
+      <div className="space-y-4 overflow-y-auto h-96">
         {dashboard?.data?.upcomingEvents.length > 0 ? (
           dashboard?.data?.upcomingEvents.map((event) => (
             <div
@@ -67,7 +67,7 @@ export const UpcomingEventsCard = ({ darkMode, dashboard }) => {
               {/* <InfoRow  label={event.name} className="font-semibold" /> */}
               <h3 className={`${
                 darkMode ? " text-siidni-goldLight" : "text-blue-900"
-              } rounded-lg shadow-md  font-semibold `}>{event.name}  </h3>
+              } rounded-lg font-semibold `}>{event.name}  </h3>
 
               <InfoRow  icon={FaUser} iconClass="text-blue-500" label={`${event.clientName} : ${event.clientEmail}`} />
               

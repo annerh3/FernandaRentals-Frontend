@@ -23,10 +23,9 @@
   };
 
 
-  // Función de validación para la edición de eventos
   export const validateFormEditEvent = (data) => {
     const errors = {};
-    const warnings = {}; // Para mensajes informativos que no bloquean el formulario
+    const warnings = {};
     const currentDate = new Date();
     const startDate = data.startDate ? new Date(data.startDate) : null;
     const endDate = data.endDate ? new Date(data.endDate) : null;
@@ -38,15 +37,16 @@
     // Validación de la fecha de inicio
     if (!startDate) {
       errors.startDate = "La fecha de inicio es obligatoria.";
-    } else if (currentDate > startDate && currentDate < endDate) {
-      // Si la fecha actual está dentro del rango, no permitir cambiar la fecha de inicio
-      warnings.startDate = "No se puede editar la fecha de inicio mientras el evento está en curso.";
     } else {
-      // Validación: la fecha de inicio debe ser al menos 3 días después de la fecha actual
       const minStartDate = new Date();
       minStartDate.setDate(currentDate.getDate() + 3); // Fecha actual + 3 días
-      if (startDate < minStartDate) {
+  
+      // Prioridad: validar que la fecha de inicio sea al menos 3 días después de la fecha actual
+      if ((startDate < minStartDate && (currentDate <= startDate))) {
         errors.startDate = "La fecha de inicio debe ser al menos 3 días posterior a la fecha actual.";
+      } else if (currentDate >= startDate) {
+        // Si la fecha ya comenzó, no permitir edición
+        warnings.startDate = "No se puede editar la fecha de inicio porque ya comenzó o es una fecha pasada.";
       }
     }
   
@@ -54,12 +54,11 @@
     if (!endDate) {
       errors.endDate = "La fecha de finalización es obligatoria.";
     } else {
-      // Validación: la fecha de finalización debe ser posterior a la fecha de inicio
+      // Validar que la fecha de finalización sea posterior a la fecha de inicio
       if (startDate && endDate < startDate) {
-        errors.endDate = "La fecha de finalización debe ser posterior a la fecha de inicio.";
+        errors.endDate = "La fecha de finalización debe ser igual o posterior a la fecha de inicio.";
       }
-  
-      // Validación: la fecha de finalización debe ser igual o posterior a la fecha actual
+      // Validar que la fecha de finalización no sea anterior a la fecha actual
       if (endDate < currentDate) {
         errors.endDate = "La fecha de finalización debe ser igual o posterior a la fecha actual.";
       }
@@ -67,6 +66,7 @@
   
     return { errors, warnings };
   };
+  
   
   
   

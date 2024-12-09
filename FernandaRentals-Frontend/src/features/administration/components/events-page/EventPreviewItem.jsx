@@ -12,7 +12,7 @@ import { formatDate } from "../../../../shared/utils";
 import { DataNotFound } from "../DataNotFound";
 import { InfoRow } from "./InfoRow";
 
-export const EventPreviewItem = ({ darkMode, handleModalOpen, events }) => {
+export const EventPreviewItem = ({ darkMode, handleModalOpen, events, onViewNotes }) => {
   if (events === undefined || events.status !== true) {
     return (
       <DataNotFound
@@ -88,6 +88,12 @@ export const EventPreviewItem = ({ darkMode, handleModalOpen, events }) => {
               />
             </div>
           </section>
+          <button
+          onClick={() => onViewNotes(event)}  
+          className={`mb-3 transition-transform transform hover:translate-y-1 text-sm ${(event.eventNotes.length > 0) ? "bg-orange-400 hover:bg-orange-500" : "bg-blue-500 hover:bg-blue-600"} text-white py-1 px-3 rounded`}
+        >
+          {(event.eventNotes.length > 0) ? "Ver Notas" : "Añadir Notas"}
+        </button>
         </div>
       ))}
     </div>
