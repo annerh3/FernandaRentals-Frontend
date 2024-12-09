@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
-import { PaymentPage } from "../../pages";
+import { PayPalCreateEventPayment, PayPalEditEventPayment } from "../../paypal";
 
-export const FormButtons = ({ handleModal, onCancel, type, errors, onPaymentSuccess }) => {
 
-  // const {resetEventData} = useEventsData();
-
+export const FormButtons = ({ handleModal, onCancel, errors, setRefundDetails, setErrorMessage, setIsErrorModalOpen, isEditing, toggle}) => {
 
   return (
     <div className="flex flex-col space-x-4 sm:flex-row sm:justify-between mt-4 w-[400px]">
@@ -29,9 +27,31 @@ export const FormButtons = ({ handleModal, onCancel, type, errors, onPaymentSucc
       </div>
 
       {/* Componente de Pago  */}
-       <div  className="w-full sm:w-[40%] flex-grow z-0">
-        <PaymentPage handleModal={handleModal} errors={errors} />
-      </div>
+
+      {
+        isEditing ? (
+          <div  className="w-full sm:w-[40%] flex-grow z-0">
+           <PayPalEditEventPayment 
+             setErrorMessage={setErrorMessage} 
+             setRefundDetails={setRefundDetails} 
+             handleModal={handleModal} 
+             errors={errors} 
+             setIsErrorModalOpen={setIsErrorModalOpen} 
+             toggle={toggle}/>
+         </div>
+        ) 
+        : (
+          <div  className="w-full sm:w-[40%] flex-grow z-0">
+           <PayPalCreateEventPayment 
+             setErrorMessage={setErrorMessage} 
+             setRefundDetails={setRefundDetails} 
+             handleModal={handleModal} 
+             errors={errors} 
+             setIsErrorModalOpen={setIsErrorModalOpen} 
+             toggle={toggle}/>
+         </div>
+        )
+      }
 
       {/* <button
           type="submit"

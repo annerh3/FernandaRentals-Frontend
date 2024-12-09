@@ -4,8 +4,8 @@ import { ProductGrid } from "./ProductGrid";
 import { ProductsSelectGrid } from "./ProductsSelectGrid";
 import { Pagination } from "../../../../shared/components";
 import {
-  convertToISO,
   validateFormCreateEvent,
+  validateFormEditEvent,
 } from "../../../../shared/utils";
 import { Alert } from "../utils";
 import { AlertPopUp } from "../utils/AlertPopUp";
@@ -16,9 +16,12 @@ import { EventPricePayment } from "./EventPricePayment";
 
 import { useEventsData } from "../../store/useEventsData";
 import { useProductsValidation } from "../../store/useProductsValidation";
+import { EventErrorModal } from "./EventErrorModal";
 import { useNavigate } from "react-router-dom";
+import { useEventEditStore } from "../../store";
 
 export const ReservationForm = () => {
+  const navigate = useNavigate();
   const { products, loadProducts, isLoading } = useProducts(); //para cargar los productos
   const [currentPage, setCurrentPage] = useState(1); // para administracion de la pagina de productos
   const [searchTerm, setSearchTerm] = useState(""); //para el uso de la busqueda
@@ -27,44 +30,108 @@ export const ReservationForm = () => {
   const [selectedProducts, setSelectedProducts] = useState([]); // para almacenar los productos seleccionados
   const [alert, setAlert] = useState({ message: "", isVisible: false }); // la que salta por errores del backend
   const [errors, setErrors] = useState({}); //para almacenar los errores que viene del back y del form validation
-  
-  const navigate = useNavigate();
+  const [warnings, setWarnings] = useState({});
 
-  const { items, addItem, updateItemQuantity, removeItem, emptyCart, cartTotal  } = useCart();
+ 
+
+  
+
+  const { items, setItems, updateItemQuantity, removeItem, emptyCart  } = useCart();
   const nameInputRef = useRef(null); // lo referencio para despues hacerle focus, cuando se renderice la pagina
-  const setSuccess = useProductsValidation((state) => state.setSuccess);
-    const {
-      eventData,
-      setEventName,
-      setEventLocation,
-      setEventStartDate,
-      setEventEndDate,
-      resetEventData,
-      isCreated,
-      setIsCreated
-    } = useEventsData();
+    const setSuccess = useProductsValidation((state) => state.setSuccess);
+      const {
+        eventData,
+        setEventName,
+        setEventLocation,
+        setEventStartDate,
+        setEventEndDate,
+        resetEventData,
+        setPaypalCaptureId,
+        setPrevTotal,
+        getEventData,
+        isCreated,
+        setIsCreated
+      } = useEventsData();
+      
+      const [toggle, setToggle] = useState(false);
+
+      useEffect(() => {
+        // Cambia el valor de toggle en cada renderizado
+        setToggle((prev) => !prev);
+      },[useCart,eventData]);
+
+
+      const { eventDataToEdit, resetEventDataEdit, getEventDataToEdit } = useEventEditStore();
+      const isEditMode = eventDataToEdit.id && eventDataToEdit.id.trim() !== '';
+      const destination = isEditMode ? "/my-events" : "/products";
+
+
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [refundDetails, setRefundDetails] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleCloseModal = () => {
+    setIsErrorModalOpen(false);
+    resetEventData();
+    emptyCart();
+    resetForm();
+    navigate(destination);
+  }
+
+
+  useEffect(() => {
+    if (eventDataToEdit) {
+
+      if (isEditMode) {
+        console.log("Data a editar: ", eventDataToEdit);
+        setItems(eventDataToEdit.productos)
+        setEventName(eventDataToEdit.name || '');
+        setEventLocation(eventDataToEdit.location || '');
+        setEventStartDate(eventDataToEdit.startDate || '');
+        setEventEndDate(eventDataToEdit.endDate || '');
+        setPaypalCaptureId(eventDataToEdit.paypalCaptureId);
+        setPrevTotal(eventDataToEdit.total)
+        setIsCreated(false);
+        console.log(eventDataToEdit.paypalCaptureId );
+        console.log("getEventDataToEdit():   ",getEventDataToEdit());
+      }
+    }
+  }, [eventDataToEdit]);
+
 
 
   // Ejecutar la validación en un efecto separado
   const validateData = () => {
-    const errors = validateFormCreateEvent(eventData); // Valida el evento
-    console.log("Errores de validación actualizados:", errors);
+    if (!eventData || typeof eventData !== "object") {
+      console.error("eventData no es válido:", eventData);
+      return;
+    }
 
-    // Solo actualiza los errores si hay cambios
+  
+    // Valida el formulario según el modo
+    const { errors, warnings } = isEditMode
+      ? validateFormEditEvent(eventData)
+      : validateFormCreateEvent(eventData);
+  
+    console.log("Errores de validación actualizados:", errors);
+    console.log("Warnings de validación actualizados:", warnings);
+  
+    // Actualiza los errores si hay cambios
     setErrors((prevErrors) => {
       if (JSON.stringify(prevErrors) !== JSON.stringify(errors)) {
         return errors;
       }
       return prevErrors;
     });
+  
+    // Actualiza los warnings si hay cambios
+    setWarnings((prevWarnings) => {
+      if (JSON.stringify(prevWarnings) !== JSON.stringify(warnings)) {
+        return warnings;
+      }
+      return prevWarnings;
+    });
   };
-
-  // useEffect(() => {
-  //   if (isCreated) {
-  //     setIsCreated(false);
-  //     navigate("/my-events");
-  //   }
-  // }, [isCreated]);
   
 
   const [formData, setFormData] = useState({
@@ -86,29 +153,19 @@ export const ReservationForm = () => {
  
   }, [eventData]);
   
-
   useEffect(() => {
     validateData(); // Llama a la función de validación
   }, [eventData]);
-
-
-  // useEffect(() => {
-  //   console.log("eventData actualizado: ", eventData);
-  // }, [eventData]);
 
   const [successAlert, setSuccessAlert] = useState({
     isVisible: false,
     data: {},
   });
 
- 
-  
-
   useEffect(() => {
     if (nameInputRef.current) {
       nameInputRef.current.focus();
-
-        }
+  }      
   }, []);
 
   // Cargar productos cuando sea necesario
@@ -135,7 +192,55 @@ export const ReservationForm = () => {
     setAlert({ message: "", isVisible: false });
   };
  
+  const handleModal = async (response) => {
+    // console.log("Modal",response);
+  
+    //  try {
+      if (response.status == true && response) {
+        resetForm();
 
+        await setSuccessAlert({ // !  X D X D X D X D
+          ...response.data || response.message, // Aquí pasas todos los detalles del evento
+          isVisible: true, // Añadimos isVisible para controlar la visibilidad del pop-up
+        });
+
+        // handleCancel();
+  //     } else {
+  //       console.log(response);
+
+  //       await setAlert({
+  //         message: response.data.message,
+  //         isVisible: true,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     setAlert({
+  //       message: "Error en la solicitud: " + error.message,
+  //       isVisible: true,
+  //     });
+    
+  }
+}
+  const handleCancel = () => {
+    setFormData({
+      eventName: "",
+      location: "",
+      startDate: "",
+      endDate: "",
+      products: [{}],
+    });
+    emptyCart();
+    resetEventData();
+    resetEventDataEdit();
+
+    setSuccess(false);
+
+    setErrors({});
+    
+    navigate(destination);
+  };
+
+  
   const handlePreviousPage = () => {
     if (products?.data?.hasPreviousPage) {
       setCurrentPage((prevPage) => prevPage - 1);
@@ -163,84 +268,7 @@ export const ReservationForm = () => {
     setFetching(true); // Vuelve a cargar productos cuando cambia el término de búsqueda
   };
 
-  const handleModal = async (response) => {
-    console.log("Modal",response);
-  
-     try {
-      if (response.status == true) {
-        resetForm();
 
-        await setSuccessAlert({
-          ...response.data, // Aquí pasas todos los detalles del evento
-          isVisible: true, // Añadimos isVisible para controlar la visibilidad del pop-up
-        });
-      } else {
-        console.log(response);
-
-        await setAlert({
-          message: response.data.message,
-          isVisible: true,
-        });
-      }
-    } catch (error) {
-      setAlert({
-        message: "Error en la solicitud: " + error.message,
-        isVisible: true,
-      });
-    
-  }
-}
-//   // Solitud Crear Evento
-//  const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     console.log("Submitting . . ")
-//     // arreglando el Data que manda al backend
-    
-
-//     // try {
-//     //   const response = await createEvent(formDataToSubmit);
-//     //   if (response.status == true) {
-//     //     resetForm();
-
-//     //     await setSuccessAlert({
-//     //       ...response.data, // Aquí pasas todos los detalles del evento
-//     //       isVisible: true, // Añadimos isVisible para controlar la visibilidad del pop-up
-//     //     });
-//     //   } else {
-//     //     console.log(response);
-
-//     //     await setAlert({
-//     //       message: response.data.message,
-//     //       isVisible: true,
-//     //     });
-//     //   }
-//     // } catch (error) {
-//     //   setAlert({
-//     //     message: "Error en la solicitud: " + error.message,
-//     //     isVisible: true,
-//       // });
-
- 
-//     // }
-
-//     setFetching(true);
-//   };
-
-  const handleCancel = () => {
-    setFormData({
-      eventName: "",
-      location: "",
-      startDate: "",
-      endDate: "",
-      products: [{}],
-    });
-    emptyCart();
-    resetEventData();
-
-    setSuccess(false);
-
-    setErrors({});
-  };
 
   const handlesearchChangeValue = (e) => {
     setSearchTerm(e.target.value);
@@ -256,16 +284,17 @@ export const ReservationForm = () => {
     setAlert({ ...alert, isVisible: false });
   };
   const handleCreateAnotherEvent = () => {
-    setSuccessAlert((prevState) => ({
-      ...prevState,
-      isVisible: false,
-    }));
+    // setSuccessAlert((prevState) => ({
+    //   ...prevState,
+    //   isVisible: false,
+    // }));
+    navigate("/products");
   };
 
   return (
     <div className="min-h-screen container ml-auto flex items-center justify-center bg-gray-100 ">
       <div className="w-full p-4 ">
-        <form
+        <main
           className="bg-white shadow-md pb-4 pt-6 rounded-md grid grid-cols-1 sm:grid-cols-2 "
         >
           {successAlert.isVisible && (
@@ -273,6 +302,7 @@ export const ReservationForm = () => {
               eventDetails={successAlert}
               isUpdate={false}
               onCreateAnotherEvent={handleCreateAnotherEvent}
+              handleCancel={handleCancel}
             />
           )}
           {alert.isVisible && (
@@ -295,7 +325,7 @@ export const ReservationForm = () => {
           className="shadow appearance-none border rounded w-72 py-2 px-3 text-gray-700 leading-tight  focus:outline-none focus:ring focus:ring-blue-400"
           id="name"
           name="name"
-          value={eventData.name}
+          value={eventData.name }
           placeholder="Presentación UNAH"
           onChange={(e) => setEventName(e.target.value)}
           ref={nameInputRef}
@@ -336,12 +366,19 @@ export const ReservationForm = () => {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-md"
             id="startdate"
             name="startDate"
-            value={formData.startDate}
+            value={eventData.startDate}
+            disabled={warnings.startDate}
             onChange={(e) => setEventStartDate(e.target.value)}
           />
           {errors.startDate && (
             <Alert errorMessage={errors.startDate} />
           )}
+           {warnings.startDate && (
+              <div className="text-gray-400 text-[12px] ml-2">
+                {warnings.startDate}
+              </div> 
+          )}
+         
         </div>
         <div className="sm:col-span-4 justify-center">
           <label
@@ -355,7 +392,7 @@ export const ReservationForm = () => {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-md"
             id="enddate"
             name="endDate"
-            value={formData.endDate}
+            value={eventData.endDate}
             onChange={(e) => setEventEndDate(e.target.value)}
           />
           {errors.endDate && <Alert errorMessage={errors.endDate} />}
@@ -366,7 +403,7 @@ export const ReservationForm = () => {
 
   {/* Contenedor para los botones */}
   <div className="ml-[350px]">
-    <EventPricePayment handleCancel={handleCancel} errors={errors} handleModal={handleModal}/>
+    <EventPricePayment handleCancel={handleCancel} errors={errors} handleModal={handleModal} setErrorMessage={setErrorMessage} setRefundDetails={setRefundDetails} setIsErrorModalOpen={setIsErrorModalOpen} toggle={toggle} isEditing={isEditMode}/>
   </div>
 </section>
 
@@ -463,8 +500,15 @@ export const ReservationForm = () => {
             </section>
              {/* Fin SecciónProductos   */}
           </div>
-        </form>
+        </main>
       </div>
+      <EventErrorModal
+  isOpen={isErrorModalOpen}
+  onClose={handleCloseModal}
+  errorMessage={errorMessage}
+  refundDetails={refundDetails}
+/>
+
     </div>
   );
 

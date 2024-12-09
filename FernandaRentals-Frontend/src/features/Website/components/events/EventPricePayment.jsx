@@ -3,7 +3,7 @@ import { GiTakeMyMoney } from "react-icons/gi";
 import { FormButtons } from ".";
 import { usePriceEvent } from "../../hooks/usePriceEvent";
 
-export const  EventPricePayment = ({ handleCancel, errors, handleModal}) => {
+export const  EventPricePayment = ({ handleCancel, errors, handleModal, setRefundDetails, setErrorMessage, setIsErrorModalOpen, isEditing, toggle}) => {
     const { SUBTOTAL, DISCOUNT, TOTAL } = usePriceEvent();
 
     return (
@@ -15,16 +15,11 @@ export const  EventPricePayment = ({ handleCancel, errors, handleModal}) => {
               <span className="flex space-x-1 items-center font-bold"><GiTakeMyMoney size={21} /><p>Total a Pagar: </p><p>L {TOTAL.toFixed(2)}</p></span>
             </section>
 
-
-
-           {
-  /* Inicio Botones  */
-}     
+         {/* Inicio Botones  */}     
           <section className="grid grid-flow-row lg:grid-flow-col ">
-            <FormButtons  onCancel={handleCancel} type={"create"} errors={errors} handleModal={handleModal}/>
+            <FormButtons  onCancel={handleCancel} type={"create"} errors={errors} handleModal={handleModal} setErrorMessage={setErrorMessage} setRefundDetails={setRefundDetails} setIsErrorModalOpen={setIsErrorModalOpen} isEditing={isEditing} toggle={toggle}/>
           </section>
-           {
-  /* Fin Botones */
+    {/* Fin Botones */
 }
            </div>);
   }

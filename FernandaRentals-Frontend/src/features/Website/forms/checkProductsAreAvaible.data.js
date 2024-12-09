@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 
 export const checkProductsInitvalues = {
-    eventStartDate: "2024-12-01T00:00:00Z",
-    eventEndDate: "2024-12-04T00:00:00Z",
+    eventStartDate: "",
+    eventEndDate: "",
     products: [
       {
         productId: "abc123",
@@ -12,11 +12,27 @@ export const checkProductsInitvalues = {
   };
 
 
-export const checkProductsValidationSchema = Yup.object({
+  export const checkProductsValidationSchema = Yup.object({
     eventStartDate: Yup.date()
       .required("La fecha de inicio es obligatoria")
-      .min(new Date(), "La fecha de inicio debe ser mayor al día actual"),
+      .min(
+        new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // Fecha actual + 3 días
+        "La fecha de inicio debe ser al menos 3 días después del día actual"
+      ),
     eventEndDate: Yup.date()
       .required("La fecha de fin es obligatoria")
-      .min(Yup.ref('eventStartDate'), "La fecha de fin debe ser posterior a la fecha de inicio"),
+      .min(
+        Yup.ref("eventStartDate"),
+        "La fecha de fin debe ser posterior a la fecha de inicio"
+      ),
   });
+
+  export const basicValidationSchema = Yup.object({
+    eventStartDate: Yup.date()
+      .required("La fecha de inicio es obligatoria"),
+    eventEndDate: Yup.date()
+      .required("La fecha de fin es obligatoria")
+  });
+
+
+  

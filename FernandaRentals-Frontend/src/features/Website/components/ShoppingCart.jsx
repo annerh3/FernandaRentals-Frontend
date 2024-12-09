@@ -5,6 +5,7 @@ import { BsCartDash, BsCartX } from "react-icons/bs";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { useCart } from "react-use-cart";
 import {
+  basicValidationSchema,
   checkProductsInitvalues,
   checkProductsValidationSchema,
 } from "../forms/checkProductsAreAvaible.data";
@@ -15,10 +16,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { useProductsValidation } from "../store/useProductsValidation";
 import { Link, useNavigate } from "react-router-dom";
 import { useEventsData } from "../store/useEventsData";
+import { useEventEditStore } from "../store";
+
 
 export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
   const [loading, setLoading] = useState(false);
   const setShowModal = useProductsValidation((state) => state.setShowModal);
+
+  const { eventDataToEdit } = useEventEditStore();
+
 
   const setData = useProductsValidation((state) => state.setData);
 
@@ -50,6 +56,8 @@ export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
     console.log("useEventData", eventData);
   }, [eventData]);
 
+  const isEditMode = eventDataToEdit.id && eventDataToEdit.id.trim() !== '';
+
   // Manejador personalizado para agregar los productos
   const handleAddProducts = (e) => {
     e.preventDefault();
@@ -68,17 +76,32 @@ export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
   const handleEmptyCart = () => {
     resetEventData();
     emptyCart();
+    formik.resetForm();
   };
+  
+  // useEffect(() => {
+  //   if (eventDataToEdit) {
+  //     formik.setValues({
+  //       eventStartDate: eventDataToEdit.startDate || checkProductsInitvalues.eventStartDate,
+  //       eventEndDate: eventDataToEdit.endDate || checkProductsInitvalues.eventEndDate,
+  //       products: eventDataToEdit.products || checkProductsInitvalues.products,
+  //     });
+  //   }
+  // }, [eventDataToEdit]);
+ 
 
   const formik = useFormik({
     initialValues: checkProductsInitvalues,
-    validationSchema: checkProductsValidationSchema,
+    enableReinitialize: true, 
+    validationSchema: isEditMode ? basicValidationSchema : checkProductsValidationSchema,
     validateOnChange: true,
     onSubmit: async (values) => {
+      console.log("formikValues: ",values);
+      
       setEventStartDate(values.eventStartDate);
       setEventEndDate(values.eventEndDate);
       setEventProducts(values.products);
-
+      
       try {
         const result = await validateProducts(values);
         console.log("Response from server:", result);
@@ -90,12 +113,13 @@ export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
         // howToast("warning", "Sin conexión al servidor");
       } finally {
         setLoading(false);
+        formik.resetForm();
       }
     },
   });
 
   useEffect(() => {
-    if (success) {
+    if (success && !isEditMode) {
       setSuccess(false);
       // Navegar a la página de reserva solo si showModal es true
       navigate("/reservation");
@@ -164,14 +188,14 @@ export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-md"
                         id="eventStartDate"
                         name="eventStartDate"
-                        value={formik.values.eventStartDate}
+                        value={formik.values.eventStartDate}  
                         onChange={formik.handleChange}
-                        // onBlur={formik.handleBlur}
+                         onBlur={formik.handleBlur}
                       />
                       {formik.touched.eventStartDate &&
                         formik.errors.eventStartDate && (
                           <div className="text-red-600 text-xs my-1">
-                            {formik.errors.eventStartDate}
+                            {formik.errors.eventStartDate }
                           </div>
                         )}
                     </div>
@@ -187,9 +211,9 @@ export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-md"
                         id="eventEndDate"
                         name="eventEndDate"
-                        value={formik.values.eventEndDate}
+                        value={formik.values.eventEndDate}  
                         onChange={formik.handleChange}
-                        // onBlur={formik.handleBlur}
+                         onBlur={formik.handleBlur}
                       />
                       {formik.touched.eventEndDate &&
                         formik.errors.eventEndDate && (

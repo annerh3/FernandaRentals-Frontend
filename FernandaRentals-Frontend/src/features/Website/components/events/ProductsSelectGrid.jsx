@@ -14,6 +14,12 @@ const { setEventProducts } = useEventsData();
   const PRODUCTS_PER_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
 
+  const {
+    eventData,
+    getEventData
+  } = useEventsData();
+
+
   // Calcula el número total de páginas
   const totalPages = Math.ceil(items.length / PRODUCTS_PER_PAGE);
 
@@ -40,6 +46,9 @@ const { setEventProducts } = useEventsData();
 
   useEffect(() => {
     setEventProducts(items)
+    console.log("desde ProductsSelectedGrid, eventData:   ",eventData);
+    console.log("desde ProductsSelectedGrid, getEventData():   ",getEventData());
+    
   }, [items])
   
   

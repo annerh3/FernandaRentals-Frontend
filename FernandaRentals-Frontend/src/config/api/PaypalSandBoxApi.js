@@ -70,14 +70,3 @@ export const refundPayment = async (captureId, refundAmount = null) => {
   }
 };
 
-// Ejemplo de uso
-(async () => {
-  try {
-    const captureId = "1SC959100T924251H"; // ID del pago capturado
-    const refundAmount = "10.00"; // Para reembolsos parciales (opcional)
-    const refundResponse = await refundPayment(captureId, refundAmount);
-    console.log("Respuesta del reembolso:", refundResponse);
-  } catch (error) {
-    console.error("Error:", error.message);
-  }
-})();

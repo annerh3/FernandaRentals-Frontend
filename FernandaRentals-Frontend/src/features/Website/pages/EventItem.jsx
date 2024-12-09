@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MdDiscount,
   MdOutlineCancel,
@@ -7,12 +7,14 @@ import {
 import { TbCalendarTime, TbFilePencil } from "react-icons/tb";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 import { formatDate } from "../../../shared/utils";
-import { Link } from "react-router-dom";
+
 import { FaLocationDot } from "react-icons/fa6";
 import { GrMoney } from "react-icons/gr";
 import { SiVirustotal } from "react-icons/si";
 import { useEvents } from "../hooks/data";
 import Popup from "reactjs-popup";
+import { useEventEditStore } from "../store/useEventEditStore";
+import { useNavigate } from "react-router-dom";
 
 // Función para calcular la diferencia en días entre dos fechas
 const calculateDaysBetweenDates = (startDate, endDate) => {
@@ -24,8 +26,26 @@ const calculateDaysBetweenDates = (startDate, endDate) => {
 };
 
 export const EventItem = ({ event, onDelete }) => {
+  const { eventDataToEdit } = useEventEditStore();
+  useEffect(() => {
+    if(eventDataToEdit){
+      // emptyCart();
+      console.log("Data a editar: ", eventDataToEdit);
+
+    }
+  }, [eventDataToEdit])
+
   const [showDetails, setShowDetails] = useState(false);
-  const { removeEvent } = useEvents(); // Obtén la función removeEvent desde el hook
+  const { removeEvent } = useEvents(); // eliminar evento hook
+  const { setEventDataToEdit } = useEventEditStore();
+
+ const navigate = useNavigate();
+
+  const handleEditClick = () => {
+     setEventDataToEdit(event); 
+     navigate(`/reservation`); 
+  };
+
 
   const toggleDetails = () => {
     setShowDetails(!showDetails);
@@ -41,11 +61,21 @@ export const EventItem = ({ event, onDelete }) => {
     //}
   };
   const now = Date.now();
-const isCancellable = now < new Date(event.startDate).getTime();
+  const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000; // 3 días en milisegundos
+  const isCancellable = new Date(event.startDate).getTime() - now > threeDaysInMillis;
+  // const isEditable = new Date(event.endDate).getTime() >= now; //si la fecha de ninalizacion en mayor a la fecha actual, es editable. se podrá extender la fecha de finalizacion.
+
+  const isEditable = 
+  now <= new Date(event.endDate).getTime(); //&&  La fecha actual es igual o menor a la fecha de finalización. esto sirve para extender la fecha finalizacion
+//  isCancellable; // La fecha de inicio es mayor o igual a 3 días desde la fecha actual
 
   const days = calculateDaysBetweenDates(event.startDate, event.endDate);
   return (
-    <div className="bg-gray-200 rounded-lg shadow-md p-4  text-black">
+    <div className={`${
+      eventDataToEdit?.id === event.id
+        ? "bg-orange-300"
+        : "bg-gray-200"
+    } rounded-lg shadow-md p-4 text-black`}>
       <div className="mb-4 flex items-center">
         <MdOutlineEventNote className="text-xl text-green-600 mr-1" />
         <h2 className="text-lg font-bold">{event.name}</h2>
@@ -70,6 +100,9 @@ const isCancellable = now < new Date(event.startDate).getTime();
           <section className=" text-black">
             <hr className="m-4" />
             <p className="text-sm  ">
+
+            <div className="font-bold">CaptureId: {event.paypalCaptureId}</div>
+
               <strong className="mr-1">Fecha de Inicio:</strong>
               {formatDate(event.startDate)}
             </p>
@@ -154,14 +187,15 @@ const isCancellable = now < new Date(event.startDate).getTime();
             </>
           )}
         </button>
-
-        <Link
-          to={`/my-event/edit/${event.id}`}
+        
+        { isEditable && (<button
+          onClick={handleEditClick}
+          title="Extender la fecha de finalización."
           className="flex items-center text-sm border border-black  rounded px-3 py-1 hover:bg-orange-300 hover:text-black"
         >
-          <TbFilePencil className="h-4 w-4 mr-2" />
-          Editar
-        </Link>
+          <TbFilePencil className={`h-4 w-4 mr-2`} />
+          {eventDataToEdit?.id === event.id ? "En Edición": "Editar"}
+        </button>)}
 
         <Popup
           trigger={

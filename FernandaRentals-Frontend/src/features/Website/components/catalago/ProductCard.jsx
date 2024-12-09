@@ -3,8 +3,19 @@ import { Link } from "react-router-dom";
 import { useAuthStore } from "../../../security/store";
 import { rolesListConstant } from "../../../../shared/constants/roles-list.constants.js";
 import { useCart } from "react-use-cart";
+import { useEventEditStore } from "../../store/useEventEditStore.js";
+import { useEffect } from "react";
 
 export const ProductCard = ({ product }) => {
+  const { eventDataToEdit } = useEventEditStore();
+  useEffect(() => {
+    if(eventDataToEdit){
+      // emptyCart();
+      console.log("Data a editar: ", eventDataToEdit);
+
+    }
+  }, [eventDataToEdit])
+  
 
   const formattedProductObject = {
     id: product.id,
@@ -17,12 +28,12 @@ export const ProductCard = ({ product }) => {
   };
 // console.log(formattedProductObject)
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+ 
   const roles = useAuthStore((state) => state.roles);
   const containsRoleAdmin = roles.some((role) =>
     [rolesListConstant.ADMIN].includes(role)
   );
   const { addItem } = useCart();
-
   return (
     <div className="bg-background rounded-lg shadow-lg overflow-hidden max-w-sm mx-auto flex flex-col w-full">
       <ModalImage
@@ -68,6 +79,7 @@ export const ProductCard = ({ product }) => {
           ) : (
             <button
               onClick={() => addItem(product)}
+              disabled={eventDataToEdit.id && eventDataToEdit.id.trim() !== ''}
               className="inline-flex items-center justify-center w-full rounded-md bg-[#d68a3d] px-6 py-3 text-white text-md font-bold text-primary-foreground shadow-sm transition-transform transform hover:translate-y-1 hover:bg-[#a96b2e] cursor-pointer"
             >
               Agregar al Carrito

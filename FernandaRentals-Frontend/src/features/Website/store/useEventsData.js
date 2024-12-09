@@ -5,12 +5,16 @@ const initialEventData = {
   location: "",
   startDate: "2000-01-01T06:00:00.000Z",
   endDate: "2000-01-01T06:00:00.000Z",
+  paypalCaptureId: "default",
+  prevTotal:"0",
   productos: [{ productId: "", quantity: 0 }],
 };
 
-export const useEventsData = create((set) => ({
+export const useEventsData = create((set, get) => ({
 
   eventData: { ...initialEventData },
+
+  getEventData: () => get().eventData,
 
   // Actualizar campos específicos del evento
   setEventName: (name) =>
@@ -25,6 +29,12 @@ export const useEventsData = create((set) => ({
   setEventEndDate: (endDate) =>
     set((state) => ({ eventData: { ...state.eventData, endDate } })),
 
+  setPaypalCaptureId: (paypalCaptureId) =>
+    set((state) => ({ eventData: { ...state.eventData, paypalCaptureId } })),
+
+  setPrevTotal: (prevTotal) =>
+    set((state) => ({ eventData: { ...state.eventData, prevTotal } })),
+
   setEventProducts: (productos) => {
     const formattedProducts = productos.map((product) => ({
       productId: product.id,
@@ -32,6 +42,8 @@ export const useEventsData = create((set) => ({
     }));
     set((state) => ({ eventData: { ...state.eventData, productos: formattedProducts } }));
   },
+
+ 
 
   // Reiniciar los datos del evento a los valores predeterminados
   resetEventData: () => set({ eventData: { ...initialEventData } }),

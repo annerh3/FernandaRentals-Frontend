@@ -1,4 +1,5 @@
 import { formatDate } from "../../../shared/utils";
+import { useEventEditStore } from "../store";
 import { useProductsValidation } from "../store/useProductsValidation";
 
 
@@ -8,6 +9,8 @@ export const ValidateProductsModal = () => {
   const data = useProductsValidation((state) => state.data);
   
   const setSuccess = useProductsValidation((state) => state.setSuccess);
+
+
 
   if (data.status && showModal) {
     setTimeout(() => {
