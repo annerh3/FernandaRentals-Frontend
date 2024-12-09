@@ -32,6 +32,7 @@
     "react-hotkeys": "^2.0.0",
     "react-icons": "^5.2.1",
     "react-leaflet": "^4.2.1",
+    "react-lite-month-picker": "^1.2.19",
     "react-modal-image": "^2.6.0",
     "react-router-dom": "^6.26.0",
     "react-scroll": "^1.9.0",

@@ -22,10 +22,16 @@ export const NotesModal = ({ event, onClose, setFetching, darkMode = false }) =>
       const eventId = event.id;
       const body = { ...formValues, eventId };
       let result = await createNote(body); // Petición al API
-      if (result.status !== true) return alert("Error al crear la nota.");
+      if (result.status !== true) {
+         alert(result.message || "Error al crear la nota.");
+        onClose();
+        return;
+      }
       alert("Nota creada");
-      setIsCreating(false); // Oculta el formulario después de enviarlo
       setFetching(true);
+      setIsCreating(false); // Oculta el formulario después de enviarlo
+      console.log("Cerrando");
+      
       onClose();
     },
   });

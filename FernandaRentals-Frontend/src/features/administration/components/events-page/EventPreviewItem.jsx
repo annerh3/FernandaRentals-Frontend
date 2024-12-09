@@ -90,7 +90,7 @@ export const EventPreviewItem = ({ darkMode, handleModalOpen, events, onViewNote
           </section>
           <button
           onClick={() => onViewNotes(event)}  
-          className={`mb-3 transition-transform transform hover:translate-y-1 text-sm ${(event.eventNotes.length > 0) ? "bg-orange-400 hover:bg-orange-500" : "bg-blue-500 hover:bg-blue-600"} text-white py-1 px-3 rounded`}
+          className={`my-3 transition-transform transform hover:translate-y-1 text-sm ${(event.eventNotes.length > 0) ? "bg-orange-400 hover:bg-orange-500" : "bg-blue-500 hover:bg-blue-600"} text-white py-1 px-3 rounded`}
         >
           {(event.eventNotes.length > 0) ? "Ver Notas" : "Añadir Notas"}
         </button>
