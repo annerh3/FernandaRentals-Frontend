@@ -92,9 +92,13 @@ export const MyEvents = () => {
         />
       )}{" "}
       {/* Muestra la alerta si showAlert es true */}
-
-
-      {showNotesModal && <NotesModal event={selectedEvent} onClose={closeNotesModal} setFetching={setFetching}/>}
+      {showNotesModal && (
+        <NotesModal
+          event={selectedEvent}
+          onClose={closeNotesModal}
+          setFetching={setFetching}
+        />
+      )}
     </section>
   );
 };
