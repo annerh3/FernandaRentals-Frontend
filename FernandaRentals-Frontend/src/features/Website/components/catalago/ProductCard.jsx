@@ -1,26 +1,45 @@
 import ModalImage from "react-modal-image";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../../../security/store";
-import {rolesListConstant} from "../../../../shared/constants/roles-list.constants.js"
+import { rolesListConstant } from "../../../../shared/constants/roles-list.constants.js";
+import { useCart } from "react-use-cart";
+import { useEventEditStore } from "../../store/useEventEditStore.js";
+import { useEffect } from "react";
 
 export const ProductCard = ({ product }) => {
+  const { eventDataToEdit } = useEventEditStore();
+  useEffect(() => {
+    if(eventDataToEdit){
+      // emptyCart();
+      console.log("Data a editar: ", eventDataToEdit);
+
+    }
+  }, [eventDataToEdit])
+  
+
+  const formattedProductObject = {
+    id: product.id,
+    name: product.name,
+    description: product.description,
+    urlImage: product.urlImage,
+    category: product.category,
+    price: product.price,
+    stock: product.stock,
+  };
+// console.log(formattedProductObject)
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+ 
   const roles = useAuthStore((state) => state.roles);
-  const containsRoleAdmin = roles.some(role => [rolesListConstant.ADMIN].includes(role));
+  const containsRoleAdmin = roles.some((role) =>
+    [rolesListConstant.ADMIN].includes(role)
+  );
+  const { addItem } = useCart();
   return (
     <div className="bg-background rounded-lg shadow-lg overflow-hidden max-w-sm mx-auto flex flex-col w-full">
-      {/* <img
-        src={product.urlImage}
-        alt={product.description}
-        width={400}
-        height={300}
-        className="w-full h-[200px] object-cover"
-        style={{ aspectRatio: "400/300", objectFit: "cover" }}
-      /> */}
       <ModalImage
-        small={product.urlImage}
-        large={product.urlImage}
-        alt={product.description}
+        small={formattedProductObject.urlImage}
+        large={formattedProductObject.urlImage}
+        alt={formattedProductObject. description}
         width={400}
         height={300}
         className="w-full h-[200px] object-cover shadow-2xl"
@@ -28,18 +47,24 @@ export const ProductCard = ({ product }) => {
       />
       <div className="p-4 flex flex-col flex-grow bg-white">
         <div className="flex-grow">
-          <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
-          <p className="text-muted-foreground mb-2">{product.description}</p>
+          <h3 className="text-xl font-semibold mb-2">
+            {formattedProductObject.name}
+          </h3>
+          <p className="text-muted-foreground mb-2">
+            {formattedProductObject. description}
+          </p>
           <p className="text-sm text-gray-600 mb-2">
             <span className="font-medium">Categoría:</span>{" "}
-            {product.category.name}
+            {formattedProductObject.category.name}
           </p>
           <div className="flex justify-start items-center space-x-4 mb-4">
             <p className="text-sm text-gray-600">
-              <span className="font-medium">Costo:</span> ${product.cost}
+              <span className="font-medium">Costo:</span> $
+              {formattedProductObject.price}
             </p>
             <p className="text-sm text-gray-600 ml-4">
-              <span className="font-medium">Stock:</span> {product.stock}
+              <span className="font-medium">Stock:</span>{" "}
+              {formattedProductObject.stock}
             </p>
           </div>
         </div>
@@ -52,12 +77,13 @@ export const ProductCard = ({ product }) => {
               Administrar Productos
             </Link>
           ) : (
-            <Link
-              to={isAuthenticated ? "/reservation" : "/security/login"}
-              className="inline-flex items-center justify-center w-full rounded-md bg-[#d68a3d] px-6 py-3 text-base font-medium text-primary-foreground shadow-sm transition-transform transform hover:translate-y-1 hover:bg-[#a96b2e] cursor-pointer"
+            <button
+              onClick={() => addItem(product)}
+              disabled={eventDataToEdit.id && eventDataToEdit.id.trim() !== ''}
+              className="inline-flex items-center justify-center w-full rounded-md bg-[#d68a3d] px-6 py-3 text-white text-md font-bold text-primary-foreground shadow-sm transition-transform transform hover:translate-y-1 hover:bg-[#a96b2e] cursor-pointer"
             >
-              {isAuthenticated ? "Reserva Ahora" : "Reserva"}
-            </Link>
+              Agregar al Carrito
+            </button>
           )}
         </div>
       </div>

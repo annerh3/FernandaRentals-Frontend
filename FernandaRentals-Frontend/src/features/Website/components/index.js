@@ -5,3 +5,5 @@ export * from './CarouselNext.jsx';
 export * from './Carousel.jsx';
 export * from './ActionSection.jsx';
 export * from './Testimonials.jsx';
+export * from './ShoppingCart.jsx';
+export * from './ValidateProductsModal.jsx';

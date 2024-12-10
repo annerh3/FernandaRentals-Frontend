@@ -12,7 +12,7 @@ import { formatDate } from "../../../../shared/utils";
 import { DataNotFound } from "../DataNotFound";
 import { InfoRow } from "./InfoRow";
 
-export const EventPreviewItem = ({ darkMode, handleModalOpen, events }) => {
+export const EventPreviewItem = ({ darkMode, handleModalOpen, events, onViewNotes }) => {
   if (events === undefined || events.status !== true) {
     return (
       <DataNotFound
@@ -88,6 +88,12 @@ export const EventPreviewItem = ({ darkMode, handleModalOpen, events }) => {
               />
             </div>
           </section>
+          <button
+          onClick={() => onViewNotes(event)}  
+          className={`my-3 transition-transform transform hover:translate-y-1 text-sm ${(event.eventNotes.length > 0) ? "bg-orange-400 hover:bg-orange-500" : "bg-blue-500 hover:bg-blue-600"} text-white py-1 px-3 rounded`}
+        >
+          {(event.eventNotes.length > 0) ? "Ver Notas" : "Añadir Notas"}
+        </button>
         </div>
       ))}
     </div>
@@ -96,12 +102,12 @@ export const EventPreviewItem = ({ darkMode, handleModalOpen, events }) => {
 
 export const EventPreviewSkeleton = ({ darkMode }) => {
   return (
-    <div className="grid grid-cols-1 gap-4 w-full p-4 sm:p-6 md:grid-cols-2 lg:grid-cols-3">
-      {[...Array(4)].map((_, index) => (
+    <div className="grid grid-cols-1 gap-4 w-full p-4 sm:p-6">
+      {[...Array(5)].map((_, index) => (
         <div
           key={index}
           className={`${
-            darkMode ? "bg-siidni-dark" : "bg-gray-400"
+            darkMode ? "bg-siidni-dark" : "bg-gray-300"
           } w-full max-w-full sm:max-w-[500px] h-[150px] p-4 mx-auto rounded-xl shadow-md animate-pulse`}
         >
           <div className="flex justify-between items-start mb-4">
@@ -110,6 +116,7 @@ export const EventPreviewSkeleton = ({ darkMode }) => {
                 darkMode ? "bg-gray-600" : "bg-white"
               } h-5 rounded w-2/3`}
             ></div>
+            {/* Botones */}
             <div className="flex space-x-2 items-center">
               <div
                 className={`${
@@ -119,16 +126,17 @@ export const EventPreviewSkeleton = ({ darkMode }) => {
               <div
                 className={`${
                   darkMode ? "bg-gray-700" : "bg-white"
-                } h-8 w-13 rounded-md`}
+                } h-7 w-6 rounded-md`}
               ></div>
             </div>
+
           </div>
           <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <div
                 className={`${
                   darkMode ? "bg-gray-700" : "bg-white"
-                } h-4 w-80 rounded`}
+                } h-4 w-40 rounded`}
               ></div>
               <div
                 className={`${
@@ -141,11 +149,11 @@ export const EventPreviewSkeleton = ({ darkMode }) => {
                 } h-4 rounded w-1/2`}
               ></div>
             </div>
-            <div className="space-y-2">
+            <div className="ml-6 space-y-2">
               <div
                 className={`${
                   darkMode ? "bg-gray-700" : "bg-white"
-                } h-4 rounded w-3/4`}
+                } h-4 rounded w-4/5`}
               ></div>
               <div
                 className={`${

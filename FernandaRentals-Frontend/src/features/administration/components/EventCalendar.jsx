@@ -27,7 +27,7 @@ export const EventCalendar = ({ darkMode, events, handleModalOpen }) => {
       backgroundColor: event.color || "#007bff", // Color del evento
       borderRadius: "4px",
       opacity: 0.8,
-      color: "white",
+      color: "red",
       border: "none",
       display: "block",
       fontSize: "10px", // Ajusta el tamaño del texto
@@ -51,6 +51,16 @@ export const EventCalendar = ({ darkMode, events, handleModalOpen }) => {
       </div>
     );
   };
+
+  const dayPropGetter = () => {
+    return {
+      style: {
+        backgroundColor: darkMode ? "#1e293b" : "#f8f9fa",
+        color: darkMode ? "#ff0000" : "#f8f9fa",
+      },
+    };
+  };
+
   const messages = {
     today: "Hoy", // Traducción para "Today"
     previous: "Atrás", // Traducción para "Back"
@@ -78,7 +88,9 @@ export const EventCalendar = ({ darkMode, events, handleModalOpen }) => {
     //   "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
     //   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
     // ],
+
   };
+  
 
   return (
     <div
@@ -87,6 +99,7 @@ export const EventCalendar = ({ darkMode, events, handleModalOpen }) => {
       } p-4 max-h-[600px] sm:max-h-[700px] w-full h-[400px]`}
     >
       <Calendar
+      // dayPropGetter={dayPropGetter}
         localizer={localizer}
         messages={messages}
         events={calendarEvents}

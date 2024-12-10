@@ -24,7 +24,7 @@ export const useAuthStore = create((set, get) => ({
                         name: data.name,
                         email: data.email,
                         tokenExpiration: data.tokenExpiration,
-                        clientTypeName : data.clientTypeName,
+                        clientType : data.clientType,
                     },
                     token: data.token,
                     refreshToken: data.refreshToken,

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MdDiscount,
   MdOutlineCancel,
@@ -7,15 +7,17 @@ import {
 import { TbCalendarTime, TbFilePencil } from "react-icons/tb";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 import { formatDate } from "../../../shared/utils";
-import { Link } from "react-router-dom";
+
 import { FaLocationDot } from "react-icons/fa6";
 import { GrMoney } from "react-icons/gr";
 import { SiVirustotal } from "react-icons/si";
 import { useEvents } from "../hooks/data";
 import Popup from "reactjs-popup";
+import { useEventEditStore } from "../store/useEventEditStore";
+import { useNavigate } from "react-router-dom";
 
 // Función para calcular la diferencia en días entre dos fechas
-const calculateDaysBetweenDates = (startDate, endDate) => {
+const calculateDaysBetweenDates = (startDate, endDate ) => {
   const start = new Date(startDate);
   const end = new Date(endDate);
   const differenceInTime = end - start;
@@ -23,9 +25,27 @@ const calculateDaysBetweenDates = (startDate, endDate) => {
   return differenceInDays > 0 ? differenceInDays : 1; // Asegura que al menos sea 1 día
 };
 
-export const EventItem = ({ event, onDelete }) => {
+export const EventItem = ({ event, onDelete, onViewNotes }) => {
+  const { eventDataToEdit } = useEventEditStore();
+  useEffect(() => {
+    if(eventDataToEdit){
+      // emptyCart();
+      console.log("Data a editar: ", eventDataToEdit);
+
+    }
+  }, [eventDataToEdit])
+
   const [showDetails, setShowDetails] = useState(false);
-  const { removeEvent } = useEvents(); // Obtén la función removeEvent desde el hook
+  const { removeEvent } = useEvents(); // eliminar evento hook
+  const { setEventDataToEdit } = useEventEditStore();
+
+ const navigate = useNavigate();
+
+  const handleEditClick = () => {
+     setEventDataToEdit(event); 
+     navigate(`/reservation`); 
+  };
+
 
   const toggleDetails = () => {
     setShowDetails(!showDetails);
@@ -41,15 +61,37 @@ export const EventItem = ({ event, onDelete }) => {
     //}
   };
   const now = Date.now();
-const isCancellable = now < new Date(event.startDate).getTime();
+  const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000; // 3 días en milisegundos
+  const isCancellable = new Date(event.startDate).getTime() - now > threeDaysInMillis; // para cancelar, tiene que haber un maximo de 3 dias entre la fecha actual y ka fecha de inicio del evento
+
+  const isEditable = 
+  now <= new Date(event.endDate).getTime(); //&&  La fecha actual es igual o menor a la fecha de finalización. esto sirve para extender la fecha finalizacion
+//  isCancellable; // La fecha de inicio es mayor o igual a 3 días desde la fecha actual
 
   const days = calculateDaysBetweenDates(event.startDate, event.endDate);
+
+
   return (
-    <div className="event rounded-lg shadow-md p-4  text-white">
+    <div className={`${
+      eventDataToEdit?.id === event.id
+        ? "bg-orange-300"
+        : "bg-gray-200"
+    } rounded-lg shadow-md p-4 text-black`}>
       <div className="mb-4 flex items-center">
         <MdOutlineEventNote className="text-xl text-green-600 mr-1" />
         <h2 className="text-lg font-bold">{event.name}</h2>
       </div>
+      {/* // event.eventNotes.length > 0 */}
+      {isEditable && (
+      <button
+          onClick={() => onViewNotes(event)}  // Llamar a onViewNotes pasando el evento
+          className={`mb-3 transition-transform transform hover:translate-y-1 text-sm ${(event.eventNotes.length > 0) ? "bg-orange-400 hover:bg-orange-500" : "bg-blue-500 hover:bg-blue-600"} text-white py-1 px-3 rounded`}
+        >
+          {(event.eventNotes.length > 0) ? "Ver Notas" : "Añadir Notas"}
+        </button>
+
+      )}
+        
       <span className="flex items-center">
         <FaLocationDot className="text-red-800 mr-1" />
         <span>{event.location}</span>
@@ -67,9 +109,12 @@ const isCancellable = now < new Date(event.startDate).getTime();
 
       <div className="mb-4">
         {showDetails && (
-          <section className=" text-white">
+          <section className=" text-black">
             <hr className="m-4" />
             <p className="text-sm  ">
+
+            <div className="font-bold">CaptureId: {event.paypalCaptureId}</div>
+
               <strong className="mr-1">Fecha de Inicio:</strong>
               {formatDate(event.startDate)}
             </p>
@@ -90,46 +135,49 @@ const isCancellable = now < new Date(event.startDate).getTime();
             </p>
             <br />
             <strong>Lista de Productos Reservados</strong>
-            <table className="min-w-full  mt-4 border">
-              <thead>
-                <tr className="">
-                  <th className="py-2 px-4 border">Imagen</th>
-                  <th className="py-2 px-4 border">Producto</th>
-                  <th className="py-2 px-4 border">Cantidad</th>
-                  <th className="py-2 px-4 border">Precio Unitario</th>
-                  <th className="py-2 px-4 border">Precio Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {event.eventDetails.map((detail) => (
-                  <tr key={detail.id} className="border-b">
-                    <td className="py-2 px-4 border">
-                      <a
-                        href={detail.product.urlImage}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="py-2 px-4 flex justify-center transform transition-transform duration-300 hover:scale-110"
-                      >
-                        <img
-                          src={detail.product.urlImage}
-                          width={50}
-                          alt="img-product"
-                          className="rounded-md shadow-md"
-                        />
-                      </a>
-                    </td>
-                    <td className="py-2 px-4 border">{detail.product.name}</td>
-                    <td className="py-2 px-4 border">{detail.quantity}</td>
-                    <td className="py-2 px-4 border">
-                      ${detail.unitPrice.toFixed(2)}
-                    </td>
-                    <td className="py-2 px-4 border">
-                      ${detail.totalPrice.toFixed(2)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <table className="min-w-full mt-4 border border-black ">
+  <thead>
+    <tr className="bg-gray-300 ">
+      <th className="py-2 px-4 border border-black rounded-l-md">Imagen</th>
+      <th className="py-2 px-4 border border-black">Producto</th>
+      <th className="py-2 px-4 border border-black">Cantidad</th>
+      <th className="py-2 px-4 border border-black">Precio Unitario</th>
+      <th className="py-2 px-4 border border-black">Precio Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    {event.eventDetails.map((detail) => (
+      <tr key={detail.id} className="border-b border-black">
+        <td className="py-2 px-4 border border-black">
+          <a
+            href={detail.product.urlImage}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="py-2 px-4 flex justify-center transform transition-transform duration-300 hover:scale-110"
+          >
+            <img
+              src={detail.product.urlImage}
+              width={50}
+              alt="img-product"
+              className="rounded-md shadow-md"
+            />
+          </a>
+        </td>
+        <td className="py-2 px-4 border border-black">
+          {detail.product.name}
+        </td>
+        <td className="py-2 px-4 border border-black">{detail.quantity}</td>
+        <td className="py-2 px-4 border border-black">
+          ${detail.unitPrice.toFixed(2)}
+        </td>
+        <td className="py-2 px-4 border border-black">
+          ${detail.totalPrice.toFixed(2)}
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
           </section>
         )}
       </div>
@@ -137,7 +185,7 @@ const isCancellable = now < new Date(event.startDate).getTime();
       <div className="flex justify-between">
         <button
           onClick={toggleDetails}
-          className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 hover:bg-blue-200 hover:text-black"
+          className="flex items-center text-sm border border-black rounded px-3 py-1 hover:bg-blue-200 hover:text-black"
         >
           {showDetails ? (
             <>
@@ -151,20 +199,21 @@ const isCancellable = now < new Date(event.startDate).getTime();
             </>
           )}
         </button>
-
-        <Link
-          to={`/my-event/edit/${event.id}`}
-          className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 hover:bg-orange-300 hover:text-black"
+        
+        { isEditable && (<button
+          onClick={handleEditClick}
+          title="Extender la fecha de finalización."
+          className="flex items-center text-sm border border-black  rounded px-3 py-1 hover:bg-orange-300 hover:text-black"
         >
-          <TbFilePencil className="h-4 w-4 mr-2" />
-          Editar
-        </Link>
+          <TbFilePencil className={`h-4 w-4 mr-2`} />
+          {eventDataToEdit?.id === event.id ? "En Edición": "Editar"}
+        </button>)}
 
         <Popup
           trigger={
             
               isCancellable && (
-                <span className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 hover:bg-red-500 hover:cursor-pointer hover:text-black">
+                <span className="flex items-center text-sm border border-black  rounded px-3 py-1 hover:bg-red-500 hover:cursor-pointer hover:text-black">
                   <MdOutlineCancel className="h-4 w-4 mr-2" />
                   Cancelar
                 </span>
@@ -172,7 +221,7 @@ const isCancellable = now < new Date(event.startDate).getTime();
             
           }
           position="top right"
-          className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 hover:bg-red-500"
+          className="flex items-center text-sm border border-black rounded px-3 py-1 hover:bg-red-500"
         >
           <aside className="bg-siidni-goldLight rounded-md p-4 flex flex-col items-center justify-center">
             <strong className="mb-2 text-center">
@@ -180,7 +229,7 @@ const isCancellable = now < new Date(event.startDate).getTime();
             </strong>
             <button
               onClick={handleDelete}
-              className="flex items-center text-sm border border-gray-300 rounded px-3 py-1 bg-red-500"
+              className="flex items-center text-sm border border-black rounded px-3 py-1 bg-red-500"
             >
               <MdOutlineCancel className="h-4 w-4 mr-2" />
               SHI 😥

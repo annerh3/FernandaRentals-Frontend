@@ -44,6 +44,7 @@ export const getEventsList = async (searchTerm = "", page = 1) => {
 export const createEvent = async (eventData) => {
   try {
     const { data } = await webApi.post('/eventos', eventData);
+console.log(eventData);
 
     return data;
   } catch (error) {
@@ -88,3 +89,5 @@ export const getClientEventsList = async () => {
     return error.response;
   }
 };
+
+

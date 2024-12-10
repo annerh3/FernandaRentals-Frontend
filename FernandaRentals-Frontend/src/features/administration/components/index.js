@@ -19,3 +19,4 @@ export * from './users-page/ClientTypeItem.jsx';
 export * from './users-page/AdminUserItem.jsx';
 export * from './users-page/AdminModal.jsx';
 export * from './EventCalendar.jsx';
+export * from './FinancialReport.jsx';

@@ -4,3 +4,4 @@ export * from './FormEventPage';
 export * from './MyEvents';
 export * from './FormEditEventPage';
 export * from './PageNotFound';
+export * from '../paypal/PayPalCreateEventPayment';

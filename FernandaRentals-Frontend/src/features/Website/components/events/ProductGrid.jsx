@@ -1,8 +1,10 @@
+import { useCart } from "react-use-cart";
 import { ProductGridItem } from "./ProductGridItem";
 
 export const ProductGrid = ({ products, isLoading, onProductSelect }) => {
+  const { addItem } = useCart();
     const handleDoubleClick = (product) => {
-      onProductSelect(product);
+      addItem(product);
     };
   
     return (

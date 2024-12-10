@@ -144,7 +144,7 @@ export const LoginPage = () => {
                 }
                 `}
               type="submit"
-              disabled={!isObjectEmpty(formik.errors)}
+              disabled={!isObjectEmpty(formik.errors) || formik.isSubmitting}
             >
               Login
             </button>

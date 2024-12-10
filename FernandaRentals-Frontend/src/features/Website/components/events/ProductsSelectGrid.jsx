@@ -1,43 +1,28 @@
 import { useEffect, useState } from "react";
 import { Pagination } from "../../../../shared/components";
+import { FaMinus, FaPlus } from "react-icons/fa";
+import { useEventsData } from "../../store/useEventsData";
 
 export const ProductsSelectGrid = ({
-  selectedProducts,
-  onRemoveProduct,
-  onUpdateQuantity,
+  items,
+  updateItemQuantity,
+  removeItem,
 }) => {
-  // Inicializa las cantidades con la cantidad en el producto seleccionado
-  const [quantities, setQuantities] = useState({});
-  useEffect(() => {
-    const newQuantities = selectedProducts.reduce((acc, product) => {
-      acc[product.id] = product.quantity || 1; 
-      return acc;
-    }, {});
-    setQuantities(newQuantities);
-  }, [selectedProducts]);
 
+
+const { setEventProducts } = useEventsData();
   const PRODUCTS_PER_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
 
+  const {
+    eventData,
+    getEventData
+  } = useEventsData();
+
+
   // Calcula el número total de páginas
-  const totalPages = Math.ceil(selectedProducts.length / PRODUCTS_PER_PAGE);
+  const totalPages = Math.ceil(items.length / PRODUCTS_PER_PAGE);
 
-  // Maneja el cambio en la cantidad
-  const handleQuantityChange = (id, value) => {
-    const intValue = parseInt(value, 10);
-    if (intValue >= 0) {
-      setQuantities((prev) => ({
-        ...prev,
-        [id]: intValue,
-      }));
-      onUpdateQuantity(id, intValue); // Notifica al componente padre sobre el cambio
-    }
-  };
-
-  // Maneja la eliminación de un producto específico
-  const handleRemoveClick = (id) => {
-    onRemoveProduct(id);
-  };
 
   // Cambia la página actual
   const handleCurrentPage = (page) => {
@@ -56,8 +41,17 @@ export const ProductsSelectGrid = ({
 
   // Calcula los productos a mostrar en la página actual
   const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
-  const endIndex = Math.min(startIndex + PRODUCTS_PER_PAGE, selectedProducts.length);
-  const currentProducts = selectedProducts.slice(startIndex, endIndex);
+  const endIndex = Math.min(startIndex + PRODUCTS_PER_PAGE, items.length);
+  const currentProducts = items.slice(startIndex, endIndex);
+
+  useEffect(() => {
+    setEventProducts(items)
+    console.log("desde ProductsSelectedGrid, eventData:   ",eventData);
+    console.log("desde ProductsSelectedGrid, getEventData():   ",getEventData());
+    
+  }, [items])
+  
+  
 
   return (
     <div className="mt-6 overflow-x-auto">
@@ -82,26 +76,48 @@ export const ProductsSelectGrid = ({
           {currentProducts.length ? (
             currentProducts.map((product) => (
               <tr key={product.id} className="hover:bg-gray-100">
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap font-bold text-lg text-gray-800">
                   {product.name}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {product.cost}
+                  {product.price}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <input
-                    type="number"
-                    min="0"
-                    value={quantities[product.id] || 1}
-                    onChange={(e) =>
-                      handleQuantityChange(product.id, e.target.value)
-                    }
-                    className="border rounded px-2 py-1 w-20"
-                  />
+                
+                    <div className="flex space-x-2 ">
+                      {/* Boton Menos */}
+                      <button
+                        className=""
+                        onClick={() =>
+                          updateItemQuantity(
+                            product.id,
+                            (product.quantity ?? 0) - 1
+                          )
+                        }
+                      >
+                        <FaMinus className="bg-gray-200 p-1 text-xl text-gray-400 hover:bg-yellow-400 rounded-sm" />
+                      </button>
+                      {/* Cantidad */}
+                    <div className="text-gray-500 text-lg">
+                      {product.quantity}
+                    </div>
+                      {/* Boton Mas */}
+                        <button
+                          onClick={() =>
+                            updateItemQuantity(
+                              product.id,
+                              (product.quantity ?? 0) + 1
+                            )
+                          }
+                        >
+                          <FaPlus className="bg-gray-200 p-1 text-xl text-gray-400 hover:bg-green-300 rounded-sm" />
+                        </button>
+                      </div>
+                  
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <button
-                    onClick={() => handleRemoveClick(product.id)}
+                    onClick={() => removeItem(product.id)}
                     className="px-4 py-2 bg-red-500 text-white rounded"
                   >
                     Eliminar

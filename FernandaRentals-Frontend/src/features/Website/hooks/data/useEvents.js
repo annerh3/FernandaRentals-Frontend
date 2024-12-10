@@ -31,6 +31,8 @@ export const useEvents = () => {
       setIsLoading(false);
   };
 
+
+
   return {
     // Properties
     events,

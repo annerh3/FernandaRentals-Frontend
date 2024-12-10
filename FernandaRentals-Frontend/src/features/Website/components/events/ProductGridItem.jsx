@@ -24,7 +24,7 @@ export const ProductGridItem = ({ products = [], handleDoubleClick = () => {} })
             {product.category.name}
           </td>
           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-            {product.cost}
+            {product.price}
           </td>
           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             {product.stock}

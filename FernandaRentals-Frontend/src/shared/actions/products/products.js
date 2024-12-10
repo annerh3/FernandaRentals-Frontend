@@ -78,3 +78,19 @@ export const createProduct = async (productData) => {
       return error.response;
     }
   };
+
+
+  
+// para validar disponibilidad de productos entre fechas del evento a crear
+export const validateProducts = async (values) => {
+  console.log("values en actions:  ", values);
+  
+  try {
+    const { data } = await webApi.post(`/eventos/validate-products`, values);
+    return data;
+    
+  } catch (error) {
+    console.error(error);
+    return error.response.data;
+  }
+};
