@@ -17,6 +17,7 @@ import { useProductsValidation } from "../store/useProductsValidation";
 import { Link, useNavigate } from "react-router-dom";
 import { useEventsData } from "../store/useEventsData";
 import { useEventEditStore } from "../store";
+import { useAuthStore } from "../../security/store";
 
 
 export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
@@ -27,6 +28,7 @@ export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
 
 
   const setData = useProductsValidation((state) => state.setData);
+  const isAuthenicated = useAuthStore((state) => state.isAuthenticated);
 
   const setSuccess = useProductsValidation((state) => state.setSuccess);
   const success = useProductsValidation((state) => state.success);
@@ -50,6 +52,7 @@ export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
     emptyCart,
   } = useCart();
 
+
   const { eventData } = useEventsData();
 
   useEffect(() => {
@@ -57,6 +60,7 @@ export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
   }, [eventData]);
 
   const isEditMode = eventDataToEdit.id && eventDataToEdit.id.trim() !== '';
+  // const itStartedShopping = eventData.startDate && eventData.startDate.trim() !== '';
 
   // Manejador personalizado para agregar los productos
   const handleAddProducts = (e) => {
@@ -101,6 +105,11 @@ export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
       setEventStartDate(values.eventStartDate);
       setEventEndDate(values.eventEndDate);
       setEventProducts(values.products);
+
+      setShowModal(true);
+      if(!isAuthenicated){
+        return navigate("/security/login");
+      }
       
       try {
         const result = await validateProducts(values);
@@ -119,9 +128,9 @@ export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
   });
 
   useEffect(() => {
+    // if (success && !isEditMode && !itStartedShopping) {
     if (success && !isEditMode) {
       setSuccess(false);
-      // Navegar a la página de reserva solo si showModal es true
       navigate("/reservation");
       toggleCart(); // Cerrar el carrito al navegar
     }

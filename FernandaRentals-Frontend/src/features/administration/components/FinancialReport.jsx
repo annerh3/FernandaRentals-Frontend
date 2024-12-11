@@ -20,7 +20,7 @@ export const FinancialReport = ({
   
   return (
     <div
-      className={`max-w-md mx-auto mt-8 p-6 shadow-lg rounded-lg border ${
+      className={`min-h-[400px] mx-auto mt-8 p-2 shadow-lg rounded-lg border ${
         darkMode
           ? "bg-siidni-darkCard border-gray-700 text-gray-200"
           : "bg-white border-gray-200 text-gray-800"
@@ -104,6 +104,7 @@ export const FinancialReport = ({
           {message || "No hubieron eventos en este mes."}
         </p>
       )}
+
     </div>
   );
 };

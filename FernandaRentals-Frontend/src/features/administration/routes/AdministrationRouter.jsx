@@ -32,7 +32,6 @@ export const AdministrationRouter = () => {
 
             {/* PRODUCTOS */}
             <Route path="/manage-products" element={<ProductsPage darkMode={darkMode} />} />
-
             {/* Categorías de Productos */}
             <Route path="/manage-products-categories" element={<CategoryProductPage darkMode={darkMode} />} />
 

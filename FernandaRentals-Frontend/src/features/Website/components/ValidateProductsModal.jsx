@@ -1,5 +1,4 @@
 import { formatDate } from "../../../shared/utils";
-import { useEventEditStore } from "../store";
 import { useProductsValidation } from "../store/useProductsValidation";
 
 
@@ -10,6 +9,7 @@ export const ValidateProductsModal = () => {
   
   const setSuccess = useProductsValidation((state) => state.setSuccess);
 
+  
 
 
   if (data.status && showModal) {
@@ -30,12 +30,12 @@ export const ValidateProductsModal = () => {
   }
 
   // Agrupar productos por ID y fechas de no disponibilidad
-  const groupedProducts = data.data.reduce((acc, item) => {
+  const groupedProducts = data.reduce((acc, item) => {
     const productId = item.product.id;
     if (!acc[productId]) {
       acc[productId] = {
         product: item.product,
-        unavailableDates: new Set() // Usamos un Set para evitar fechas duplicadas
+        unavailableDates: new Set() // para evitar fechas duplicadas
       };
     }
     acc[productId].unavailableDates.add(item.unavailableDate);

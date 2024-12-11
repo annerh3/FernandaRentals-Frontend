@@ -3,8 +3,8 @@ import { create } from "zustand";
 const initialEventData = {
   name: "",
   location: "",
-  startDate: "2000-01-01T06:00:00.000Z",
-  endDate: "2000-01-01T06:00:00.000Z",
+  startDate: "",
+  endDate: "",
   paypalCaptureId: "default",
   prevTotal:"0",
   productos: [{ productId: "", quantity: 0 }],
