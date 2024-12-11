@@ -5,8 +5,8 @@ export const StatsGrid = ({ stats, darkMode }) => {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       {stats.map((stat, index) => {
         const { comparation } = stat;
-        const { message, icon, newTLast7Days } = getComparisonDetails(comparation);
-        console.log("Icon:", icon);
+        const { message, Icon, newTLast7Days, twClasses } = getComparisonDetails(comparation);
+        console.log("Icon:", Icon);
 
         return (
           <div
@@ -39,7 +39,11 @@ export const StatsGrid = ({ stats, darkMode }) => {
                     <p className="font-medium">{newTLast7Days} Nuevos</p>
                   </div>
                   <div className="flex items-center justify-end space-x-2">
-                    {icon} {/* Aquí renderizas el ícono */}
+                  <icon className="text-blue-600" />
+                    {/* Aquí renderizas el ícono */}
+                    {/* {icon}  */}
+                    {/* <RiPauseCircleFill className={`${twClasses}`} /> */}
+                    {Icon && <Icon className={`${twClasses}`} />}
                     <p className="font-medium">{message}</p>
                   </div>
                 </div>

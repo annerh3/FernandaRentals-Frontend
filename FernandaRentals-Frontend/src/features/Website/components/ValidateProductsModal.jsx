@@ -1,5 +1,4 @@
 import { formatDate } from "../../../shared/utils";
-import { useAuthStore } from "../../security/store/useAuthStore";
 import { useProductsValidation } from "../store/useProductsValidation";
 
 
@@ -9,7 +8,7 @@ export const ValidateProductsModal = () => {
   const data = useProductsValidation((state) => state.data);
   
   const setSuccess = useProductsValidation((state) => state.setSuccess);
-  const isAuthenicated = useAuthStore((state) => state.isAuthenticated);
+
   
 
 
@@ -31,7 +30,7 @@ export const ValidateProductsModal = () => {
   }
 
   // Agrupar productos por ID y fechas de no disponibilidad
-  const groupedProducts = data.data.reduce((acc, item) => {
+  const groupedProducts = data.reduce((acc, item) => {
     const productId = item.product.id;
     if (!acc[productId]) {
       acc[productId] = {
