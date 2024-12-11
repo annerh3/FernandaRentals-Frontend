@@ -60,7 +60,7 @@ export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
   }, [eventData]);
 
   const isEditMode = eventDataToEdit.id && eventDataToEdit.id.trim() !== '';
-  const itStartedShopping = eventData.startDate && eventData.startDate.trim() !== '';
+  // const itStartedShopping = eventData.startDate && eventData.startDate.trim() !== '';
 
   // Manejador personalizado para agregar los productos
   const handleAddProducts = (e) => {
@@ -128,7 +128,8 @@ export const ShoppingCart = ({ toggleCart, isCartOpen }) => {
   });
 
   useEffect(() => {
-    if (success && !isEditMode && !itStartedShopping) {
+    // if (success && !isEditMode && !itStartedShopping) {
+    if (success && !isEditMode) {
       setSuccess(false);
       navigate("/reservation");
       toggleCart(); // Cerrar el carrito al navegar

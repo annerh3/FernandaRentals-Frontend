@@ -20,6 +20,7 @@ export const Top3 = ({ darkMode , data ,title , colSpan =2 , is_up=true}) => {
                 count={item.count}
                 monto={item.revenue}
                 is_up={is_up}
+                darkMode={darkMode}
               />
             ))}
           </ul>
