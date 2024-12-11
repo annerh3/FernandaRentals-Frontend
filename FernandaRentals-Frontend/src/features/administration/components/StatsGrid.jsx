@@ -43,8 +43,9 @@ export const StatsGrid = ({ stats, darkMode }) => {
                     {/* Aquí renderizas el ícono */}
                     {/* {icon}  */}
                     {/* <RiPauseCircleFill className={`${twClasses}`} /> */}
-                    {Icon && <Icon className={`${twClasses}`} />}
-                    <p className="font-medium">{message}</p>
+                    {Icon && <Icon className={`${twClasses} text-2xl`} />}
+                    {/* <p className={`${darkMode ? "text-green-600" : "text-siidni-dark"} font-medium`}>{message}</p> */}
+                    <p className={`${twClasses} font-medium`}>{message}</p>
                   </div>
                 </div>
               </div>
