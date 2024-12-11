@@ -12,3 +12,34 @@ export const loginValidationSchema = Yup.object({
     password: Yup.string()
         .required('La contraseña es requerida')
 })
+
+
+export const  registerInitValues = {
+    email: '',
+    password: '',
+    confirmPassword: '',
+    clientName: '',
+    clientTypeId:''
+  }
+
+
+export const registerValidationSchema = Yup.object({
+    email: Yup.string()
+    .required('El correo electrónico es requerido.')
+    .email('Ingrese un correo válido.'),
+
+  password: Yup.string()
+    .required('La contraseña es requerida.')
+    .min(8, 'La contraseña debe tener al menos 8 caracteres.'), 
+  confirmPassword: Yup.string()
+    .required('La confirmación de la contraseña es requerida.')
+    .oneOf([Yup.ref('password'), null], 'Las contraseñas no coinciden.'), 
+
+  clientName: Yup.string()
+    .required('El nombre del cliente es requerido.')
+    .min(3, 'El nombre del cliente debe tener al menos 3 caracteres.')
+    .max(50, 'El nombre del cliente no debe exceder los 50 caracteres.'),
+
+  clientTypeId: Yup.string()
+    .required('El tipo de cliente es requerido.')
+});

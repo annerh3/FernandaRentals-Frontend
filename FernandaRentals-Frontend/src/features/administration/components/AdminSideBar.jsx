@@ -53,6 +53,7 @@ export const AdminSideBar = ({ darkMode }) => {
               spanTitle="Dashboard"
               isActive={location.pathname === "/administration/dashboard"}
             />
+
             {/* eventos */}
             <ItemNavAdministration
               titleLink="Events"

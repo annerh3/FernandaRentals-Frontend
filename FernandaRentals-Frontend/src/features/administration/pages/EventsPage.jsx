@@ -26,26 +26,37 @@ const backendResponse = {
 };
 
 export const EventsPage = ({ darkMode }) => {
+
+
   const [showModal, setShowModal] = useState(false);
+
+  // Da el reporte inicialmente 
   const [selectedMonthData, setSelectedMonthData] = useState({
-    month: 9,
-    year: 2023,
+    month: new Date().getMonth() + 1, 
+    year: new Date().getFullYear(),
   });
+
   const [isPickerOpen, setIsPickerOpen] = useState(false);
 
+
   const [showNotesModal, setShowNotesModal] = useState(false);
+
   const [lastSelectedValue, setLastSelectedValue] = useState(null); // para recargar los datos luego de crear una nota
   const [selectedItem, setselectedItem] = useState(null);
 
   const [fetching, setFetching] = useState(true);
   const { events, isLoading, loadEvents } = useEvents();
 
+
   const { finance, financeIsLoading, loadFinancialsMonthly } = useFinance();
 
+
+  // para actualizar el reporte 
   useEffect(() => {
-    console.log("El mes es: ",selectedMonthData);
+  //  console.log("El mes es: ",selectedMonthData);
     loadFinancialsMonthly(selectedMonthData);
   }, [selectedMonthData]);
+
 
   const handleModalOpen = (data) => {
     setselectedItem(data);
@@ -56,7 +67,7 @@ export const EventsPage = ({ darkMode }) => {
   const handleSelect = (e) => {
     const selectedValue = e.target.value;
     // console.log("Selected Value: ", selectedValue);
-    console.log(e.target.value);
+    //console.log(e.target.value);
 
     if (Object.values(selectValues).includes(selectedValue)) {
       setLastSelectedValue(selectedValue);
@@ -68,8 +79,8 @@ export const EventsPage = ({ darkMode }) => {
     if (fetching) {
       loadEvents(selectValues.TODAY);
       setselectedItem(false);
-      console.log("Fetched");
-      console.log(finance);
+      //console.log("Fetched");
+      //console.log(finance);
       
     }
   }, [fetching]);
@@ -116,7 +127,7 @@ export const EventsPage = ({ darkMode }) => {
   <div
     className={`${
       darkMode ? "bg-siidni-darkCard" : "bg-white"
-    } col-span-12 lg:col-span-4 rounded-md overflow-y-auto flex flex-col items-center min-h-[300px] max-h-[850px]`}
+    } col-span-12 lg:col-span-5 rounded-md overflow-y-auto flex flex-col items-center min-h-[300px] max-h-[800px]`}
   >
     <div className="flex mt-5 w-full px-4">
       <select
@@ -158,7 +169,7 @@ export const EventsPage = ({ darkMode }) => {
   </div>
 
   {/* Segunda sección: Reporte Financiero y Calendario */}
-  <div className="col-span-12 lg:col-span-8 flex flex-col space-y-4">
+  <div className="col-span-12 lg:col-span-7 flex flex-col space-y-4">
     {/* Reporte Financiero */}
     <div
       className={`${

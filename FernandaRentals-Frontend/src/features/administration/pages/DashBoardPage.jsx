@@ -16,6 +16,7 @@ import { SeeMoreModal } from "../components/events-page/SeeMoreModal";
 // import Calendar from "react-calendar";
 
 export const DashBoardPage = ({ darkMode }) => {
+  
   //   const [date, setDate] = useState(new Date());
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setselectedItem] = useState(null);
