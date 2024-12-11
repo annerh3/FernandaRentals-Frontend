@@ -9,7 +9,7 @@ export const DonutPieGraph = ({ data, darkMode }) => {
   const labels = productsRevenueDistribution.map(
     (item) => item.product || "Producto"
   );
-  
+
   // Valores del gráfico
   const series = productsRevenueDistribution.map((item) => item.revenue || 0);
 
@@ -17,7 +17,9 @@ export const DonutPieGraph = ({ data, darkMode }) => {
   if (series.length === 0) {
     return (
       <div
-        className={`donut-chart-container ${darkMode ? "text-white" : "text-black"}`}
+        className={`donut-chart-container ${
+          darkMode ? "text-white" : "text-black"
+        }`}
       >
         <div className="text-2xl font-bold pb-2">Distribución de Ingresos</div>
         <p>No hay datos disponibles</p>
@@ -55,17 +57,19 @@ export const DonutPieGraph = ({ data, darkMode }) => {
       y: {
         formatter: (value) => `$${value.toLocaleString()}`,
       },
+      theme: darkMode ? "dark" : "light",
     },
-    colors: ["#FF6347", "#FFD700", "#4CAF50", "#2196F3", "#9C27B0", "#00CED1"],
+    colors:["#FF6347", "#FFD700", "#4CAF50", "#2196F3", "#9C27B0", "#00CED1"], 
+    //darkMode ? ["#08741E", "#084E74", "#6B7280", "#740808", "#B5B22C", "#C83D98"] : 
     legend: {
       position: "bottom",
-      horizontalAlign: "center", 
+      horizontalAlign: "center",
       labels: {
         colors: darkMode ? "#ffffff" : "#000000",
         useSeriesColors: false,
       },
     },
-   
+
     yaxis: {
       labels: {
         style: {
@@ -74,6 +78,7 @@ export const DonutPieGraph = ({ data, darkMode }) => {
       },
     },
     plotOptions: {
+      // pie del gráfico
       pie: {
         donut: {
           size: "65%",
@@ -82,8 +87,11 @@ export const DonutPieGraph = ({ data, darkMode }) => {
             total: {
               show: true,
               label: "Total",
+              color: darkMode ? "#E5E7EB" : "#374151",
+              fontSize: "16px",
+              fontWeight: 600,
               formatter: () => {
-                return `$${grossProfit ? formatCurrency(grossProfit) : '0'}`;
+                return `$${grossProfit ? formatCurrency(grossProfit) : "0"}`;
               },
             },
           },
@@ -99,12 +107,7 @@ export const DonutPieGraph = ({ data, darkMode }) => {
       } rounded-xl p-4`}
     >
       <div className="text-2xl font-bold pb-2">Distribución de Ingresos</div>
-      <Chart 
-        options={options} 
-        series={series} 
-        type="donut" 
-        height={350} 
-      />
+      <Chart options={options} series={series} type="donut" height={350} />
     </div>
   );
 };
