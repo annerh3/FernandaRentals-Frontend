@@ -4,7 +4,8 @@ import { formatCurrency, formatDate_MM_YY } from '../../../../shared/utils';
 
 export const LineGraph = ({darkMode , data}) => {
 
-    console.log(data);
+    // console.log(data);
+    // console.log(data?.grossProfitByMonth.map((item) => formatDate_MM_YY( item.month )));
     
     // const data = {
     //     totalIncome_name: "Total Ingresado",
@@ -37,7 +38,7 @@ export const LineGraph = ({darkMode , data}) => {
           toolbar: { show: true },
         },
         xaxis: {
-          categories: data?.grossProfitByMonth.map((item) => formatDate_MM_YY( item.month)),
+          categories: data?.grossProfitByMonth.map((item) => formatDate_MM_YY( item.month )),
           labels: {
             style: {
               fontFamily: "Inter, sans-serif",
@@ -92,7 +93,7 @@ export const LineGraph = ({darkMode , data}) => {
           }`}
         >
           <div className="text-2xl font-bold pb-2">$  { formatCurrency(data?.grossProfit)}</div>
-          <p className="text-sm font-normal">Ventas del mes</p>
+          <p className="text-sm font-normal">Ventas de los últimos 4 meses</p>
           <div className="mt-4">
             <Chart options={options} series={series} type="area" height={300} />
           </div>

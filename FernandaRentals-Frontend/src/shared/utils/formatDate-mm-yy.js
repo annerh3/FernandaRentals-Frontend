@@ -1,6 +1,9 @@
 export function formatDate_MM_YY(monthString) {
     const [month, year] = monthString.split('-');
-    const date = new Date(`${year}-${month}-01`);
+    console.log(monthString); 
+  
+    const date = new Date(Number(year), Number(month) - 1, 1);
+    console.log(date);
     
    
     const options = { year: 'numeric', month: 'long' };

@@ -56,16 +56,16 @@ export const DonutPieGraph = ({ data, darkMode }) => {
         formatter: (value) => `$${value.toLocaleString()}`,
       },
     },
-    colors: ["#FF6347", "#FFD700", "#4CAF50", "#2196F3", "#9C27B0"],
+    colors: ["#FF6347", "#FFD700", "#4CAF50", "#2196F3", "#9C27B0", "#00CED1"],
     legend: {
       position: "bottom",
-      horizontalAlign: "center", // Changed to center for better layout
+      horizontalAlign: "center", 
       labels: {
         colors: darkMode ? "#ffffff" : "#000000",
         useSeriesColors: false,
       },
     },
-    // Explicitly adding yaxis to prevent the undefined error
+   
     yaxis: {
       labels: {
         style: {
@@ -83,7 +83,6 @@ export const DonutPieGraph = ({ data, darkMode }) => {
               show: true,
               label: "Total",
               formatter: () => {
-                // Ensure fallback if formatCurrency fails
                 return `$${grossProfit ? formatCurrency(grossProfit) : '0'}`;
               },
             },
