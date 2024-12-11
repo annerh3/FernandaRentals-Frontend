@@ -13,7 +13,6 @@ export const LabelFormBase = ({
     <>
       <label
         className="block text-white text-sm font-bold mb-2"
-        htmlFor="email"
       >
         {inputLabel}
       </label>
@@ -27,7 +26,7 @@ export const LabelFormBase = ({
         onBlur={inputOnblur}
       />
       {{evaluated} && (
-        <div className="text-siidni-gold text-xs my-1">
+        <div className="text-red-500 font-bold text-xs my-1">
           {errorForm}
         </div>
       )}

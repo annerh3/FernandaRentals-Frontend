@@ -1,6 +1,4 @@
 export const RegisterPage = () => {
-
-
   return (
     <>
     
@@ -58,7 +56,7 @@ export const RegisterPage = () => {
                       placeholder="******************"
                     />
                     <p className="text-xs italic text-red-500">
-                      Please choose a password.
+                      Escribe una contraseña
                     </p>
                   </div>
                   <div className="md:ml-2">

@@ -2,8 +2,6 @@ import { useFormik } from "formik";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  loginInitValues,
-  loginValidationSchema,
   registerInitValues,
   registerValidationSchema,
 } from "../forms/login_data";
@@ -13,21 +11,34 @@ import { useAuthStore } from "../store/useAuthStore";
 import "react-toastify/dist/ReactToastify.css";
 import { rolesListConstant } from "../../../shared/constants/roles-list.constants";
 import { LoginForm, RegisterForm } from "../components";
+import { useEventsData } from "../../Website/store";
 
 export const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false); // Estado para cambiar entre login y registro
   const navigate = useNavigate();
 
-  const { login, isAuthenticated, validateAuthentication, roles } =
+  const { login, register, isAuthenticated, validateAuthentication, roles } =
     useAuthStore();
 
+    const {
+      eventData
+    } = useEventsData();
+
+    const itStartedShopping = eventData.startDate && eventData.startDate.trim() !== '';
+
   useEffect(() => {
+    // eventData.startDate
+    let destination ;
     if (!isAuthenticated) return;
     const hasAdminRole = roles.includes(rolesListConstant.ADMIN);
-    const destination = hasAdminRole
-      ? "/administration/dashboard"
-      : "/my-events";
+    if(itStartedShopping){
+      navigate('/reservation')
+      return;
+    }
+    destination = hasAdminRole
+    ? "/administration/dashboard"
+    : "/my-events";
     navigate(destination);
   }, [roles]);
 
@@ -35,12 +46,15 @@ export const LoginPage = () => {
     mirage.register();
   }, []);
 
+
   // Formulario de login
   const formikLogin = useFormik({
-    initialValues: loginInitValues,
-    validationSchema: loginValidationSchema,
+    initialValues: registerInitValues,
+    validationSchema: registerValidationSchema,
     validateOnChange: true,
     onSubmit: async (formValues) => {
+      console.log("formValues: ",values);
+      
       setLoading(true);
       try {
         const { error, message } = await login(formValues);
@@ -66,6 +80,8 @@ export const LoginPage = () => {
     validationSchema: registerValidationSchema,
     validateOnChange: true,
     onSubmit: async (formValues) => {
+      console.log(formValues);
+      
       setLoading(true);
       try {
         const { error, message } = await register(formValues);
@@ -80,9 +96,18 @@ export const LoginPage = () => {
         });
       } finally {
         setLoading(false);
+        navigate("/products");
+        formikRegister.resetForm();
       }
     },
   });
+
+
+  
+useEffect(() => {
+  console.log(formikRegister.errors);
+  
+}, [formikRegister.errors])
 
   return (
     <section className="flex justify-center items-center min-h-screen w-full">

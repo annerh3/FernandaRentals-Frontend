@@ -1,6 +1,7 @@
 import { create } from "zustand";
-import { loginAsync } from "../../../shared/actions/auth/auth.action";
+import { loginAsync, registerAsync } from "../../../shared/actions/auth/auth.action";
 import { jwtDecode } from "jwt-decode";
+import { register } from "react-scroll/modules/mixins/scroller";
 export const useAuthStore = create((set, get) => ({
     // Propiedades de estados iniciales
     user: null,
@@ -16,6 +17,33 @@ export const useAuthStore = create((set, get) => ({
         const { status, data, message } = await loginAsync(form);
 
         console.log(status)
+        if (status) {
+            set(
+                {
+                    error: false,
+                    user: {
+                        name: data.name,
+                        email: data.email,
+                        tokenExpiration: data.tokenExpiration,
+                        clientType : data.clientType,
+                    },
+                    token: data.token,
+                    refreshToken: data.refreshToken,
+                    isAuthenticated: true,
+                    message: message
+                }
+            );
+            localStorage.setItem('user', JSON.stringify(get().user ?? {}))
+            localStorage.setItem('token', get().token);
+            localStorage.setItem('refreshToken', get().refreshToken)
+            return { error: false, message };
+        }
+        set({ message: message, error: true });
+        return { error: true, message };
+    },
+
+    register: async (form) => {
+        const { status, data, message } = await registerAsync(form);
         if (status) {
             set(
                 {

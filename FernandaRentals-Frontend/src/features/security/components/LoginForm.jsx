@@ -6,9 +6,9 @@ export const LoginForm = ({formikLogin, loading}) => (
       <div className="mb-4">
         <LabelFormBase 
             inputLabel="Email"
-            inputId="Email"
-            inputName="Email"
-            inputType="Email"
+            inputId="email"
+            inputName="email"
+            inputType="email"
 
             inputValue={formikLogin.values.email}
             inputOnChange={formikLogin.handleChange}
@@ -20,10 +20,10 @@ export const LoginForm = ({formikLogin, loading}) => (
       </div>
       <div className="mb-6">
       <LabelFormBase 
-            inputLabel="Password"
-            inputId="Password"
-            inputName="Password"
-            inputType="Password"
+            inputLabel="Contraseña"
+            inputId="password"
+            inputName="password"
+            inputType="password"
 
             inputValue={formikLogin.values.password}
             inputOnChange={formikLogin.handleChange}

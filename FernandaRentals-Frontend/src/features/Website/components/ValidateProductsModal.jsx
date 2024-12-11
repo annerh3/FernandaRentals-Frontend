@@ -1,5 +1,5 @@
 import { formatDate } from "../../../shared/utils";
-import { useEventEditStore } from "../store";
+import { useAuthStore } from "../../security/store/useAuthStore";
 import { useProductsValidation } from "../store/useProductsValidation";
 
 
@@ -9,7 +9,8 @@ export const ValidateProductsModal = () => {
   const data = useProductsValidation((state) => state.data);
   
   const setSuccess = useProductsValidation((state) => state.setSuccess);
-
+  const isAuthenicated = useAuthStore((state) => state.isAuthenticated);
+  
 
 
   if (data.status && showModal) {
@@ -35,7 +36,7 @@ export const ValidateProductsModal = () => {
     if (!acc[productId]) {
       acc[productId] = {
         product: item.product,
-        unavailableDates: new Set() // Usamos un Set para evitar fechas duplicadas
+        unavailableDates: new Set() // para evitar fechas duplicadas
       };
     }
     acc[productId].unavailableDates.add(item.unavailableDate);
