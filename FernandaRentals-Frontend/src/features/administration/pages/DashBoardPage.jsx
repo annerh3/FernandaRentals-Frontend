@@ -102,15 +102,30 @@ export const DashBoardPage = ({ darkMode }) => {
 
           {/*Grafics Grid  */}
 
-          <div className="grid grid-cols-7 grid-rows-1 gap-3 mt-2">
+          <div className="grid grid-flow-col justify-stretch gap-3">
             {/* Top 3 Productos más Solicitados */}
-              <Top3  darkMode={darkMode}  data={tops?.topRequestedProducts} title="Mas Solicitados"/>
+            <Top3
+              darkMode={darkMode}
+              data={tops?.topRequestedProducts}
+              title="Mas Solicitados"
+            />
             {/* Elemento 2 */}
-            <Top3  darkMode={darkMode}  data={tops?.leastRequestedProducts} is_up={false} title="Menos Solicitados"/>
+            <Top3
+              darkMode={darkMode}
+              data={tops?.leastRequestedProducts}
+              is_up={false}
+              title="Menos Solicitados"
+            />
 
             {/* Elemento 3 */}
-            <Top3  darkMode={darkMode}  data={tops?.topRevenueProducts} colSpan={3} title="Mayor Ganancias"/>
-
+            <Top3
+              darkMode={darkMode}
+              data={tops?.topRevenueProducts}
+              colSpan={3}
+              title="Mayor Ganancias"
+            />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mt-2">
             {/* Elemento 4 */}
             {/* Comienzan los Gráficos */}
             <div
@@ -121,8 +136,7 @@ export const DashBoardPage = ({ darkMode }) => {
               } shadow-md rounded-xl p-6`}
             >
               {/* <h2 className="text-xl font-semibold mb-4">Elemento 4</h2> */}
-              <LineGraph  darkMode={darkMode}/>
-
+              <LineGraph darkMode={darkMode} />
             </div>
 
             {/* Elemento 5 */}
