@@ -6,7 +6,7 @@ export const Top3 = ({ darkMode , data ,title , colSpan =2 , is_up=true}) => {
         <div
       className={`col-span-${colSpan} ${
         darkMode ? "bg-siidni-darkCard text-white" : "bg-white text-gray-900"
-      } shadow-md rounded-xl p-6`}
+      } shadow-md rounded-xl p-6 transition-transform hover:scale-105`}
     >
           {/* Titulo centrado */}
           <h2 className="text-lg font-semibold mb-4 text-center">{title}</h2>

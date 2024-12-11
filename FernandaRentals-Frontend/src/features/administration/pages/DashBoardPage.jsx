@@ -14,7 +14,7 @@ import { useEvents } from "../../Website/hooks/data";
 import { CurrentDate } from "../../../shared/components/Utils";
 import { SeeMoreModal } from "../components/events-page/SeeMoreModal";
 import { FaAnglesUp } from "react-icons/fa6";
-import { LineGraph, Top3 } from "../components/dashboard";
+import { DistributedGraph, DonutPieGraph, LineGraph, Top3 } from "../components/dashboard";
 // import Calendar from "react-calendar";
 
 export const DashBoardPage = ({ darkMode }) => {
@@ -75,7 +75,7 @@ export const DashBoardPage = ({ darkMode }) => {
     },
   ];
   const tops = dashboard?.data?.tops || null;
-
+  const lineGraph = dashboard?.data?.statistics || null ;
   return (
     <div
       className={`min-h-screen ${
@@ -136,7 +136,7 @@ export const DashBoardPage = ({ darkMode }) => {
               } shadow-md rounded-xl p-6`}
             >
               {/* <h2 className="text-xl font-semibold mb-4">Elemento 4</h2> */}
-              <LineGraph darkMode={darkMode} />
+              <LineGraph darkMode={darkMode} data={lineGraph}/>
             </div>
 
             {/* Elemento 5 */}
@@ -148,7 +148,9 @@ export const DashBoardPage = ({ darkMode }) => {
               } shadow-md rounded-xl p-6`}
             >
               <h2 className="text-xl font-semibold mb-4">Elemento 5</h2>
-              <p>Contenido del elemento 5</p>
+              {/* Grafico en pastel */}
+              <DonutPieGraph data={lineGraph} darkMode={darkMode}/>
+              {/* <DistributedGraph data={lineGraph} darkMode={darkMode} /> */}
             </div>
           </div>
 

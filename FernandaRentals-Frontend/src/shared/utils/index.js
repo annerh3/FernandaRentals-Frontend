@@ -7,3 +7,5 @@ export * from './is-object-empty';
 export * from './transformEvents';
 
 export * from './formatMessage';
+export * from './formatDate-mm-yy';
+export * from './formatCurrent';
