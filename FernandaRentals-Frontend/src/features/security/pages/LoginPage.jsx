@@ -2,6 +2,8 @@ import { useFormik } from "formik";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  loginInitValues,
+  loginValidationSchema,
   registerInitValues,
   registerValidationSchema,
 } from "../forms/login_data";
@@ -49,13 +51,19 @@ export const LoginPage = () => {
   const handleButton = () =>{
     setIsRegistering((prev) => !prev)
     isRegistering ?  formikRegister.resetForm() :  formikLogin.resetForm();
+    console.log(isRegistering);
+    console.log(formikRegister);
+    console.log(formikLogin);
+    
+    
+    
   }
 
 
   // Formulario de login
   const formikLogin = useFormik({
-    initialValues: registerInitValues,
-    validationSchema: registerValidationSchema,
+    initialValues: loginInitValues,
+    validationSchema: loginValidationSchema,
     validateOnChange: true,
     onSubmit: async (formValues) => {
       console.log("formValues: ",values);
