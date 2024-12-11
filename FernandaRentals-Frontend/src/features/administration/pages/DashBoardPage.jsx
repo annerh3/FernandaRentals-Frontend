@@ -102,34 +102,12 @@ export const DashBoardPage = ({ darkMode }) => {
 
           {/*Grafics Grid  */}
 
-          <div className="grid grid-flow-col justify-stretch gap-3">
-            {/* Top 3 Productos más Solicitados */}
-            <Top3
-              darkMode={darkMode}
-              data={tops?.topRequestedProducts}
-              title="Mas Solicitados"
-            />
-            {/* Elemento 2 */}
-            <Top3
-              darkMode={darkMode}
-              data={tops?.leastRequestedProducts}
-              is_up={false}
-              title="Menos Solicitados"
-            />
+         
 
-            {/* Elemento 3 */}
-            <Top3
-              darkMode={darkMode}
-              data={tops?.topRevenueProducts}
-              colSpan={3}
-              title="Mayor Ganancias"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mt-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-3 mt-2">
             {/* Elemento 4 */}
-            {/* Comienzan los Gráficos */}
             <div
-              className={`col-span-4 row-start-2 ${
+              className={`lg:col-span-4 md:col-span-2 ${
                 darkMode
                   ? "bg-siidni-darkCard text-white"
                   : "bg-white text-gray-900"
@@ -141,7 +119,7 @@ export const DashBoardPage = ({ darkMode }) => {
 
             {/* Elemento 5 */}
             <div
-              className={`col-span-3 col-start-5 row-start-2 ${
+              className={`lg:col-span-3 md:col-span-2 ${
                 darkMode
                   ? "bg-siidni-darkCard text-white"
                   : "bg-white text-gray-900"
@@ -172,7 +150,7 @@ export const DashBoardPage = ({ darkMode }) => {
             <div
               className={`${
                 darkMode ? "bg-siidni-darkCard" : "bg-white"
-              } p-6 rounded-xl shadow-md`}
+              } p-6 rounded-xl shadow-md hidden sm:block`}
             >
               {fetching ? (
                 <p className="text-center text-gray-500">
