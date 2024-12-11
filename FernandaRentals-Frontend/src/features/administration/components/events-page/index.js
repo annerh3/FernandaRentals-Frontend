@@ -9,5 +9,3 @@ export * from './TableProductsEventDetails';
 export * from './InfoRow';
 export * from './CancelEventButton';
 
-
-export * from './GrafSection';

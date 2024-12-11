@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { MonthInput, MonthPicker } from "react-lite-month-picker";
-import { GrafSection } from "./events-page";
 
 export const FinancialReport = ({
   data,
@@ -106,7 +105,6 @@ export const FinancialReport = ({
         </p>
       )}
 
-      <GrafSection darkMode={darkMode}/>
     </div>
   );
 };

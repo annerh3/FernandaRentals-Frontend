@@ -13,10 +13,11 @@ import { selectValues } from "../../../shared/constants/variousConstants";
 import { useEvents } from "../../Website/hooks/data";
 import { CurrentDate } from "../../../shared/components/Utils";
 import { SeeMoreModal } from "../components/events-page/SeeMoreModal";
+import { FaAnglesUp } from "react-icons/fa6";
+import { LineGraph } from "../components/dashboard";
 // import Calendar from "react-calendar";
 
 export const DashBoardPage = ({ darkMode }) => {
-  
   //   const [date, setDate] = useState(new Date());
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setselectedItem] = useState(null);
@@ -58,19 +59,22 @@ export const DashBoardPage = ({ darkMode }) => {
       title: "Productos Totales",
       count: dashboard?.data?.totalProducts || "0",
       icon: statsIcons.totalProducts,
+      comparation: dashboard?.data?.comparisons?.productsComparation || null,
     },
     {
       title: "Próximos Eventos",
       count: dashboard?.data?.totalUpcomingEvents || "0",
       icon: statsIcons.totalUpcomingEvents,
+      comparation: dashboard?.data?.comparisons?.eventsComparation || null,
     },
     {
       title: "Clientes",
       count: dashboard?.data?.totalClients || "0",
       icon: statsIcons.totalClients,
+      comparation: dashboard?.data?.comparisons?.clientComparation || null,
     },
   ];
-
+  const tops = dashboard?.data?.tops || null;
   return (
     <div
       className={`min-h-screen ${
@@ -84,7 +88,7 @@ export const DashBoardPage = ({ darkMode }) => {
           <div className="flex justify-start items-center mb-8">
             <h1 className="text-2xl font-bold">DashBoard</h1>
             {/* Muestra la Fecha Actual */}
-            <CurrentDate darkMode={darkMode}/>
+            <CurrentDate darkMode={darkMode} />
           </div>
 
           {/* Stats Grid */}
@@ -94,6 +98,99 @@ export const DashBoardPage = ({ darkMode }) => {
           ) : (
             <StatsGrid stats={stats} darkMode={darkMode} />
           )}
+
+          {/*Grafics Grid  */}
+
+          <div className="grid grid-cols-7 grid-rows-2 gap-3 mt-8">
+            {/* Top 3 Productos más Solicitados */}
+            <div
+              className={`col-span-2 ${
+                darkMode
+                  ? "bg-siidni-darkCard text-white"
+                  : "bg-white text-gray-900"
+              } shadow-md rounded-xl p-6`}
+            >
+              {/* Título centrado */}
+              <h2 className="text-xl font-semibold mb-4 text-center">
+                Productos más Solicitados
+              </h2>
+
+              {/* Lista de productos */}
+              <ul className="list-none space-y-2">
+                <li className="flex justify-between items-center mx-2">
+                  <p className="text-base">Manzanas</p>
+                  <span className="flex items-center space-x-1 ">
+                    <span>17</span>
+                    <FaAnglesUp className="text-green-700"/>
+                  </span>
+                </li>
+                <li className="flex justify-between items-center mx-2">
+                  <p className="text-base">Peras</p>
+                  <span className="flex items-center space-x-1 ">
+                    <span>12</span>
+                    <FaAnglesUp className="text-green-700"/>
+                  </span>
+                </li>
+                <li className="flex justify-between items-center mx-2">
+                  <p className="text-base">Uvas</p>
+                  <span className="flex items-center space-x-1 ">
+                    <span>9</span>
+                    <FaAnglesUp className="text-green-700" />
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Elemento 2 */}
+            <div
+              className={`col-span-2 ${
+                darkMode
+                  ? "bg-siidni-darkCard text-white"
+                  : "bg-white text-gray-900"
+              } shadow-md rounded-xl p-6`}
+            >
+              <h2 className="text-xl font-semibold mb-4">Elemento 2</h2>
+              <p>Contenido del elemento 2</p>
+            </div>
+
+            {/* Elemento 3 */}
+            <div
+              className={`col-span-3 ${
+                darkMode
+                  ? "bg-siidni-darkCard text-white"
+                  : "bg-white text-gray-900"
+              } shadow-md rounded-xl p-6`}
+            >
+              <h2 className="text-xl font-semibold mb-4">Elemento 3</h2>
+              <p>Contenido del elemento 3</p>
+            </div>
+
+            {/* Elemento 4 */}
+            {/* Comienzan los Gráficos */}
+            <div
+              className={`col-span-4 row-start-2 ${
+                darkMode
+                  ? "bg-siidni-darkCard text-white"
+                  : "bg-white text-gray-900"
+              } shadow-md rounded-xl p-6`}
+            >
+              {/* <h2 className="text-xl font-semibold mb-4">Elemento 4</h2> */}
+              <LineGraph  darkMode={darkMode}/>
+
+            </div>
+
+            {/* Elemento 5 */}
+            <div
+              className={`col-span-3 col-start-5 row-start-2 ${
+                darkMode
+                  ? "bg-siidni-darkCard text-white"
+                  : "bg-white text-gray-900"
+              } shadow-md rounded-xl p-6`}
+            >
+              <h2 className="text-xl font-semibold mb-4">Elemento 5</h2>
+              <p>Contenido del elemento 5</p>
+            </div>
+          </div>
 
           {/* Main Content Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
@@ -122,7 +219,11 @@ export const DashBoardPage = ({ darkMode }) => {
                   Cargando calendario...
                 </p>
               ) : (
-                <EventCalendar darkMode={darkMode} events={events} handleModalOpen={handleModalOpen}/>
+                <EventCalendar
+                  darkMode={darkMode}
+                  events={events}
+                  handleModalOpen={handleModalOpen}
+                />
               )}
             </div>
           </div>

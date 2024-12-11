@@ -4,34 +4,46 @@
 export const StatsGrid = ({ stats, darkMode }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      {stats.map((stat, index) => (
-        <div
-          key={index}
-          className={`${
-            darkMode ? "bg-siidni-darkCard" : "bg-white"
-          } p-6 rounded-xl shadow-md transition-transform hover:scale-105`}
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              {/* Informacion de las estadisticas
-                Nombre, y conteo
-              */}
-              <p className="text-sm opacity-70">{stat.title}</p>
-              <p className="text-2xl font-bold mt-1">{stat.count}</p>
-            </div>
-            <div
-              className={`${
-                darkMode ? "text-gray-400" : "text-gray-600"
-              } text-2xl`}
-            >
-              {stat.icon}
+      {stats.map((stat, index) => {
+        const { comparation } = stat;
+        const message = comparation
+          ? comparation.message
+          : ""; 
+        const  newLas7daysValue  = comparation? comparation.newTLast7Days : "";
+        return (
+          <div
+            key={index}
+            className={`${
+              darkMode ? "bg-siidni-darkCard" : "bg-white"
+            } p-6 rounded-xl shadow-md transition-transform hover:scale-105`}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                {/* Informacion de las estadisticas: Nombre, conteo y comparación */}
+                <p className="text-sm opacity-70">{stat.title}</p>
+                <p className="text-2xl font-bold mt-1">{stat.count}</p>
+                {/* Mostrar mensaje de comparación */}
+                {message && (
+                  <p className="text-sm text-gray-500 mt-2">
+                    {newLas7daysValue} Nuevos en comparacion a la Ultima semana  {message}
+                  </p>
+                )}
+              </div>
+              <div
+                className={`${
+                  darkMode ? "text-gray-400" : "text-gray-600"
+                } text-2xl`}
+              >
+                {stat.icon}
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
+
 
 //skeleton de los eventos para cuando estan cargando
 export const StatsGridSkeleton = ({ darkMode }) => {
