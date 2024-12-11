@@ -1,15 +1,13 @@
+import { getComparisonDetails } from "../../../shared/utils";
 
-
-// para cargar los eventos y mostrarlos
 export const StatsGrid = ({ stats, darkMode }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       {stats.map((stat, index) => {
         const { comparation } = stat;
-        const message = comparation
-          ? comparation.message
-          : ""; 
-        const  newLas7daysValue  = comparation? comparation.newTLast7Days : "";
+        const { message, icon, newTLast7Days } = getComparisonDetails(comparation);
+        console.log("Icon:", icon);
+
         return (
           <div
             key={index}
@@ -18,25 +16,35 @@ export const StatsGrid = ({ stats, darkMode }) => {
             } p-6 rounded-xl shadow-md transition-transform hover:scale-105`}
           >
             <div className="flex items-center justify-between">
+              {/* Información principal */}
               <div>
-                {/* Informacion de las estadisticas: Nombre, conteo y comparación */}
                 <p className="text-sm opacity-70">{stat.title}</p>
                 <p className="text-2xl font-bold mt-1">{stat.count}</p>
-                {/* Mostrar mensaje de comparación */}
-                {message && (
-                  <p className="text-sm text-gray-500 mt-2">
-                    {newLas7daysValue} Nuevos en comparacion a la Ultima semana  {message}
-                  </p>
-                )}
               </div>
+              {/* Ícono principal */}
               <div
-                className={`${
-                  darkMode ? "text-gray-400" : "text-gray-600"
-                } text-2xl`}
+                className={`text-2xl ${darkMode ? "text-gray-400" : "text-gray-600"}`}
               >
                 {stat.icon}
               </div>
             </div>
+
+            {/* Detalles del cambio */}
+            {message && (
+              <div className="mt-4">
+                {/* Mensaje introductorio */}
+                <p className="text-sm text-gray-500 mb-2">En comparación a la última semana:</p>
+                <div className="grid grid-cols-2 items-center text-sm text-gray-500 gap-2">
+                  <div>
+                    <p className="font-medium">{newTLast7Days} Nuevos</p>
+                  </div>
+                  <div className="flex items-center justify-end space-x-2">
+                    {icon} {/* Aquí renderizas el ícono */}
+                    <p className="font-medium">{message}</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         );
       })}
@@ -45,7 +53,8 @@ export const StatsGrid = ({ stats, darkMode }) => {
 };
 
 
-//skeleton de los eventos para cuando estan cargando
+
+//skeleton de los eventos para cuando están cargando
 export const StatsGridSkeleton = ({ darkMode }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

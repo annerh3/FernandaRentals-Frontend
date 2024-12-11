@@ -14,7 +14,7 @@ import { useEvents } from "../../Website/hooks/data";
 import { CurrentDate } from "../../../shared/components/Utils";
 import { SeeMoreModal } from "../components/events-page/SeeMoreModal";
 import { FaAnglesUp } from "react-icons/fa6";
-import { LineGraph } from "../components/dashboard";
+import { LineGraph, Top3 } from "../components/dashboard";
 // import Calendar from "react-calendar";
 
 export const DashBoardPage = ({ darkMode }) => {
@@ -75,6 +75,7 @@ export const DashBoardPage = ({ darkMode }) => {
     },
   ];
   const tops = dashboard?.data?.tops || null;
+
   return (
     <div
       className={`min-h-screen ${
@@ -101,69 +102,14 @@ export const DashBoardPage = ({ darkMode }) => {
 
           {/*Grafics Grid  */}
 
-          <div className="grid grid-cols-7 grid-rows-2 gap-3 mt-8">
+          <div className="grid grid-cols-7 grid-rows-1 gap-3 mt-2">
             {/* Top 3 Productos más Solicitados */}
-            <div
-              className={`col-span-2 ${
-                darkMode
-                  ? "bg-siidni-darkCard text-white"
-                  : "bg-white text-gray-900"
-              } shadow-md rounded-xl p-6`}
-            >
-              {/* Título centrado */}
-              <h2 className="text-xl font-semibold mb-4 text-center">
-                Productos más Solicitados
-              </h2>
-
-              {/* Lista de productos */}
-              <ul className="list-none space-y-2">
-                <li className="flex justify-between items-center mx-2">
-                  <p className="text-base">Manzanas</p>
-                  <span className="flex items-center space-x-1 ">
-                    <span>17</span>
-                    <FaAnglesUp className="text-green-700"/>
-                  </span>
-                </li>
-                <li className="flex justify-between items-center mx-2">
-                  <p className="text-base">Peras</p>
-                  <span className="flex items-center space-x-1 ">
-                    <span>12</span>
-                    <FaAnglesUp className="text-green-700"/>
-                  </span>
-                </li>
-                <li className="flex justify-between items-center mx-2">
-                  <p className="text-base">Uvas</p>
-                  <span className="flex items-center space-x-1 ">
-                    <span>9</span>
-                    <FaAnglesUp className="text-green-700" />
-                  </span>
-                </li>
-              </ul>
-            </div>
-
+              <Top3  darkMode={darkMode}  data={tops?.topRequestedProducts} title="Mas Solicitados"/>
             {/* Elemento 2 */}
-            <div
-              className={`col-span-2 ${
-                darkMode
-                  ? "bg-siidni-darkCard text-white"
-                  : "bg-white text-gray-900"
-              } shadow-md rounded-xl p-6`}
-            >
-              <h2 className="text-xl font-semibold mb-4">Elemento 2</h2>
-              <p>Contenido del elemento 2</p>
-            </div>
+            <Top3  darkMode={darkMode}  data={tops?.leastRequestedProducts} is_up={false} title="Menos Solicitados"/>
 
             {/* Elemento 3 */}
-            <div
-              className={`col-span-3 ${
-                darkMode
-                  ? "bg-siidni-darkCard text-white"
-                  : "bg-white text-gray-900"
-              } shadow-md rounded-xl p-6`}
-            >
-              <h2 className="text-xl font-semibold mb-4">Elemento 3</h2>
-              <p>Contenido del elemento 3</p>
-            </div>
+            <Top3  darkMode={darkMode}  data={tops?.topRevenueProducts} colSpan={3} title="Mayor Ganancias"/>
 
             {/* Elemento 4 */}
             {/* Comienzan los Gráficos */}
