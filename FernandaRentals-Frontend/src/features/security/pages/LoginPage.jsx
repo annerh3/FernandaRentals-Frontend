@@ -66,12 +66,12 @@ export const LoginPage = () => {
     validationSchema: loginValidationSchema,
     validateOnChange: true,
     onSubmit: async (formValues) => {
-      console.log("formValues: ",values);
+      console.log("formValues: ",formValues);
       
       setLoading(true);
       try {
         const { error, message } = await login(formValues);
-        // validateAuthentication();
+         validateAuthentication();
         toast[error ? "error" : "success"](message, {
           position: "top-center",
           autoClose: 2500,
