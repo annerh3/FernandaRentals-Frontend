@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { isObjectEmpty } from "../../../shared/utils";
 import { useClientType } from "../../administration/hooks";
-import { LabelFormBase, SelectButton } from "./FormsComponents";
+import { LabelFormBase } from "./FormsComponents";
 
 export const RegisterForm = ({ formikRegister, loading }) => {
   const { clientTypes, loadClientTypes, isLoading } = useClientType();

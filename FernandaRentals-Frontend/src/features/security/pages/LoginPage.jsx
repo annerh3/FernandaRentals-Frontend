@@ -46,6 +46,11 @@ export const LoginPage = () => {
     mirage.register();
   }, []);
 
+  const handleButton = () =>{
+    setIsRegistering((prev) => !prev)
+    isRegistering ?  formikRegister.resetForm() :  formikLogin.resetForm();
+  }
+
 
   // Formulario de login
   const formikLogin = useFormik({
@@ -58,7 +63,7 @@ export const LoginPage = () => {
       setLoading(true);
       try {
         const { error, message } = await login(formValues);
-        validateAuthentication();
+        // validateAuthentication();
         toast[error ? "error" : "success"](message, {
           position: "top-center",
           autoClose: 2500,
@@ -70,6 +75,7 @@ export const LoginPage = () => {
         });
       } finally {
         setLoading(false);
+        formikLogin.resetForm();
       }
     },
   });
@@ -132,7 +138,7 @@ useEffect(() => {
         {/* Enlace para cambiar entre login y registro */}
         <div className="mt-4 text-center">
           <button
-            onClick={() => setIsRegistering((prev) => !prev)}
+            onClick={handleButton}
             className="text-siidni-gold text-sm hover:underline"
           >
             {isRegistering

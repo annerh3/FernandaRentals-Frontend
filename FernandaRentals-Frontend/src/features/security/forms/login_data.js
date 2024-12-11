@@ -31,9 +31,25 @@ export const registerValidationSchema = Yup.object({
     password: Yup.string()
     .required('La contraseña es requerida.')
     .min(8, 'La contraseña debe tener al menos 8 caracteres.')
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      'La contraseña debe ser segura y contener al menos 8 caracteres, incluyendo minúsculas, mayúsculas, números y caracteres especiales.'
+    .test(
+      'has-lowercase',
+      'La contraseña debe contener al menos una letra minúscula.',
+      (value) => /[a-z]/.test(value || '')
+    )
+    .test(
+      'has-uppercase',
+      'La contraseña debe contener al menos una letra mayúscula.',
+      (value) => /[A-Z]/.test(value || '')
+    )
+    .test(
+      'has-number',
+      'La contraseña debe contener al menos un número.',
+      (value) => /\d/.test(value || '')
+    )
+    .test(
+      'has-special-char',
+      'La contraseña debe contener al menos un carácter especial.',
+      (value) => /[@$!%*?&]/.test(value || '')
     ),
   confirmPassword: Yup.string()
     .required('La confirmación de la contraseña es requerida.')
