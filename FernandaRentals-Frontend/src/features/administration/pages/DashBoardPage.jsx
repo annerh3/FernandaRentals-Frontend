@@ -84,7 +84,7 @@ export const DashBoardPage = ({ darkMode }) => {
     >
       <div className="flex">
         {/* Main Content */}
-        <main className="ml-20 sm:ml-30 md:ml-60 flex-1 p-4 md:p-8">
+        <main className="ml-20 sm:ml-30 md:ml-60 flex-1 p-4 md:p-8 ">
           {/* Header */}
           <div className="flex justify-start items-center mb-8">
             <h1 className="text-2xl font-bold">DashBoard</h1>
@@ -102,9 +102,31 @@ export const DashBoardPage = ({ darkMode }) => {
 
           {/*Grafics Grid  */}
 
-         
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+            {/* Top 3 Productos más Solicitados */}
+            <Top3
+              darkMode={darkMode}
+              data={tops?.topRequestedProducts}
+              title="Más Solicitados"
+            />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-3 mt-2">
+            {/* Menos Solicitados */}
+            <Top3
+              darkMode={darkMode}
+              data={tops?.leastRequestedProducts}
+              is_up={false}
+              title="Menos Solicitados"
+            />
+
+            {/* Mayor Ganancias */}
+            <Top3
+              darkMode={darkMode}
+              data={tops?.topRevenueProducts}
+              title="Mayor Ganancias"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-3 mt-5">
             {/* Elemento 4 */}
             <div
               className={`lg:col-span-4 md:col-span-2 ${
@@ -150,7 +172,7 @@ export const DashBoardPage = ({ darkMode }) => {
             <div
               className={`${
                 darkMode ? "bg-siidni-darkCard" : "bg-white"
-              } p-6 rounded-xl shadow-md hidden sm:block`}
+              } p-6 rounded-xl shadow-md`}
             >
               {fetching ? (
                 <p className="text-center text-gray-500">
