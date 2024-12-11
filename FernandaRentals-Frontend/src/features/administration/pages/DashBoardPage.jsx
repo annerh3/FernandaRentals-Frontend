@@ -158,7 +158,7 @@ export const DashBoardPage = ({ darkMode }) => {
             <div
               className={`${
                 darkMode ? "bg-siidni-darkCard" : "bg-white"
-              } p-6 rounded-xl shadow-md`}
+              } p-6 rounded-xl shadow-md  `}
             >
               {/* Las cards de Eventos el skeleton si esta cargando o la información ya cargada */}
               {isLoading ? (
@@ -172,7 +172,7 @@ export const DashBoardPage = ({ darkMode }) => {
             <div
               className={`${
                 darkMode ? "bg-siidni-darkCard" : "bg-white"
-              } p-6 rounded-xl shadow-md`}
+              } p-6 rounded-xl shadow-md hidden sm:block`}
             >
               {fetching ? (
                 <p className="text-center text-gray-500">
